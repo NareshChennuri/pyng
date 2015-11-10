@@ -1,0 +1,132 @@
+<?php 
+/* @var $request JO_Request */
+$request = $this->getRequest();
+$og_namespace = trim(JO_Registry::get('og_namespace'));
+$og_recipe = trim(JO_Registry::get('og_recipe'));
+if(!$og_recipe) {
+	$og_namespace = '';
+}
+
+
+?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml" lang="<?php echo JO_Registry::forceGet('config_language');?>" xmlns:fb="http://ogp.me/ns/fb#" xml:lang="<?php echo JO_Registry::forceGet('config_language');?>">
+
+
+
+	<?php if($og_namespace) { ?>
+	<?php echo '<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# '.$og_namespace.': http://ogp.me/ns/fb/'.$og_namespace.'#">'?>
+	<?php } else { ?>
+	<head>
+	<?php } ?>
+		
+	
+		<?php 
+		
+			//MOBILE ADDITION;
+			//here we define which is the controller name and pass a variable which we grab in 
+			//part_header.php and use it to decide if we should show the login/invite button banner		
+	 		
+			
+			$this->getRequest()->getController() == 'users' && $this->getRequest()->getAction() == 'login' ?  JO_Registry::set('is_login_form', true)  : JO_Registry::set('is_login_form', false);
+			$this->getRequest()->getController() == 'facebook' && $this->getRequest()->getAction() == 'register' ? JO_Registry::set('is_facebook_return', true)  : JO_Registry::set('is_facebook_return', false);
+	 		$this->getRequest()->getController() == 'welcome' && $this->getRequest()->getAction() == 'second' ? JO_Registry::set('is_welcome_second', true)  : JO_Registry::set('is_welcome_second', false);
+		
+	 	
+	 	?>		
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=9" />
+		<title><?php echo $this->placeholder('title');?></title>
+		
+		<?php if($this->placeholder('favicon')) { ?>
+		<link rel="icon" href="<?php echo $this->placeholder('favicon');?>" type="image/x-icon" />
+		<?php } ?>
+		
+		<!--BASEPATH -->
+		<base href="<?php echo $this->getRequest()->getBaseUrl();?>" />
+		
+		<?php if( in_array($request->getController(), array('pins', 'users')) ) { ?>
+		<meta name="description" content="<?php echo $this->placeholder('pin_description')?$this->placeholder('pin_description'):$this->placeholder('description');?>" />
+		<meta name="keywords" content="<?php echo $this->placeholder('keywords');?>" />
+		<?php } ?>
+		
+		<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />		
+		<base href="<?php echo $request->getBaseUrl();?>" />
+		
+		<!--  <link href="<?php //echo WM_Minify::minifyCSS('data_mobile/css/mobile.css');?>" rel="stylesheet" type="text/css" />  -->
+		<link rel='stylesheet' type="text/css" href="data_mobile/css/mobile.css"/>
+             
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+                <script src='data_mobile/js/jquery.mobile.custom1.js'></script>
+             
+
+                <!--hide the mobile address bar on device -->
+          
+                <script type='text/javascript'>
+					var commentButtonText = "<?php echo $this->translate('Comment'); ?>";
+					
+				</script>
+                
+                <!-- load the js file that controlls animations -->
+                 <script type='text/javascript' src='../data_mobile/js/animations1.js'></script>
+                <!--<script type="text/jscript" src='../data_mobile/css/menus.js'/> -->
+	<!--	<script type="text/javascript" src="<?php //echo WM_Minify::minifyJs('data_mobile/js/js_full.pack.js');?>"></script> -->
+	
+		
+		
+		
+		
+
+	   <script src="data_mobile/js/iscroll.js" type="text/javascript" charset="utf-8"></script>
+	   <script type="text/javascript">
+        // Enables iScroll.
+        // iScroll allows scrolling the categories list in the Search/Explore menu.
+        var everything;
+    
+        function loaded() {
+            everything = new iScroll('categories', { hScroll: false, hScrollbar: false, vScrollbar: false });
+			//var wrapper = new iScroll('wrapper');
+            
+        }
+
+        document.addEventListener('DOMContentLoaded', setTimeout(function () { loaded(); }, 200), false);
+  </script> 
+	
+		<?php if($this->placeholder('pin_image')) { ?>
+		<meta name="medium" content="image"/>
+	    <meta http-equiv="imagetoolbar" content="no"/> 
+	
+	    <link rel="image_src" href="<?php echo $this->placeholder('pin_image') ? $this->placeholder('pin_image') : $this->placeholder('site_logo');?>"/>
+	    <link rel="canonical" href="<?php echo $this->placeholder('pin_url') ? $this->placeholder('pin_url') : $request->getBaseUrl();?>"/>
+		<?php } ?>
+		
+		<?php if(JO_Registry::get('oauth_fb_key')) { ?>
+		<meta property="fb:app_id" content="<?php echo JO_Registry::get('oauth_fb_key');?>"/>
+	    <meta property="og:site_name" content="<?php echo $this->placeholder('site_name');?>"/>
+	    <meta property="og:url" content="<?php echo $this->placeholder('pin_url') ? $this->placeholder('pin_url') : $request->getBaseUrl();?>"/>
+	    <meta property="og:title" content="<?php echo $this->placeholder('board_title')?$this->placeholder('board_title'):$this->placeholder('title');?>"/>
+	    <meta property="og:description" content="<?php echo $this->placeholder('pin_description') ? $this->placeholder('pin_description') : $this->placeholder('description');?>"/>
+	    <meta property="og:image" content="<?php echo $this->placeholder('pin_image') ? $this->placeholder('pin_image') : $this->placeholder('site_logo');?>"/>
+	    <?php if($og_namespace) { ?>
+	    <meta property="og:type" content="<?php echo $og_namespace;?>:<?php echo $og_recipe;?>"/>
+	    <?php } else { ?>
+	    <meta property="og:type" content="website"/>
+	    <?php } ?>
+		<?php } ?>
+		
+		<?php echo $this->placeholder('inhead');?>
+		
+		<?php echo $this->placeholder('google_analytics');?>
+		
+	</head>
+	
+	<body<?php //;echo (!JO_Session::get('user[user_id]')?' id="not-login"':'');?> class="hdpi" data-scroll='y'>
+	<div id='white-dim'></div>	
+		
+	
+		<?php echo $this->placeholder('content');?>
+	
+   
+	</body>
+</html>

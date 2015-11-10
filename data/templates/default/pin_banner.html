@@ -1,0 +1,7 @@
+{{each banners}}
+<div class="box easy-ads event-masonry" {{if $value.width}}style="width:${$value.width}px"{{/if}}>
+	<div class="preview" style="{{if $value.height}}height:${$value.height}px{{/if}}">
+		{{html $value.html}}
+	</div>
+</div>
+{{/each}}

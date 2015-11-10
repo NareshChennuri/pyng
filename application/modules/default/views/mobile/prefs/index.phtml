@@ -1,0 +1,140 @@
+<?php echo $this->header_part; ?>
+
+<div id="detail" class="editprofile">       
+	<div id="view-profile">
+		
+
+		<form name="profileEdit" accept-charset="utf-8" method="post" action="" class="Form StaticForm" id="profileEdit">
+
+            <h3><?php echo $this->translate('Edit Profile');?></h3>
+
+            <ul>
+
+                <!-- Email -->
+                <li>
+                    <label for="id_email"><?php echo $this->translate('Email');?></label>
+                    <div class="Right NoInput">
+                    
+	                    <?php echo $this->user_data['new_email'];?>&nbsp;·&nbsp;<a href="<?php echo $this->settings_href;?>" class="user_edit"><?php echo $this->translate('Change Email');?></a>
+	                    
+                    </div>
+                </li>
+
+
+                <!-- Group Pins -->
+                <li>
+                    <label><?php echo $this->translate('Group Pins');?></label>
+                    <div class="Right NoInput">
+                        <label for="groups_pin_email" class="large">
+                            <input type="checkbox" id="groups_pin_email" name="groups_pin_email" <?php echo ($this->user_data['groups_pin_email'] ? 'checked="checked"' : '');?> value="1" /> <?php echo $this->translate('When a new pin is added to a group board');?>
+                        </label>
+                    </div>
+                </li>
+                
+                <!-- Comments -->
+                <li>
+                    <label><?php echo $this->translate('Comments');?></label>
+                    <div class="Right NoInput">
+                        <label for="comments_email" class="large">
+                            <input type="checkbox" id="comments_email" name="comments_email" <?php echo ($this->user_data['comments_email'] ? 'checked="checked"' : '');?> value="1" /> <?php echo $this->translate('When someone comments on your pin');?>
+                        </label>
+                    </div>
+                </li>
+                
+                <!-- Likes -->
+                <li>
+                    <label><?php echo $this->translate('Likes');?></label>
+                    <div class="Right NoInput">
+                        <label for="likes_email" class="large">
+                            <input type="checkbox" id="likes_email" name="likes_email" <?php echo ($this->user_data['likes_email'] ? 'checked="checked"' : '');?> value="1" /> <?php echo $this->translate('When someone likes your pin');?>
+                        </label>
+                    </div>
+                </li>
+                
+                <!-- Repins -->
+                <li>
+                    <label><?php echo $this->translate('Repyng');?></label>
+                    <div class="Right NoInput">
+                        <label for="repins_email" class="large">
+                            <input type="checkbox" id="repins_email" name="repins_email" <?php echo ($this->user_data['repins_email'] ? 'checked="checked"' : '');?> value="1" /> <?php echo $this->translate('When your pyng is repynged');?>
+                        </label>
+                    </div>
+                </li>
+                
+                <!-- Follows -->
+                <li>
+                    <label><?php echo $this->translate('Follows');?></label>
+                    <div class="Right NoInput">
+                        <label for="follows_email" class="large">
+                            <input type="checkbox" id="follows_email" name="follows_email" <?php echo ($this->user_data['follows_email'] ? 'checked="checked"' : '');?> value="1" /> <?php echo $this->translate('When a new person follows you');?>
+                        </label>
+                    </div>
+                </li>
+                
+                <!-- Frequency -->
+                <li>
+                    <label for="id_email_interval_0"><?php echo $this->translate('Frequency');?></label>
+                    <div id="genderOptions" class="Right NoInput">
+
+						<span style="display: block; margin-bottom: 8px;"><?php echo $this->translate('How often you receive emails about likes, repyngs, &amp; follows:');?></span>
+						<ul>
+							<li><label for="id_email_interval_0"><input type="radio" name="email_interval" value="1" id="id_email_interval_0" <?php echo ($this->user_data['email_interval']==1?' checked="checked"':'');?> /> <?php echo $this->translate('Immediately');?></label></li>
+							<li><label for="id_email_interval_1"><input type="radio" name="email_interval" value="2" id="id_email_interval_1" <?php echo ($this->user_data['email_interval']==2?' checked="checked"':'');?> /> <?php echo $this->translate('Once Daily');?></label></li>
+						</ul>
+                     
+                    </div>
+                </li>
+                
+                <!-- Digest -->
+                <li>
+                    <label><?php echo $this->translate('Digest');?></label>
+                    <div class="Right NoInput">
+                        <label for="digest_email" class="large">
+                            <input type="checkbox" id="digest_email" name="digest_email" <?php echo ($this->user_data['digest_email'] ? 'checked="checked"' : '');?> value="1" /> <?php echo $this->translate('Emails summarizing your weekly activity');?>
+                        </label>
+                    </div>
+                </li>
+                
+                <!-- News -->
+                <li>
+                    <label><?php echo $this->translate('News');?></label>
+                    <div class="Right NoInput">
+                        <label for="news_email" class="large">
+                            <input type="checkbox" id="news_email" name="news_email" <?php echo ($this->user_data['news_email'] ? 'checked="checked"' : '');?> value="1" /> <?php echo $this->translate('Occasional Pinterest news and updates');?>
+                        </label>
+                    </div>
+                </li>
+
+                
+
+            </ul>
+
+            <!-- Button -->
+            <div class="Submit">
+                <a onclick="$('#profileEdit').submit(); return false" class="Button WhiteButton RedButton Button24 userform_submit editpage_submit" href="#"><strong><?php echo $this->translate('Save Profile');?></strong><span></span></a>
+            </div>
+        </form>		
+
+    
+    </div>
+    
+    <div class="clear"></div>    
+</div>
+
+
+<?php ob_start();?>
+<script type="text/javascript"><!--
+$(document).ready(function(){
+
+	$('.StaticForm .Right label.large input[type=checkbox]').switcherSlider({
+		text: {
+			on: '<?php echo $this->translate('ON');?>',
+			off: '<?php echo $this->translate('OFF');?>'
+		}
+	});
+
+});
+//--></script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+
+<?php echo $this->footer_part; ?>

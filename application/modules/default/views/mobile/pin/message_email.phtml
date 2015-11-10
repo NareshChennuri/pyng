@@ -1,0 +1,9 @@
+<div id="reportpin">
+	<h4 class="question text-center"><?php echo $this->translate('Your message was sent!');?></h4>
+</div>
+<script type="text/javascript">
+setTimeout(function(){
+	opener = '<?php echo $this->pin_oppener;?>';
+	Pins.initPopupOpener($('<a>').attr('href', '<?php echo $this->pin_href;?>'), opener);
+}, 5000);
+</script>

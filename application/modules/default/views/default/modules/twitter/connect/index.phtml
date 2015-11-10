@@ -1,0 +1,51 @@
+<?php ob_start();?>
+<script type="text/javascript">
+head.ready('main', function() {
+	head.js({'twitter': 'data/js/lib/twitter.js'});
+});
+
+head.ready('switcherSlider', function() {
+	$('.event-twitter-connect').switcherSlider({
+			text: {
+				on: '<?php echo $this->translate('ON');?>',
+				off: '<?php echo $this->translate('OFF');?>'
+			},
+			stageClass: 'event-twitter-connect-click'
+	});
+
+	$('.event-twitter-connect-click').live('click',function() {
+		Twitter.startTwitterConnect("<?php echo $this->twitter_connect_url;?>");
+	});
+
+	<?php if($this->add_pin_to_twitter) { ?>
+	head.ready('switcherSlider', function() {
+		$('.event-twitter-twit').switcherSlider({
+			text: {
+				on: '<?php echo $this->translate('ON');?>',
+				off: '<?php echo $this->translate('OFF');?>'
+			},
+			stageClass: 'event-twitter-connect-twit-click'
+		});
+		
+		$('.event-twitter-connect-twit-click').live('click',function() {
+			Twitter.startTwitterConnect("<?php echo $this->twitter_twit_connect_url;?>");
+		});
+	});
+	<?php } ?>
+	
+});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+
+<div class="row">
+	<div class="cell-left">
+		<label><?php echo $this->translate('Twitter');?></label>
+	</div>
+	<div class="cell-center">
+		<div class="custom-checkboxes">
+			<label for="twitter_connect"><input class="event-twitter-connect" type="checkbox" id="twitter_connect" <?php echo ($this->twitter_connect ? 'checked="checked"' : '');?> /> <?php echo $this->translate('Link to Twitter');?></label>
+			<label for="twitter_timeline" class="event-connect-twitter-hide large" <?php echo (!$this->twitter_connect ? 'style="display:none;"' : '');?>><input class="event-twitter-twit" type="checkbox" id="twitter_timeline" <?php echo ($this->twitter_connect ? '' : 'disabled="disabled"');?> <?php echo ($this->twitter_connect && $this->twitter_twit ? 'checked="checked"' : '');?> name="twitter_twit" /> <?php echo sprintf($this->translate('Add %s to Twitter'),$this->site_name);?></label>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>

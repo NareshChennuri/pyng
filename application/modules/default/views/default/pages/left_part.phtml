@@ -1,0 +1,9 @@
+<?php if($this->pages) { ?>
+<div class="pagenav">
+	<ul>
+		<?php foreach($this->pages AS $page) { ?>
+		<li> <a<?php echo ($page['active']?' class="active"':'');?> href="<?php echo $page['href'];?>"><?php echo $page['title'];?></a> </li>
+		<?php } ?>
+	</ul>
+</div>
+<?php } ?>

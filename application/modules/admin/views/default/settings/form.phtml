@@ -1,0 +1,991 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<form name="admin_form" id="admin_form" method="post" action="">
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/domain_template.png">
+		<?php echo $this->translate('Management of system settings');?>
+	</h3>
+	
+	
+	<?php if($this->successfu_edite || $this->error_permision || $this->error) { ?>
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<?php } else if($this->error_permision) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error_permision;?></span></span>
+	<?php } else if($this->error) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error;?></span></span>
+	<?php } ?>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } else { ?>
+	<span id="fader" class="fleft mleft30" style="display:none;">
+		<span class="msgError"><span><?php echo $this->translate('Error!');?></span><i class="error_text"></i></span>
+	</span>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+		<a class="button" href="<?php echo $module;?>/settings/"><?php echo $this->translate('Cancel');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+	
+	<div class="clear"></div>
+	<br />
+	
+	<div class="tabs mtop3">
+		<ul>
+			<li><a href="#tab_general"><?php echo $this->translate('General');?></a></li>
+			<li><a href="#tab_seo"><?php echo $this->translate('SEO');?></a></li>
+			<li><a href="#tab_option"><?php echo $this->translate('Options');?></a></li>
+			<li><a href="#tab_mail"><?php echo $this->translate('Contacts');?></a></li> 
+			<li><a href="#tab_images"><?php echo $this->translate('Images');?></a></li> 
+			<li><a href="#tab_pages"><?php echo $this->translate('Pages');?></a></li> 
+			<li><a href="#tab_dates"><?php echo $this->translate('Dates');?></a></li> 
+			<li><a href="#tab_crons"><?php echo $this->translate('Crons');?></a></li> 
+			<li><a href="#tab_cat_boards"><?php echo $this->translate('Categories & Boards');?></a></li> 
+		</ul> 
+		<div class="clear"></div>
+	</div>
+	
+		
+		
+		<div id="tab_crons">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<thead>
+					<tr>
+						<td width="150" rowspan="2"><?php echo $this->translate('Interval');?></td>
+						<td><?php echo $this->translate('Command');?></td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('CURL');?></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							2 minutes
+						</td>
+						<td>
+							curl <?php echo $this->getRequest()->getBaseUrl();?>crons/generateCache
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							2 minutes
+						</td>
+						<td>
+							curl <?php echo $this->getRequest()->getBaseUrl();?>crons/generatePopularCache
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							10 minutes
+						</td>
+						<td>
+							curl <?php echo $this->getRequest()->getBaseUrl();?>crons/deletePinImages
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+							24 hours
+						</td>
+						<td>
+							curl <?php echo $this->getRequest()->getBaseUrl();?>crons/sendDaily
+						</td>
+					</tr>
+					<tr>
+						<td>
+							24 hours
+						</td>
+						<td>
+							curl <?php echo $this->getRequest()->getBaseUrl();?>crons/generateStat
+						</td>
+					</tr>
+					<tr>
+						<td>
+							1 week
+						</td>
+						<td>
+							curl <?php echo $this->getRequest()->getBaseUrl();?>crons/sendWeekly
+						</td>
+					</tr>
+					<tr>
+						<td>
+							1 month
+						</td>
+						<td>
+							curl <?php echo $this->getRequest()->getBaseUrl();?>crons/updateStat
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	
+		<div id="tab_cat_boards">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<thead>
+					<tr>
+						<td><?php echo $this->translate('Enable Boards description');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="board_description_1">
+									<input <?php echo ($this->config_board_description_enable == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_board_description_enable]" id="board_description_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="board_description_2">
+									<input <?php echo ($this->config_board_description_enable == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_board_description_enable]" id="board_description_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Enable Secret boards');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="private_boards_1">
+									<input <?php echo ($this->config_private_boards == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_private_boards]" id="private_boards_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="private_boards_2">
+									<input <?php echo ($this->config_private_boards == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_private_boards]" id="private_boards_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Default category for new board');?>:</td>
+						<td colspan="2">
+							<select name="config[default_category_id]" class="select">
+								<option value="0"><?php echo $this->translate('None');?></option>
+								<?php foreach($this->categories AS $category) { ?>
+								<?php if($this->default_category_id == $category['category_id']) { ?>
+								<option selected="selected" value="<?php echo $category['category_id'];?>"><?php echo $category['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $category['category_id'];?>"><?php echo $category['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<th colspan="3" style="padding: 5px 0;"><?php echo $this->translate('Default boards when registering a new user');?></th>
+					</tr>
+					<tr>
+						<th style="padding: 5px 0; text-align: left;"><?php echo $this->translate('Category');?></th>
+						<th style="padding: 5px 0; text-align: left;"><?php echo $this->translate('Title');?></th>
+						<th style="padding: 5px 0; text-align: left;"><?php echo $this->translate('Delete');?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($this->default_boards AS $row => $db) { ?>
+					<tr>
+						<td>
+							<select name="config[default_boards][<?php echo $row;?>][category_id]" class="select">
+								<?php foreach($this->categories AS $category) { ?>
+								<?php if($db['category_id'] == $category['category_id']) { ?>
+								<option selected="selected" value="<?php echo $category['category_id'];?>"><?php echo $category['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $category['category_id'];?>"><?php echo $category['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+						</td>
+						<td>
+							<input class="inputbox" name="config[default_boards][<?php echo $row;?>][title]" size="55" value="<?php echo $db['title'];?>" />
+						</td>
+						<td width="100">
+							<a class="button" onclick="$(this).parents('tr').remove();"><?php echo $this->translate('Delete');?></a>
+						</td>
+					</tr>
+					<?php } ?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="3" align="center">
+							<a class="button" onclick="addBoardRow();"><?php echo $this->translate('Add row');?></a>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	
+		
+	
+		<div id="tab_general">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td width="150"><?php echo $this->translate('Base domain');?>: </td>
+						<td><input type="text" size="40" value="<?php echo $this->config_base_domain;?>" class="inputbox" name="config[config_base_domain]" /></td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Facebook fan page');?>: </td>
+						<td><input type="text" size="40" value="<?php echo $this->config_on_facebook;?>" class="inputbox" name="config[config_on_facebook]" /></td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('Google analytics code');?>:</td>
+						<td>
+							<textarea style="width: 405px; height: 80px;" class="inputbox" name="config[google_analytics]"><?php echo $this->google_analytics;?></textarea>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Copy of external images');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="c_21">
+									<input <?php echo ($this->config_fix_image_thumb_editor == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_fix_image_thumb_editor]" id="c_21" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="c_22">
+									<input <?php echo ($this->config_fix_image_thumb_editor == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_fix_image_thumb_editor]" id="c_22" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Copies external images into a text editor in a local folder on the server');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Мodify еxternal URL');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="c_111">
+									<input <?php echo ($this->config_fix_external_urls == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_fix_external_urls]" id="c_111" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="c_211">
+									<input <?php echo ($this->config_fix_external_urls == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_fix_external_urls]" id="c_211" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Automatically set the nofollow and open a new window');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+		
+		<div id="tab_seo">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td><?php echo $this->translate('Site name');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->site_name;?>" class="inputbox" name="config[site_name]" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Site name')?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Meta title');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->meta_title;?>" class="inputbox" name="config[meta_title]" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('It could be said that the title is one of the most important factors for a successful search engine optimization of your website. The title tags should be between 10-60 characters.')?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Meta keywords');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->meta_keywords;?>" class="inputbox" name="config[meta_keywords]" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Lately, the meta keyword tag has become the least important tag for the search engines and especially Google. However, it is an easy way to reinforce once again your most important keywords. We recommend its usage as we believe that it may help the SEO process, especially if you follow the rules mentioned below. The keyword tags should contain between 4 and 10 keywords.');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Meta description');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->meta_description;?>" class="inputbox" name="config[meta_description]" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('The description tag should be written in such way that it will show what information your website contains or what your website is about. Write short and clear sentences that will not confuse your visitors. The description tag should be less than 200 characters.');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+	
+		<div id="tab_mail">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td width="150"><?php echo $this->translate('Admin mail');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" title="<?php echo $this->translate('Please enter Admin mail')?>" size="55" value="<?php echo $this->admin_mail;?>" class="inputbox required" name="config[admin_mail]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('On this email will comes all emails that is related to your system');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Report mail');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" title="<?php echo $this->translate('Please enter Report mail')?>" size="55" value="<?php echo $this->report_mail;?>" class="inputbox required" name="config[report_mail]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Email to reports from the system');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('No reply mail');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" title="<?php echo $this->translate('Please enter No reply mail')?>" size="55" value="<?php echo $this->noreply_mail;?>" class="inputbox required" name="config[noreply_mail]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Email to reports from the system');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Using SMTP');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="smtp_1">
+									<input <?php echo ($this->mail_smtp == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[mail_smtp]" id="smtp_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="smtp_2">
+									<input <?php echo ($this->mail_smtp == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[mail_smtp]" id="smtp_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('SMTP host');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->mail_smtp_host;?>" class="inputbox" name="config[mail_smtp_host]" />
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('SMTP port');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->mail_smtp_port;?>" class="inputbox" name="config[mail_smtp_port]" />
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('SMTP user');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->mail_smtp_user;?>" class="inputbox" name="config[mail_smtp_user]" />
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('SMTP password')?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->mail_smtp_password;?>" class="inputbox" name="config[mail_smtp_password]" />
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('Email footer');?>:</td>
+						<td>
+							<textarea rows="4" cols="53" name="config[mail_footer]" class="valid ckeditor_replace"><?php echo $this->mail_footer;?></textarea>
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('Reported pin notification');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="rp_1">
+									<input <?php echo ($this->not_rp == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[not_rp]" id="rp_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="rp_2">
+									<input <?php echo ($this->not_rp == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[not_rp]" id="rp_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('Reported comment notification');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="rc_1">
+									<input <?php echo ($this->not_rc == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[not_rc]" id="rc_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="rc_2">
+									<input <?php echo ($this->not_rc == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[not_rc]" id="rc_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('Invite request notification');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="ri_1">
+									<input <?php echo ($this->not_ri == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[not_ri]" id="ri_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="ri_2">
+									<input <?php echo ($this->not_ri == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[not_ri]" id="ri_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+		
+		<div id="tab_option">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					
+					<tr>
+						<td width="150"><?php echo $this->translate('Results per page (Administration)');?>: </td>
+						<td><input type="text" size="10" value="<?php echo $this->config_admin_limit;?>" class="inputbox" name="config[config_admin_limit]" /></td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Results per page (Site)');?>: </td>
+						<td><input type="text" size="10" value="<?php echo $this->config_front_limit;?>" class="inputbox" name="config[config_front_limit]" /></td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Site Template');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[template]" class="select">
+								<?php foreach($this->templates AS $template) { ?>
+								<?php if($this->template == $template) { ?>
+								<option selected="selected" value="<?php echo $template;?>"><?php echo $template;?></option>
+								<?php } else { ?>
+								<option value="<?php echo $template;?>"><?php echo $template;?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Site Template which will be visible to users')?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Currency');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[config_currency]" class="select">
+								<?php foreach($this->currencies AS $currency) { ?>
+								<?php if($this->config_currency == $currency['code']) { ?>
+								<option selected="selected" value="<?php echo $currency['code'];?>"><?php echo $currency['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $currency['code'];?>"><?php echo $currency['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Default currency');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Automatically update currency');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="c_1">
+									<input <?php echo ($this->config_currency_auto_update == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_currency_auto_update]" id="c_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="c_2">
+									<input <?php echo ($this->config_currency_auto_update == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_currency_auto_update]" id="c_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+						</td>
+					</tr>
+	
+					<tr>
+						<td><?php echo $this->translate('Enable open registration');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="enable_free_registration_1">
+									<input <?php echo ($this->enable_free_registration == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[enable_free_registration]" id="enable_free_registration_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="enable_free_registration_2">
+									<input <?php echo ($this->enable_free_registration == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[enable_free_registration]" id="enable_free_registration_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Site maintenance');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="maintenance_1">
+									<input <?php echo ($this->config_maintenance == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_maintenance]" id="maintenance_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="maintenance_2">
+									<input <?php echo ($this->config_maintenance == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_maintenance]" id="maintenance_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					<?php if(JO_Registry::get('license_powered_check') == 'false') { ?>
+					<tr>
+						<td><?php echo $this->translate('Hide brand url');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="hide_brand_1">
+									<input <?php echo ($this->config_hide_brand == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_hide_brand]" id="hide_brand_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="hide_brand_2">
+									<input <?php echo ($this->config_hide_brand == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_hide_brand]" id="hide_brand_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					<?php } ?>
+					<tr>
+						<td><?php echo $this->translate('Date timezone on server');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[phpSettings][date.timezone]" class="select">
+								<?php foreach($this->data_timezones AS $zone => $data) { ?>
+								<optgroup label="<?php echo $zone;?>">
+									<?php foreach($data AS $timezone) { ?>
+									<?php if($this->date_timezone == $timezone) { ?>
+									<option selected="selected" value="<?php echo $timezone;?>"><?php echo $timezone;?></option>
+									<?php } else { ?>
+									<option value="<?php echo $timezone;?>"><?php echo $timezone;?></option>
+									<?php } ?>
+									<?php } ?>
+								</optgroup>
+								<?php } ?>
+							</select>
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('These functions allow you to get the date and time from the server where your PHP scripts are running. You can use these functions to format the date and time in many different ways.')?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Upload storage method');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[file_upload_method]" class="select">
+								<?php foreach($this->upload_storage AS $storage) { ?>
+								<?php if($storage['active']) { ?>
+								<option selected="selected" value="<?php echo $storage['key'];?>"><?php echo $storage['name'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $storage['key'];?>"><?php echo $storage['name'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Pick a storage location for new pin images. After you select a server all new files will be uploaded to it.')?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Total comments in listing');?>: </td>
+						<td><input type="text" size="10" value="<?php echo $this->config_comments_list;?>" class="inputbox" name="config[config_comments_list]" /></td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('Disable popup preview and pagination');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="dis_js_1">
+									<input <?php echo ($this->config_disable_js == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_disable_js]" id="dis_js_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="dis_js_2">
+									<input <?php echo ($this->config_disable_js == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_disable_js]" id="dis_js_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td width="150"><?php echo $this->translate('Pin prefix');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" title="<?php echo $this->translate('Please enter Pin prefix');?>" size="55" value="<?php echo $this->config_pin_prefix;?>" class="inputbox required" name="config[config_pin_prefix]" />
+							&nbsp;&nbsp; <img title="<?php echo sprintf($this->translate('Format pin url for set /pin/ part. %s'), $this->getRequest()->getBaseUrl() . '<b>pin</b>/123456');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('User view by');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[config_user_view]" class="select">
+								<option <?php if($this->config_user_view == 'username') { ?>selected="selected"<?php } ?> value="username"><?php echo $this->translate('Username');?></option>
+								<option <?php if($this->config_user_view == 'firstname') { ?>selected="selected"<?php } ?> value="firstname"><?php echo $this->translate('Firstname');?></option>
+								<option <?php if($this->config_user_view == 'fullname') { ?>selected="selected"<?php } ?> value="fullname"><?php echo $this->translate('Fullname');?></option>
+							</select>
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('Enagle gallery pin');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="config_gallery_pin_1">
+									<input <?php echo ($this->config_gallery_pin == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_gallery_pin]" id="config_gallery_pin_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="config_gallery_pin_2">
+									<input <?php echo ($this->config_gallery_pin == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_gallery_pin]" id="config_gallery_pin_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Files upload for gallery');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" title="<?php echo $this->translate('Please enter limit');?>" size="55" value="<?php echo $this->config_gallery_limit;?>" class="inputbox required" name="config[config_gallery_limit]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Max files limit for gallery upload. Set 0 for disable limit (not recommend)!');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('Home page view (not loged users)');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[config_home_page_view_not_loged]" class="select">
+								<option <?php if($this->config_home_page_view_not_loged == 'latest') { ?>selected="selected"<?php } ?> value="latest"><?php echo $this->translate('Latest pins');?></option>
+								<option <?php if($this->config_home_page_view_not_loged == 'randum') { ?>selected="selected"<?php } ?> value="randum"><?php echo $this->translate('Randum pins');?></option>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Home page view (loged users)');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[config_home_page_view_loged]" class="select">
+								<option <?php if($this->config_home_page_view_loged == 'latest') { ?>selected="selected"<?php } ?> value="latest"><?php echo $this->translate('Latest pins');?></option>
+								<option <?php if($this->config_home_page_view_loged == 'following') { ?>selected="selected"<?php } ?> value="following"><?php echo $this->translate('Following pins');?></option>
+							</select>
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td width="150"><?php echo $this->translate('Image minimum size in pixel\'s');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" title="<?php echo $this->translate('Please enter minimum size');?>" size="55" value="<?php echo $this->config_image_minimum_size;?>" class="inputbox required" name="config[config_image_minimum_size]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Image minimum size for width and height in pixel\'s for enable pining!');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					
+					<?php /* v2.2 */ ?>
+					<tr>
+						<td><?php echo $this->translate('Enagle private/public user and switch off for follow');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="config_enable_follow_private_profile_1">
+									<input <?php echo ($this->config_enable_follow_private_profile == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_enable_follow_private_profile]" id="config_enable_follow_private_profile_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="config_enable_follow_private_profile_2">
+									<input <?php echo ($this->config_enable_follow_private_profile == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_enable_follow_private_profile]" id="config_enable_follow_private_profile_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					<?php /* v2.2 */?>
+					
+				</tbody>
+			</table>
+		</div>
+		
+		<div id="tab_images">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>	
+					<tr>
+						<td width="150"><?php echo $this->translate('Site logo');?>:</td>
+						<td>
+							<input type="hidden" name="images[site_logo]" value="<?php echo $this->site_logo; ?>" id="site_logo" />
+							<img id="preview_logo" src="<?php echo $this->preview_logo;?>" />
+							<br />
+							<a style="cursor: pointer;" onclick="image_upload('site_logo', 'preview_logo');"><?php echo $this->translate('Browse Files'); ?></a>
+							<?php /* ?>
+							&nbsp;&nbsp;|&nbsp;&nbsp;
+							<a style="cursor: pointer;" onclick="$('#preview_logo').attr('src', '<?php echo $this->preview; ?>'); $('#site_logo').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+							<?php */ ?>
+						</td>
+					</tr>
+					
+					<?php if(in_array( 'mobile', WM_Modules::getTemplates() )) { ?>
+					<tr>
+						<td width="150"><?php echo $this->translate('Site logo (mobile)');?>:</td>
+						<td>
+							<input type="hidden" name="images[site_logo_mobile]" value="<?php echo $this->site_logo_mobile; ?>" id="site_logo_mobile" />
+							<img id="preview_logo_mobile" src="<?php echo $this->preview_logo_mobile;?>" />
+							<br />
+							<a style="cursor: pointer;" onclick="image_upload('site_logo_mobile', 'preview_logo_mobile');"><?php echo $this->translate('Browse Files'); ?></a>
+							<?php /* ?>
+							&nbsp;&nbsp;|&nbsp;&nbsp;
+							<a style="cursor: pointer;" onclick="$('#preview_logo_mobile').attr('src', '<?php echo $this->preview_mobile; ?>'); $('#site_logo_mobile').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+							<?php */ ?>
+						</td>
+					</tr>
+					<?php } ?>
+					
+					<tr>
+						<td><?php echo $this->translate('Favicon');?>:</td>
+						<td>
+							<input type="hidden" name="images[favicon]" value="<?php echo $this->favicon; ?>" id="site_favicon" />
+							<img id="preview_favicon" src="<?php echo $this->preview_favicon;?>" />
+							<br />
+							<a style="cursor: pointer;" onclick="image_upload('site_favicon', 'preview_favicon');"><?php echo $this->translate('Browse Files'); ?></a>
+							<?php /* ?>
+							&nbsp;&nbsp;|&nbsp;&nbsp;
+							<a style="cursor: pointer;" onclick="$('#preview_favicon').attr('src', '<?php echo $this->preview_favicon; ?>'); $('#site_favicon').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+							<?php */ ?>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><?php echo $this->translate('No image');?>:</td>
+						<td>
+							<input type="hidden" name="images[no_image]" value="<?php echo $this->no_image; ?>" id="site_no_image" />
+							<img id="preview_no_image" src="<?php echo $this->preview_no_image;?>" />
+							<br />
+							<a style="cursor: pointer;" onclick="image_upload('site_no_image', 'preview_no_image');"><?php echo $this->translate('Browse Files'); ?></a>
+							<?php /* ?>
+							&nbsp;&nbsp;|&nbsp;&nbsp;
+							<a style="cursor: pointer;" onclick="$('#preview_no_image').attr('src', '<?php echo $this->preview_no_image; ?>'); $('#site_no_image').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+							<?php */ ?>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('No avatar');?>:</td>
+						<td>
+							<input type="hidden" name="images[no_avatar]" value="<?php echo $this->no_avatar; ?>" id="site_no_avatar" />
+							<img id="preview_no_avatar" src="<?php echo $this->preview_no_avatar;?>" />
+							<br />
+							<a style="cursor: pointer;" onclick="image_upload('site_no_avatar', 'preview_no_avatar');"><?php echo $this->translate('Browse Files'); ?></a>
+							<?php /* ?>
+							&nbsp;&nbsp;|&nbsp;&nbsp;
+							<a style="cursor: pointer;" onclick="$('#preview_no_avatar').attr('src', '<?php echo $this->preview_no_avatar; ?>'); $('#site_no_avatar').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+							<?php */ ?>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+			
+		</div>
+		
+		<div id="tab_pages">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+	
+					<tr>
+						<td><?php echo $this->translate('Terms and Conditions');?>:</td>
+						<td>
+							<select name="pages[page_terms]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_terms == $page['page_id']) { ?>
+								<option selected="selected" value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Login trouble');?>:</td>
+						<td>
+							<select name="pages[page_login_trouble]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_login_trouble == $page['page_id']) { ?>
+								<option selected="selected" value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Page goodies');?>:</td>
+						<td>
+							<select name="pages[page_goodies]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_goodies == $page['page_id']) { ?>
+								<option selected="selected" value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Delete account');?>:</td>
+						<td>
+							<select name="pages[delete_account]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->delete_account == $page['page_id']) { ?>
+								<option selected="selected" value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Support page');?>:</td>
+						<td>
+							<select name="pages[support_page]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->support_page == $page['page_id']) { ?>
+								<option selected="selected" value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Pinmarklet page');?>:</td>
+						<td>
+							<select name="pages[page_pinmarklet]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_pinmarklet == $page['page_id']) { ?>
+								<option selected="selected" value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Privacy Policy page');?>:</td>
+						<td>
+							<select name="pages[page_privacy_policy]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_privacy_policy == $page['page_id']) { ?>
+								<option selected="selected" value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('How do secret boards work page');?>:</td>
+						<td>
+							<select name="pages[page_private_boards]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_private_boards == $page['page_id']) { ?>
+								<option selected="selected" value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+		
+		<div id="tab_dates">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td width="150"><?php echo $this->translate('Short date format');?>:</td>
+						<td>
+							<select name="config[config_date_format_short]">
+								<?php foreach($this->short_dates AS $date) { ?>
+								<?php if($this->config_date_format_short == $date) { ?>
+								<option selected="selected" value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } else { ?>
+								<option value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Medium date format');?>:</td>
+						<td>
+							<select name="config[config_date_format_medium]">
+								<?php foreach($this->medium_dates AS $date) { ?>
+								<?php if($this->config_date_format_medium == $date) { ?>
+								<option selected="selected" value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } else { ?>
+								<option value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Long date format');?>:</td>
+						<td>
+							<select name="config[config_date_format_long]">
+								<?php foreach($this->long_dates AS $date) { ?>
+								<?php if($this->config_date_format_long == $date) { ?>
+								<option selected="selected" value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } else { ?>
+								<option value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Long date format with time');?>:</td>
+						<td>
+							<select name="config[config_date_format_long_time]">
+								<?php foreach($this->long_dates_times AS $date) { ?>
+								<?php if($this->config_date_format_long_time == $date) { ?>
+								<option selected="selected" value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } else { ?>
+								<option value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<?php /* ?>
+					<tr>
+						<td><?php echo $this->translate('News date format');?>:</td>
+						<td>
+							<select name="config[config_date_format_news]">
+								<?php foreach($this->news_dates AS $date) { ?>
+								<?php if($this->config_date_format_news == $date) { ?>
+								<option selected="selected" value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } else { ?>
+								<option value="<?php echo $date;?>"><?php echo $date;?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<?php */ ?>
+					
+				</tbody>
+			</table>
+		</div>
+		
+		
+		<div class="info_line bottom">
+			<div class="fright mtop3">
+				<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+				<a class="button" href="<?php echo $module;?>/settings/"><?php echo $this->translate('Cancel');?></a>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+	</form>
+	
+	
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		$(".tabs ul").idTabs(); 
+	});
+
+	var row = <?php echo count($this->default_boards);?>;
+	function addBoardRow() {
+		$('#tab_cat_boards table tbody').append($('#template_default_boards').html().replace(/\{row\}/g, row));
+		row++;
+	}
+	
+</script>
+
+<script type="text/template" id="template_default_boards">
+<tr>
+	<td>
+		<select name="config[default_boards][{row}][category_id]" class="select">
+			<?php foreach($this->categories AS $category) { ?>
+			<option value="<?php echo $category['category_id'];?>"><?php echo $category['title'];?></option>
+			<?php } ?>
+		</select>
+	</td>
+	<td>
+		<input class="inputbox" name="config[default_boards][{row}][title]" size="55" />
+	</td>
+	<td width="100">
+		<a class="button" onclick="$(this).parents('tr').remove();"><?php echo $this->translate('Delete');?></a>
+	</td>
+</tr>
+</script>

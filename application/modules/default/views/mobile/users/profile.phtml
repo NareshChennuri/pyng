@@ -1,0 +1,426 @@
+
+<?php 
+//var_dump();exit;
+echo $this->header_part; ?>
+<?php
+	
+	$user_avatar = $this->userdata['avatars']['avatar_image_c'];
+	
+ ?>
+ 
+<script type="text/javascript" src='data_mobile/js/jquery.masonry.min.js'></script>
+
+<script type='text/javascript'>
+	
+		var model = new Model;
+		$(".follow").unbind('tap').live('tap',function(event){
+		model.submitFollowAction($(this));
+	});
+	
+	
+	
+	$(".unfollow").live('tap',function(event){
+		model.submitFollowAction($(this));
+	});
+	
+	
+	
+</script>
+
+<div id='profile'>
+	<div class='banner <?php echo !JO_Session::get('user[user_id]') ? "unloged" : "" ?>'>
+	
+		<table class='pinner'>
+			<tbody>
+				<tr>
+					<td class='pinner_image'>
+						<img src="<?php echo $user_avatar ?>"  class="profile user_image" alt="Profile picture of <?php echo $this->userdata['fullname'] ?>"/>
+					</td>
+					<td>
+	                     <span class="name" style="font-weight: bold;"><a href= '<?php echo $this->getRequest()->getBaseUrl().$this->userdata['username'];?>'><?php echo $this->userdata['fullname'] ?></a></span><br>
+	                </td>
+	                <td class="right button_wrapper">
+	                
+	                	
+	                	<?php if(JO_Session::get('user[user_id]')): ?>
+	                		<?php if($this->data['userdata']['user_id'] !== JO_Session::get('user[user_id]') ): ?>
+                										<?php if($this->userIsFollow== 1): ?>
+                										 <a class="mbtn user red follow" id='follow'  style="float:right;display:none" data-link='<?php echo $this->follow_user ?>'>
+										       			 <strong><?php echo $this->translate('Follow') ?></strong><span></span>
+										   				 </a>
+										   				 
+										   				 <a class="mbtn user unfollow disabled pressed" id='unfollow'  data-link='<?php echo $this->follow_user ; ?>' style="float:right;margin-top:7px;" >
+										       			 <strong><?php echo  $this->translate('Unfollow') ?></strong><span></span>
+										   				 </a>
+										   				  <?php else: ?>
+										   				  <a class="mbtn user red follow" id='follow'  style="float:right;" data-link='<?php echo $this->follow_user ?>'>
+										       			 <strong><?php echo $this->translate('Follow') ?></strong><span></span>
+										   				 </a>
+										   				 
+										   				 <a class="mbtn user unfollow disabled pressed" id='unfollow'  data-link='<?php echo $this->follow_user ; ?>' style="float:right;margin-top:7px;display:none" >
+										       			 <strong><?php echo  $this->translate('Unfollow') ?></strong><span></span>
+										   				 </a>
+										   				 <?php endif; ?>
+										   				 <?php endif; ?>
+	                	<?php endif; ?>
+	                </td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="stitching">
+	                    <div class="stitch"></div>
+	                    <div class="stitch white"></div>
+	    </div>
+	 </div>
+	 <?php if($this->active == 'boards'): ?>
+	 
+	 <script type='text/javascript'>
+		$(document).ready(function(){
+			model.get('<?php echo $this->userdata['username'] ?>',function(data){
+				console.log(data);
+				model.getTemplate('board',function(t){
+					$.each(data,function(i,board){
+						if(board.template === 'boards'){
+							console.log(board);
+							
+							var board = $(t).tmpl(board).appendTo(".user_boards ul");
+							
+						}
+					});
+				});
+			});	
+	});
+	
+	 </script>
+	 
+	 <!-- profile text -->
+	 	<div id="profile_bio"><?php echo $this->userdata['description']; ?></div>
+	 
+	 <ul id='profile_links'>
+	 	
+	 	
+		<!-- user has facebook ? -->	 	
+	 	<?php if($this->userdata['facebook_id'] > 0): ?>
+	 		<li id='facebook'>
+	 			<a class='obtn' href='http://www.facebook.com/<?php echo $this->userdata['facebook_id']; ?>' target='_blank'>
+	 				<span>Twitter</span>
+	 			</a>
+	 		</li>
+	 	<?php endif; ?>
+	 	
+	 	<!-- user has twitter? -->
+	 	<?php if($this->userdata['twitter_id']> 0): ?>
+	 		<li id='twitter'>
+	 			<a class='obtn' href='http://twitter.com/<?php echo $this->userdata['twitter_username']; ?>' target='_blank'>
+	 				<span>Twitter</span>
+	 			</a>
+	 		</li>
+	 	<?php endif; ?>
+	 	
+	 	<!-- user has website ? -->
+	 	<?php if($this->userdata['website'] > 0): ?>
+	 		<a class="obtn" href="<?php echo $this->userdata['website'] ?>" target="_blank">
+                 <span>Website</span>
+            </a>
+	 	<?php endif; ?>
+	 </ul>
+
+	<div class="profile_header"></div>
+	
+	<ul class='taplist'>
+		<li class="tappable">
+                    <a class="tappable_link" href="<?php echo $this->user_pins ?>">
+                      <?php echo $this->userdata['pins']; ?> <?php  echo $this->translate('pins'); ?>
+                    <div style='float: right'>
+                    	<img src="../data_mobile/images/arrow.png" height='14px' style="top:3px"/>
+                    </div>
+             </a>
+        </li>
+        
+        <li class="tappable">
+                    <a class="tappable_link" href="<?php echo $this->user_pins_likes?>">
+                       <?php echo $this->userdata['likes']; ?> <?php  echo $this->translate('likes'); ?>
+                    <div class="touch_arrow"></div>
+             </a>
+        </li>
+        
+        <li class="tappable">
+                    <a class="tappable_link" href="<?php echo $this->user_followers ?>">
+                        <?php echo $this->userdata['followers']; ?> <?php  echo $this->translate('followers'); ?>
+                     <div style='float: right'>
+                    	<img src="../data_mobile/images/arrow.png" height='14px' style="top:3px"/>
+                    </div>
+             </a>
+        </li>
+        
+        <li class="tappable">
+                    <a class="tappable_link" href="<?php echo $this->user_following?>">
+                        <?php echo $this->userdata['following']; ?> <?php  echo $this->translate('following'); ?>
+                    <div style='float: right'>
+                    	<img src="../data_mobile/images/arrow.png" height='14px' style="top:3px"/>
+                    </div>
+             </a>
+        </li>
+        
+        
+	</ul>
+	<div class="profile_header bottom"></div>
+	
+	
+	<!--userboards start here -->
+	
+	<div class='user_boards'>
+		<ul>
+
+		</ul>
+	</div>
+	
+</div>
+	<?php endif; ?>
+	
+	<?php if(JO_Request::getInstance()->getParam('filter') === 'likes'){?>
+		<script type="text/javascript" src='data_mobile/js/infscroll.js'>
+	
+	</script>
+		
+		<script type='text/javascript'>
+			$(document).ready(function(){
+			model.get('<?php echo $this->userdata['username'] ?>/pins?filter=likes&RSP=ajax&page=1&callback=Pins.getPins',function(data){
+			console.log(data);
+			model.getTemplate('userBoardPin',function(t){
+				$.each(data,function(i,pin){
+					if(pin.template === 'pins'){
+						console.log(pin);
+						pin.grayImg = model.grayImg;
+						var pin = $(t).tmpl(pin).appendTo("#ColumnContainer .pinboard");
+						pin.find('img').LazyLoad();
+					}
+					
+					if(data.length === parseInt(i+1)){
+						mason();
+					}
+				});
+			});
+		});	
+			
+				
+			
+	
+		});
+		function mason(){
+			var contaner_width = $('#ColumnContainer .pinboard').width();
+			var item_width = (Math.round(contaner_width / 4)-3);
+			$('#ColumnContainer .pinboard .pin').css({width:Math.round(contaner_width / 4)});
+			var total_images = $('#ColumnContainer .pinboard .pin img').size();
+			$("#ColumnContainer").css('margin-left','13%');
+			var start_masonry = false;
+			$('#ColumnContainer .pinboard .pin img').each(function(i, item){
+				var image = new Image(); 
+				image.src = $(item).data('original');
+				image.onload = function(){
+					$(item).css({
+						"width": item_width,
+						"height": Math.ceil(item_width / (this.width/this.height))
+					}).attr('src', this.src).removeAttr('width').removeAttr('height');
+					if( (i+1) == total_images) { start_masonry = true; }
+				};
+				image.onerror = function() {
+					if( (i+1) == total_images) { start_masonry = true; }
+				};
+			});
+			
+			var masonry_load = setInterval(function(){
+				if(start_masonry) {
+					load_masonry();
+					clearInterval(masonry_load);
+				}
+			}, 50);
+			function load_masonry() {
+				
+				$('#ColumnContainer .pinboard').masonry({
+					itemSelector : '.pin',
+					columnWidth: (item_width+3),
+					isAnimated:false,
+					isResizable:false,
+					gutterWidth: 1,
+					animate:false
+				  });
+				  
+				$(window).bind('deviceorientation', function() { $('#ColumnContainer .pinboard').masonry('reload'); });
+				$(window).bind('MozOrientation', function() { $('#ColumnContainer .pinboard').masonry('reload'); });
+				$(window).bind('load', function() { $('#ColumnContainer .pinboard').masonry('reload'); }); 
+				$(window).bind('resize', function() { $('#ColumnContainer .pinboard').masonry('reload'); }); 
+					
+	
+
+	
+					
+					
+			  }
+				
+		
+			};
+		
+	
+		</script>
+		
+		<div id='ColumnContainer'>
+					<div class='pinboard'>
+					</div>
+		</div>
+		
+	<?php } ?>
+	
+	
+	<?php if($this->active == 'followers'): ?>
+			<script type='text/javascript'>
+		$(document).ready(function(){
+			model.get('<?php echo $this->userdata['username'] ?>/followers?RSP=ajax&page=1&callback=Pins.getPin',function(data){
+			console.log(data);
+			model.getTemplate('followers',function(t){
+				console.log(t);
+				$.each(data,function(i,pin){
+					if(pin.template === 'user_followers'){
+						console.log(pin);
+						pin.grayImg = model.grayImg;
+						var pin = $(t).tmpl(pin).appendTo(".list_view");
+						pin.find('img').LazyLoad();
+					}
+				});
+			});
+		});
+	});
+			</script>
+			
+			<ul class='list_view'>
+				
+			</ul>
+	<?php endif; ?>
+	
+	
+	<?php if($this->active == 'following'): ?>
+		<script type='text/javascript'>
+		$(document).ready(function(){
+			model.get('<?php echo $this->userdata['username'] ?>/following?RSP=ajax&page=1&callback=Pins.getPin',function(data){
+		
+			model.getTemplate('following',function(t){
+			
+				$.each(data,function(i,pin){
+					if(pin.template === 'user_followers'){
+						console.log(pin);
+						pin.grayImg = model.grayImg;
+						var pin = $(t).tmpl(pin).appendTo(".list_view");
+						pin.find('img').LazyLoad();
+					}
+				});
+			});
+		});
+	});
+			</script>
+			<ul class='list_view'>
+				
+				
+			</ul>
+	<?php endif; ?>
+	
+	<?php if($this->active === 'pins' && !JO_Request::getInstance()->getParam('like')):;?>
+	<script type="text/javascript" src='data_mobile/js/infscroll.js'>
+	
+	</script>
+	
+		<script type="text/javascript"> 
+			
+		$(document).ready(function(){
+			
+			model.get('<?php echo $this->userdata['username'] ?>/pins?RSP=ajax&page=1&callback=Pins.getPins',function(data){
+		
+			model.getTemplate('userBoardPin',function(t){
+					
+				$.each(data,function(i,pin){
+					if(pin.template === 'pins'){
+						console.log(pin);
+						pin.grayImg = model.grayImg;
+						var pin = $(t).tmpl(pin).appendTo("#ColumnContainer .pinboard");
+						
+					}
+					
+					if(data.length === parseInt(i+1)){
+						mason();
+						console.log(data.length+"-"+ parseInt(i+1))
+						infScroll();
+					}
+				});
+			});
+			
+			});
+		
+
+			
+			
+		
+		});
+		
+		
+		function mason(){
+			var contaner_width = $("#header").width();
+			var item_width = (Math.round(contaner_width / 4)-3);
+			$('#ColumnContainer .pinboard .pin').css({width:Math.round(contaner_width / 4)});
+			var total_images = $('#ColumnContainer .pinboard .pin img').size();
+			$("#ColumnContainer").css('margin-left','13%');
+			var start_masonry = false;
+			$('#ColumnContainer .pinboard .pin img').each(function(i, item){
+				var image = new Image(); 
+				image.src = $(item).data('original');
+				image.onload = function(){
+			
+					
+					$(item).css({
+						"width": item_width,
+						"height": Math.ceil(item_width / (this.width/this.height))
+					}).attr('src', this.src).removeAttr('width').removeAttr('height');
+					if( (i+1) == total_images) { start_masonry = true; }
+				};
+				image.onerror = function() {
+					if( (i+1) == total_images) { start_masonry = true; }
+				};
+			});
+			
+			var masonry_load = setInterval(function(){
+				if(start_masonry) {
+					load_masonry();
+					clearInterval(masonry_load);
+				}
+			}, 50);
+			function load_masonry() {
+				
+				$('#ColumnContainer .pinboard').masonry({
+					itemSelector : '.pin',
+					columnWidth: (item_width+3),
+					isAnimated:false,
+					isResizable:false,
+					gutterWidth: 5,
+					animate:false
+				  });
+				  
+				$(window).bind('deviceorientation', function() { $('#ColumnContainer .pinboard').masonry('reload'); });
+				$(window).bind('MozOrientation', function() { $('#ColumnContainer .pinboard').masonry('reload'); });
+				$(window).bind('load', function() { $('#ColumnContainer .pinboard').masonry('reload'); }); 
+				$(window).bind('resize', function() { $('#ColumnContainer .pinboard').masonry('reload'); }); 
+				}
+				
+		
+			};
+			 
+		</script>
+	
+	
+			<div id='ColumnContainer'>
+					<div class='pinboard'>
+					</div>
+			</div>
+	<?php endif; ?>
+
+<?php echo $this->footer_part; ?>
+
+
+

@@ -1,0 +1,40 @@
+<?php if($this->is_facebook && $this->oauth_fb_key) { ?>
+<meta property="fb:app_id" content="<?php echo $this->oauth_fb_key;?>"/>
+<meta property="og:site_name" content="<?php echo $this->site_name;?>"/>
+<meta property="og:url" content="<?php echo $this->board['board_url'];?>"/>
+<meta property="og:title" content="<?php echo $this->board['title'];?>"/>
+<meta property="og:description" content="<?php echo $this->board['description'];?>"/>
+<meta property="og:image" content="<?php echo $this->board['images']['thumb_image_b'];?>"/>
+<meta property="og:type" content="website"/>
+<?php } ?>
+
+<?php if($this->oauth_fb_key) { ?>
+<script type="text/javascript">
+var loaded_fb = loaded_fb || false;
+head.ready('jquery', function() {
+	//jQuery.Pins_onOpened = jQuery.Pins_onOpened || {};
+	//jQuery.Pins_onOpened['f_u'] = (function() {
+		if($('.titlebar .boardmeta .boardbutton').append('<div class="fb-like" data-href="<?php echo $this->board['board_url'];?>" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div>')) {
+			if(!loaded_fb) {
+				(function() {
+					var e = document.createElement('script'); e.async = true;
+					e.src = document.location.protocol +
+					'//connect.facebook.net/en_US/all.js';
+					document.getElementsByTagName('head')[0].appendChild(e);
+				} ());
+				
+				window.fbAsyncInit = function() {
+					FB.init({
+						appId: '<?php echo $this->oauth_fb_key;?>',
+						status: true,
+						cookie: true,
+						xfbml: true
+					});
+				};
+				loaded_fb = true;
+			}
+		}
+	//});
+});
+</script>
+<?php } ?>

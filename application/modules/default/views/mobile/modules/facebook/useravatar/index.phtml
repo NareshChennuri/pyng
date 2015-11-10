@@ -1,0 +1,27 @@
+<?php ob_start();?>
+<script type="text/javascript">
+head.ready('main', function() {
+	$('.event-refresh-avatar-facebook').click(function(){
+		$(".main-form .current-avatar .thumb").hide();
+		$.post('<?php echo $this->facebook_connect_avatar;?>', function(json){
+			if (json.error) {
+				Pins.error(json.error);
+				$('.main-form .current-avatar .thumb').show();
+			} else if (json.success) {
+				var image = new Image();
+				image.src = json.success;
+				image.onload = function(){
+					$('.main-form .current-avatar .thumb').attr('src', image.src).show();
+				}
+				image.onerror = function(a){
+					$('.main-form .current-avatar .thumb').show();
+				}
+			} else {
+				$('.main-form .current-avatar .thumb').show();
+			}
+		}, 'json');
+	});
+});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<a class="grey-button big-button  event-connect-facebook-hide event-refresh-avatar-facebook" <?php echo (!$this->facebook_connect ? 'style="display:none;"' : '');?>><?php echo $this->translate('Refresh from Facebook');?></a>

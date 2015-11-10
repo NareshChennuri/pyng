@@ -1,0 +1,14 @@
+<?php if($this->open_from_pin_detail_page) { ?>
+<?php ob_start();?>
+<script type="text/javascript">
+window.open_from_pin_detail_page = '<?php echo $this->open_from_pin_detail_page;?>';
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<?php } 
+//end header include
+?>
+<?php echo $this->header_part; ?>
+<div id="boxcontainerwrapper">
+	<div id="boxcontainer" class="event-masonry-container"><?php echo $this->result_data;?></div>
+</div>
+<?php echo $this->footer_part; ?>

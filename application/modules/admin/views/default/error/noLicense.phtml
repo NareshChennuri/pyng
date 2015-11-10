@@ -1,0 +1,21 @@
+<span id="fader" class="mleft30" style="float: none">
+	<span class="msgError"><span>License error!</span><i class="error_text"></i></span>
+</span>
+<br />
+
+<div class="listing-holder left w981">
+    <div class="clr space20"></div>
+	
+	
+	<?php if($this->errors) { ?>
+	<ul>
+		<?php foreach($this->errors AS $error) { ?>
+		<li><?php echo $error;?></li>
+		<?php } ?>
+	</ul>
+	<?php } ?>
+
+
+
+	<div class="clear"></div>  	
+</div>

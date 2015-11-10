@@ -1,0 +1,107 @@
+<?php echo $this->header_part;?>
+
+<div id="welcomecontainerwrapper">
+	<div id="welcomecontainer">
+		<div class="click-pins">
+			<div class="click-title">
+				<h1 class="title-3"><?php echo $this->translate('Create your first board');?></h1>
+				<div class="click-progress event-progress">
+					<?php for($i=1; $i<=5; $i++) { ?>
+					<span <?php if($i <= $this->total_following) { ?>class="active"<?php } ?>><?php echo $i;?></span>
+					<?php } ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="click-categories">
+				<ul class="list">
+					<?php foreach($this->categories AS $c) { ?>
+					<li><a class="event-select-category" title="<?php echo $c['title'];?>" href="javascript:void(0);" data-category_id="<?php echo $c['category_id'];?>"><?php echo $c['title'];?></a></li>
+					<?php } ?>
+				</ul>
+			</div>
+			<div class="click-content event-select-follow-boards">
+				<p><?php echo $this->translate('Your boards are a great place to express yourself. Create a board to share things that inspire you, plan an event, organize a DIY project, and more. Choose an idea from the list on the left to create your first board.');?></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>
+
+<div id="infscr-loading" class="hide"><img alt="<?php echo $this->translate('Loading...');?>" src="data/images/loading.gif" />
+	<div><em><?php echo $this->translate('Loading data...');?></em></div>
+</div>
+
+<script type="text/javascript">
+	head.ready('main', function() {
+		var template = $('head').requireTemplate('welcome_create_board');
+		var posted;
+		$('.event-select-category').click(function() {
+			$('body').append($('<div>').attr('id','hide-site-for-click').css({'opacity': '0.5','background':'#ffffff','top':0,'left':0,'position':'fixed','width':'100%','height':'100%','z-index':99998}));
+			$('#infscr-loading').show().css({
+				'z-index': 99999
+			});
+			var element = this;
+			if(posted) {
+				posted.abort();
+			}
+			$('.event-select-follow-boards p').remove();
+			
+			var holder = $('.event-select-follow-boards ul');
+			if(holder.size()<1) {
+				holder = $('<ul class="userBoards">').appendTo('.event-select-follow-boards');
+			}
+
+
+			posted = $.post('<?php echo $this->load_boards;?>', {category_id: $(this).data('category_id')}, function(data){
+				holder.empty();
+				if(data.error) {
+					$('<li>').html(data.error).appendTo(holder);
+				} else if(data.boards) {
+					$(data.boards).each(function(i, board) {
+						template.tmpl(board).appendTo(holder).show(1, function() {
+							Pins.lazyLoad($('.event-load-lazy-load', this));
+						});
+					});
+					$(element).data('boards_cache', data.boards);
+				}
+				$('#hide-site-for-click').remove();
+				$('#infscr-loading').hide();
+			},'json').error(function() {
+				$('#hide-site-for-click').remove();
+				$('#infscr-loading').hide();
+				holder_title.html(('<?php echo $this->translate('Error loading data %s');?>').replace('%s',$(element).html()));
+			}).fail(function() {
+				$('#hide-site-for-click').remove();
+				$('#infscr-loading').hide();
+				holder_title.html(('<?php echo $this->translate('Error loading data %s');?>').replace('%s',$(element).html()));
+			});
+			
+			
+			return false;
+		});
+
+		$('.event-click-create-board').live('click', function() {
+			var element = this;
+			loading.load(element);
+	
+			$.post('<?php echo $this->createBoardWithCat;?>', {newboard:$(element).parents('.boardAction').find('h4').text(),category_id:$(this).data('category_id')}, function(data) {
+
+				if(data.created) {
+					var url = '<?php echo $this->next_step;?>';
+					url += (url.indexOf('?') > -1 ? '&' : '?') + 'name='+encodeURIComponent($(element).parent().find('.title').text())+'&board_id=' + $(element).data('board_id');
+					window.location = url;
+				} else if(data.error) {
+					Pins.error(data.error);
+				} else if(data.redirect) {
+					window.location = data.redirect;
+				} else {
+					Pins.error(data);
+				}
+				loading.stop();
+			}, 'json');
+			return false;
+		});
+		
+	});
+</script> 
+<?php echo $this->footer_part;?>

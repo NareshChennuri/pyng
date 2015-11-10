@@ -1,0 +1,18 @@
+<?php echo $this->header_part; ?>
+<div class="searchbar">
+	<p>
+		<?php $key = 0;foreach($this->menuSearch AS $menu) { ?>
+		<?php echo ($key? '&middot;':'');?>
+		<?php if($menu['active']) { ?>
+		<span class="selected"><?php echo $menu['title']?></span>
+		<?php } else { ?>
+		<a href="<?php echo $menu['href']?>"><?php echo $menu['title']?></a>
+		<?php } ?>
+		<?php $key++; } ?>
+		<span class="greyselected"> &mdash; <?php echo $this->translate('search results for');?> <span class="hilight"><?php echo $this->query;?></span></span> 
+	</p>
+</div>
+<div id="boxcontainerwrapper">
+	<div id="boxcontainer" class="event-masonry-container"><?php echo $this->result_data;?></div>
+</div>
+<?php echo $this->footer_part; ?>

@@ -1,0 +1,17 @@
+<li class="boardItem">
+	<div class="boardAction">
+		<h4><span class="title">${title}</span> ${text_by} ${fullname}</h4>
+		{{if following_board}} 
+		<a class="red-button event-click-follow-board-welcome disabled" href="${board_follow_href}" >${text_unfollow}</a> 
+		{{else}} 
+		<a class="red-button event-click-follow-board-welcome" href="${board_follow_href}" >${text_follow}</a> 
+		{{/if}}
+		<div class="clear"></div>
+	</div>
+	<ul class="thumbs">
+		{{each thumbs}}
+		<li class="thumb"><img alt="${title} ${text_by} ${fullname}" class="event-load-lazy-load" src="data/images/grey.gif" data-original="${$value.thumb_image_a}" /></li>
+		{{/each}}
+	</ul>
+	<div class="clear"></div>
+</li>

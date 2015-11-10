@@ -1,0 +1,39 @@
+#uploader { width: 500px; }
+.plupload_buttons { margin: 7px 0; }
+.plupload_header { display: none; }
+.plupload_start { float: left; margin-left: 10px;}
+.plupload_start span { padding: 5px 13px 6px 26px; display: block;  }
+.plupload_disabled, a.plupload_disabled:hover { color: #a6a6a6 !important; border: 1px solid #d5d5d5!important; background: #e5e5e5!important; box-shadow: none!important; -moz-box-shadow: none!important; text-shadow: none!important; cursor: default!important; }
+.plupload_disabled span { padding: 5px 13px 6px 13px; }
+.plupload_add { float: left; }
+.plupload_add span { padding: 5px 13px 6px 26px; display: block; }
+.plupload_wrapper { font-size: 14px;; width: 100%; }
+.plupload_container input { border: 1px solid #DDD; font-size: 11px; width: 98%; }
+.plupload_filelist { margin: 0; padding: 0; list-style: none; }
+.plupload_scroll .plupload_filelist { height: 190px; overflow-y: auto; border-top: 1px solid rgba(34, 25, 25, 0.1); }
+.plupload_filelist li { padding: 10px 10px 10px 0; border-top: 1px solid rgba(34, 25, 25, 0.1); }
+.plupload_filelist li:hover {}
+.plupload_filelist li:first-child {border-top: none;}
+.plupload_filelist_header, .plupload_filelist_footer { padding: 10px 0; color: #8C7E7E; }
+.plupload_filelist_header { font-weight: bold; }
+.plupload_filelist_footer { border-top: 1px solid rgba(34, 25, 25, 0.1); line-height: 30px; vertical-align: middle; } 
+.plupload_filelist_footer .plupload_file_size, .plupload_filelist_footer .plupload_file_status, .plupload_filelist_footer .plupload_progress, .plupload_filelist_footer .plupload_file_action {  }
+.plupload_file_name { float: left; overflow: hidden; }
+.plupload_file_status { color: #777; }
+.plupload_file_status span {}
+.plupload_file_size, .plupload_file_status, .plupload_progress { float: right; width: 80px; }
+.plupload_file_size, .plupload_file_status, .plupload_file_action { text-align: right; }
+.plupload_filelist .plupload_file_name { width: 205px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.plupload_file_action { float: right; width: 12px; height: 12px; margin-left: 15px; margin-top: 3px; }
+.plupload_file_action * { display: none; width: 12px; height: 12px; }
+li.plupload_done { color: #AAA; }
+li.plupload_delete a { background-image: url("../../images/Rearrange-Cancel.png"); background-repeat: no-repeat; background-position: center; }
+li.plupload_failed a { background: url(../../images/plugins/plupload/error.png) no-repeat 0; cursor: default; }
+li.plupload_done a { background-image: url(../../images/plugins/plupload/uploaded.png); background-repeat: no-repeat; background-position: center; }
+.plupload_progress, .plupload_upload_status { display: none; }
+.plupload_progress_container { margin-top: 10px; border: 1px solid #CCC; background: #FFF; padding: 1px; }
+.plupload_progress_bar { width: 0px; height: 7px; background: #CDEB8B; }
+.plupload_scroll .plupload_filelist_header .plupload_file_action, .plupload_scroll .plupload_filelist_footer .plupload_file_action { margin-right: 17px; }
+.plupload_clear,.plupload_clearer { clear: both; }
+.plupload_clearer, .plupload_progress_bar { display: block; font-size: 0; line-height: 0; }
+li.plupload_droptext { background: url(../../images/plugins/plupload/drag.png) no-repeat 50%; text-align: center; vertical-align: middle; border: 0; line-height: 165px; text-indent: -9999px; }

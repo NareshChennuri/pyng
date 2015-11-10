@@ -1,0 +1,63 @@
+<?php echo $this->header_part; ?>
+<?php
+	
+	$user_avatar = $this->board_users[0]['avatars']['avatar_image_a'];
+	
+ ?>
+<script type='text/javascript'>
+		var model = new Model;
+	
+	model.get(window.location.href+"?RSP=ajax&page=1&callback=Pins.getPins&",function(data){
+		console.log(data);
+		model.getTemplate('pinBox',function(pinBox){
+			$.each(data,function(i,pin){
+				if(pin.template === 'pins'){
+					
+					pin.grayImg = model.grayImg;
+					var pin = $(pinBox).tmpl(pin).appendTo(".boardPins");
+					pin.find('img').LazyLoad();
+				}
+			});
+		});
+	});
+	
+</script> 
+ 
+<script type="text/javascript" src='data_mobile/js/infscroll.js'>
+
+	$(document).ready(function(){
+		lazyLoad();
+		infScroll();
+	})
+</script>
+<div id='board'>
+		<div class='banner'>
+			<table class='pinner'>
+				<tbody>
+					<tr>
+						<td class="pinner_image">
+                             <a href="<?php echo $this->user_info['profile']; ?>" ontouchstart="">
+								<img src="<?php echo $user_avatar; ?>" class="profile user_image" alt="Profile picture of Weby Studios">
+                             </a>
+                        </td>
+                        <td>
+                           <a class="name" href="<?php echo $this->user_info['profile']; ?>"><?php echo $this->board_users[0]['fullname']; ?></a><br>
+                           <span class="subtext"><?php echo $this->board['board_title']; ?></span>
+                        </td>
+					</tr>
+				</tbody>	
+			</table>
+		
+			<div class="stitching">
+             	<div class="stitch"></div>
+                <div class="stitch white"></div>
+           </div>
+		</div>
+</div>
+<div class='boardPins'>
+
+</div>		
+		
+		
+	
+<?php echo $this->footer_part; ?>

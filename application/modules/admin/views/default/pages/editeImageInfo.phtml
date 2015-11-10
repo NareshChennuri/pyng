@@ -1,0 +1,98 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo $this->translate('Photo Info');?></title>
+
+<base href="<?php echo $this->getRequest()->getBaseUrl();?>" />
+
+<link href="cms/<?php echo $module;?>/assets/style.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="cms/assets/jquery.js"></script>
+<script type="text/javascript" src="cms/assets/tabs.js"></script>
+
+</head>
+<body>
+
+	<div id="content">
+		<?php if($this->error) { ?>
+		<div id="fader"><div class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error;?></div></div>
+		<div class="clear"></div>
+		<?php } ?>
+	
+		<table width="660">
+			<tr>
+				<td valign="top">
+					<div class="wrap">
+							
+						<form id="image_info" method="post" action="">
+							<?php if($this->session_edit) { ?>
+							<input type="hidden" name="session_edit" value="<?php echo $this->session_edit;?>" />
+							<?php } ?>
+							<table cellspacing="0" cellpadding="0" class="formtable">	
+								<tbody>
+									<tr>
+										<td width="150"><?php echo $this->translate('Title:');?></td>
+										<td>
+											<input type="text" size="45"  value="<?php echo $this->title;?>" class="inputbox" name="title" />
+					        			</td>
+									</tr>
+									<tr>
+										<td><?php echo $this->translate('Description:');?></td>
+										<td>
+											<textarea style="width: 335px; height: 80px;" class="inputbox" name="description"><?php echo $this->description;?></textarea>
+					        			</td>
+									</tr>
+								</tbody>
+							</table>
+							
+						</form>
+						
+					</div>
+				</td>
+				<td width="150" valign="top">
+					<div class="wrap">
+
+						<ul id="galleryrow">
+							<li>
+								<a href="javascript:void(0);" onclick="rotateImage('left');" style="top:0;position:absolute;left:0;">
+									<img src="cms/<?php echo $module;?>/images/rotate-left.png" title="<?php echo $this->translate('Rotate the left');?>" />
+								</a>
+								<a href="javascript:void(0);" onclick="rotateImage('right');" style="top:0;position:absolute;right:0;">
+									<img src="cms/<?php echo $module;?>/images/rotate-right.png" title="<?php echo $this->translate('Rotate to right');?>" />
+								</a>
+								<div class="controller">
+									<img id="image_edit_src" src="<?php echo $this->preview;?>" />
+								</div>
+							</li>
+						</ul>						
+						<div class="clear"></div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		$(".tabs ul").idTabs(); 
+	});
+
+	function rotateImage(deg) {
+		$.post('<?php echo $module;?>/pages/rotateImage/', {'deg': deg, 'file': '<?php echo $this->image;?>'}, function(data) {
+			if(data != 'error') {
+				$('#image_edit_src').attr('src', data);
+				parent.parent.top.$('#item_<?php echo $this->image_id;?> .image_src').attr('src', data);
+			}
+		});
+	}
+</script>
+
+</body>
+
+</html>

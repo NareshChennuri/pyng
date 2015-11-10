@@ -1,0 +1,89 @@
+<?php 
+
+echo $this->header_part; 
+
+?>
+
+<script type='text/javascript'>
+	var model = new Model;
+	
+
+	
+	$(document).ready(function(){
+		
+		model.get(window.location.href+"?RSP=ajax&callback=Pins.loadPinDetails",function(data){
+			console.log(data);
+			$(".pinner_image a img").attr('src',data.author_profile.avatars.avatar_image_a);
+			$(".name.link").attr('href',data.author_profile.href).text(data.author_profile.fullname);
+			model.getTemplate('pinDetail',function(t){
+					
+					
+						
+					
+					var board = data.board_url;
+					model.get(board,function(boards){
+						
+						boardData = {};
+						data.thumbs = {};
+						boardData.title = boards[0]['text_board'];
+						$.each(boards,function(i,e){
+							if(i < 4){
+								if(e.images.thumb_image_a){
+									data.thumbs[i] = {"thumb_image_a":e.images.thumb_image_a}
+								}
+								
+							}
+						});
+						$(t).tmpl(data).appendTo(".closeup");
+					});
+					
+					$('body').height('0px')
+					
+				
+			});
+		});
+	});
+	
+</script>
+
+		<div class="pinboard closeup">
+                <div class='pin' data-id='<?php echo $this->pin['pin_id'] ?>'>
+                    <!-- Pinner element -->
+                    <div class="banner <?php echo JO_Session::get('user[user_id]') ? "" : "unloged" ?>">
+                        <table class="pinner">
+  
+  
+  <tbody><tr>
+    <td class="pinner_image">
+      <a href="<?php echo $this->author_profile['href'] ?>" ontouchstart="">
+        <img src="<?php echo $this->author_profile['avatars']['avatar_image_a']?>" alt="Picture of <?php echo $this->author_profile['fullname']?>">
+      </a>
+    </td>
+    <td class="pinner_name">
+        <a href="<?php echo $this->author_profile['href'] ?>" class="name link" ontouchstart="">
+           <?php echo $this->author_profile['fullname'] ?>
+        </a>
+    </td>
+    <td class='right'>
+						
+						<a href='<?php echo $this->board_url; ?>' class='board link'>
+						
+								<?php echo $this->text_board; ?>
+						</a>
+					</td>
+  </tr>
+</tbody></table>
+
+                        <div class="stitching">
+                            <div class="stitch"></div>
+                            <div class="stitch white"></div>
+                        </div>
+                    </div>
+
+                    
+    </div>
+	
+</div>
+
+<?php echo $this->footer_part; ?>
+

@@ -1,0 +1,10 @@
+<?php echo $this->header_part; ?>
+<div id="pagecontainer"> 
+	<?php echo $this->left_part;?>
+	<div class="page">
+		<h1><a href="<?php echo $this->full_url;?>"><?php echo $this->page['title']; ?></a></h1>
+		<div class="textbox"> <?php echo $this->page['description']; ?> </div>
+	</div>
+	<div class="clear"></div>
+</div>
+<?php echo $this->footer_part; ?>

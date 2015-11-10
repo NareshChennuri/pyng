@@ -1,0 +1,57 @@
+<?php if($this->error_total_images) { ?>
+<script type="text/javascript">
+$(document).ready(function(){
+	Pins.notify('<?php echo $this->translate('We couldn\'t find any images');?>');
+});
+</script>
+<?php } ?>
+<div id="emailpin" class="addapin">
+	<form action="<?php echo $this->form_action;?>" method="get">
+		<p class="ntp">
+			<label for="url" class="hide"><?php echo $this->translate('URL');?>:<br /></label>
+			<input type="text" name="url" id="url" value="http://" />
+		</p>
+		<p class="submit">
+			<input type="submit" value="<?php echo $this->translate('Find Images');?>" />
+		</p>
+		<div class="clear"></div>
+	</form>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#emailpin form').submit(function(){
+		$('#emailpin form .submit input').after('<img src="data/images/loading_2.gif" id="loading_button" />');
+		$('#emailpin form .submit input').attr('disabled', true).addClass('disabled');
+		$.get('<?php echo $this->form_action;?>', $('#emailpin form').serialize(), function(data){
+
+			/*if(data.error) {
+				Pins.error(data.error);
+				$('#loading_button').remove();
+				$('#emailpin form .submit input').attr('disabled', false).removeClass('disabled');
+				return;
+			}
+			
+			if(data.total_images < 1) {
+				$('#loading_button').remove();
+				Pins.notify('<?php echo $this->translate('We couldn\'t find any images');?>');
+				$('#emailpin form .submit input').attr('disabled', false).removeClass('disabled');
+				return;
+			}*/
+
+			$('#loading_button').remove();
+			$.fancybox(data, {
+				'titleFormat': function(){
+//		        	return '<div id="fancybox-title-over">' + (data.title ? data.title : '<?php echo $this->translate('Add a Pin');?>') + '</div>';
+		        	return '<div id="fancybox-title-over"><?php echo $this->translate('Add a Pin');?></div>';
+		        },
+		        titlePosition: 'over'
+			});
+			
+		});
+		return false;
+	});
+
+	$('#url').clearOnFocus();
+});
+</script>

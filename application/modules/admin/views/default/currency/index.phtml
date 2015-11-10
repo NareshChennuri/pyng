@@ -1,0 +1,148 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/currency.png">
+		<?php echo $this->translate('Currency Management');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<a class="button" href="<?php echo $module;?>/currency/create/"><?php echo $this->translate('Add new record');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+<p class="info">
+	<?php echo $this->translate('Manage your currencies.');?><br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+
+<table cellspacing="0" cellpadding="0" class="display dragable_table" id="sort_order">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20" class="left">#</th>
+			<th class="left"><?php echo $this->translate('Name');?></th>
+			<th class="left"><?php echo $this->translate('Symbol Left');?></th>
+			<th class="left"><?php echo $this->translate('Symbol Right');?></th>
+			<th class="left"><?php echo $this->translate('Value');?></th>
+			<th class="left"><?php echo $this->translate('Format');?></th>
+			<th width="50"><?php echo $this->translate('Status');?></th>
+			<th width="50"><?php echo $this->translate('Edit');?></th>
+			<th width="50"><?php echo $this->translate('Delete');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->currency) { ?>
+	<?php foreach($this->currency AS $currency) { ?>
+		<tr id="<?php echo $currency['currency_id'];?>">
+			<td><?php echo $currency['currency_id'];?>.</td>
+			<td>
+				<?php echo $currency['title'];?>
+				<?php if($currency['is_set']) { ?> <strong>(Default)</strong> <?php } ?>	
+			</td>
+			<td><?php echo $currency['symbol_left'];?></td>
+			<td><?php echo $currency['symbol_right'];?></td>
+			<td><?php echo $currency['value'];?></td>
+			<td><?php echo $currency['format'];?></td>
+
+			<td align="center">
+				<?php if($this->default_currency != $currency['code']) { ?>
+				<a href="javascript:void(0);" onclick="changeStatus(<?php echo $currency['currency_id'];?>);">
+					<img src="cms/<?php echo $module;?>/images/<?php echo ($currency['status'] ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($currency['status'] ? $this->translate('Active') : $this->translate('Inactive'));?>" />
+				</a>
+				<?php } else { ?>
+				<a href="javascript:void(0);" onclick="alert('<?php echo $this->translate('You can not change the status of the default currency');?>');">
+					<img src="cms/<?php echo $module;?>/images/<?php echo ($currency['status'] ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($currency['status'] ? $this->translate('Active') : $this->translate('Inactive'));?>" />
+				</a>
+				<?php } ?>
+			</td>
+			<td align="center"><a href="<?php echo $module;?>/currency/edit/?id=<?php echo $currency['currency_id'];?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+			<td align="center">
+				<?php if(!$currency['is_set']) { ?>
+				<a id="item_<?php echo $currency['currency_id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+				<?php } else { ?>
+				<a onclick="alert('<?php echo $this->translate('You can not delete the default currency');?>')" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+				<?php } ?>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="5">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+
+<script type="text/javascript"> 
+// <![CDATA[
+changeStatus = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/currency/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#'+id).html($(data).find('#'+id).html());
+        		setTimeout(function(){
+        			$("#"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        		}, 500);
+        	});
+        }
+	});
+};
+
+$(document).ready(function(){
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/currency/delete",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+});
+
+// ]]>
+</script>

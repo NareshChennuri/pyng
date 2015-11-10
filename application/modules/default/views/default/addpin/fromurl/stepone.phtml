@@ -1,0 +1,48 @@
+<?php if($this->redirect) { ?>
+<script type="text/javascript">
+window.location = '<?php echo $this->redirect;?>';
+</script>
+<h2><?php echo $this->translate('Redirect to login!');?></h2>
+<?php } else { ?>
+<?php if($this->error) { ?>
+<script type="text/javascript">
+$(document).ready(function(){
+	Pins.error('<?php echo $this->error;?>');
+});
+</script>
+<?php } elseif($this->error_total_images) { ?>
+<script type="text/javascript">
+$(document).ready(function(){
+	Pins.notify('<?php echo $this->translate('We couldn\'t find any images');?>');
+});
+</script>
+<?php } ?>
+
+<div class="popup">
+	<form action="<?php echo $this->form_action;?>" method="get" class="main-form">
+		<div class="row row-single row-fixwidth">
+			<div class="cell-center">
+				<p class="inline"><input type="text" name="url" id="url" value="http://" class="event-clear-focus" /></p>
+				<p class="inline"><button class="grey-button big-button event-click-submit-disable"><?php echo $this->translate('Find Images');?></button></p>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</form>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.popup form').submit(function(){
+		var button = $('.event-click-submit-disable', this)
+		.attr('disabled', true).addClass('disabled');
+		loading.load(button);
+		$.get('<?php echo $this->form_action;?>', $(this).serialize(), function(data){
+			Pins.openPopupBoxWithHtml(data);
+		});
+		return false;
+	});
+});
+</script>
+<?php }?>

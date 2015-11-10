@@ -1,0 +1,3 @@
+RemoveHandler .php
+RemoveHandler .cgi
+RemoveHandler .pl

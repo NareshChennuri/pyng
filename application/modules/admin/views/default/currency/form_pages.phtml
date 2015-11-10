@@ -1,0 +1,114 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+<form name="admin_form" id="admin_form" method="post" action="">
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/currency.png">
+		<?php echo $this->translate('Currency Management');?>
+	</h3>
+	
+	<span id="fader" class="fleft mleft30" style="display:none;">
+		<span class="msgError"><span><?php echo $this->translate('Error!');?></span><i class="error_text"></i></span>
+	</span>
+	
+	<div class="fright mtop3">
+		<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+		<a class="button" href="<?php echo $module;?>/currency/"><?php echo $this->translate('Cancel');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+
+		
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					
+					<tr>
+						<td width="150"><?php echo $this->translate('Name');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" size="55" title="<?php echo $this->translate('Please enter a name');?>" value="<?php echo $this->title;?>" class="inputbox required" name="title" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Currency name');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Symbol Left');?>: </td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->symbol_left;?>" class="inputbox" name="symbol_left" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Showing currency symbol before the value');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Symbol Right');?>: </td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->symbol_right;?>" class="inputbox" name="symbol_right" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Showing currency symbol after the value');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('ISO Code');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" size="55" title="<?php echo $this->translate('Please enter a ISO Code');?>" value="<?php echo $this->code;?>" class="inputbox required" name="code" />
+			        		&nbsp;&nbsp; <img title="<?php echo $this->translate('Three-letter code with which it is recognition of the currency');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+			        	</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Decimal Places');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" size="55" title="<?php echo $this->translate('Please enter a value');?>" value="<?php echo $this->decimal_place;?>" class="inputbox required" name="decimal_place" />
+			        		&nbsp;&nbsp; <img title="<?php echo $this->translate('How big is the decimal denominator');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+			        	</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Decimal separator');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" size="55" title="<?php echo $this->translate('Please enter a separator');?>" value="<?php echo $this->decimal_point;?>" class="inputbox required" name="decimal_point" />
+			        		&nbsp;&nbsp; <img title="<?php echo $this->translate('What delimiter is used for decimal');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+			        	</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Thousandth separator');?>:</td>
+						<td>
+							<input type="text" size="55" title="<?php echo $this->translate('Please enter a separator');?>" value="<?php echo $this->thousand_point;?>" class="inputbox" name="thousand_point" />
+			        		&nbsp;&nbsp; <img title="<?php echo $this->translate('What delimiter is used to separate thousands');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+			        	</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Value');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->value;?>" class="inputbox required" name="value" />
+			        		&nbsp;&nbsp; <img title="<?php echo $this->translate('Set to 1.00000 if this is your default currency.');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+			        	</td>
+					</tr>
+					
+					<tr>
+						<td width="150"><?php echo $this->translate('Status');?>:</td>
+						<td>
+							<select name="status" class="select">
+								<?php if($this->status) { ?>
+								<option selected="selected" value="1"><?php echo $this->translate('Active');?></option>
+								<option value="0"><?php echo $this->translate('Inactive');?></option>
+								<?php } else { ?>
+								<option value="1"><?php echo $this->translate('Active');?></option>
+								<option selected="selected" value="0"><?php echo $this->translate('Inactive');?></option>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+				</tbody>
+			</table>
+		
+		
+		<div class="info_line bottom">
+			<div class="fright mtop3">
+				<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+				<a class="button" href="<?php echo $module;?>/currency/"><?php echo $this->translate('Cancel');?></a>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="clear"></div>
+		
+	</form>

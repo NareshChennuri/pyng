@@ -1,0 +1,122 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<form name="admin_form" id="admin_form" method="post" action="">
+	<input type="hidden" name="hidden_mod" value="<?php echo $this->mod;?>" />
+	<input type="hidden" name="hidden_lang" value="<?php echo $this->language_id;?>" />
+	<div class="info_line top">
+		<h3 class="fleft title">
+			<img alt="" src="cms/<?php echo $module;?>/images/language.png">
+			<?php echo $this->translate('Management texts on the site');?>
+		</h3>
+		
+		<?php if($this->successfu_edite || $this->error_permision) { ?>
+		<?php if($this->successfu_edite) { ?>
+		<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+		<?php } else if($this->error_permision) { ?>
+		<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error_permision;?></span></span>
+		<?php } ?>
+		<script type="text/javascript"> 
+		// <![CDATA[
+		$(document).ready(function() {       
+			setTimeout(function() {
+				$("#fader").customFadeOut("slow" ,    
+				function() {       
+					$("#fader").remove();  
+				});
+			},
+			4000);
+		});
+		// ]]>
+		</script>
+		<?php } ?>
+		
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $module;?>/translate/"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div class="clear"></div>
+
+	
+	<div class="tabs mtop10">
+		<ul>
+			<?php foreach($this->modules AS $module1) { ?>
+			<li>
+				<a rel="<?php echo $module1;?>" <?php echo ($this->mod == $module1 ? 'class="selected"' : '');?> href="<?php echo $module;?>/translate/?mod=<?php echo $module1;?>">
+					<?php echo $module1;?>
+				</a>
+			</li> 
+			<?php } ?>
+		</ul>
+		<div class="clear"></div>
+	</div>
+	
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<?php if($this->translated) { ?>
+			<?php foreach($this->translated AS $translate) { ?>
+			<tr>
+				<td width="40%" valign="top"><?php echo $translate['keyword'];?></td>
+				<?php if(1 == 2) { ?>
+				<td width="30">
+					<a style="cursor:pointer;" onclick="translateText('<?php echo urlencode($translate['keyword']);?>', '.rowin<?php echo $translate['language_keywords_id'];?>')">
+						<img title="" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/translate.png"> 
+					</a>
+				</td>
+				<?php } ?>
+				<td valign="top">
+					<?php if(mb_strlen($translate['keyword'], 'utf-8') > 150) { ?>
+					<textarea rows="5" style="width:98%;" cols="5" class="inputbox rowin<?php echo $translate['language_keywords_id'];?>"  name="translate[<?php echo $translate['language_keywords_id'];?>]"><?php echo $translate['translate'];?></textarea>
+					<?php } else { ?>
+					<input type="text" style="width:98%;" value="<?php echo $translate['translate'];?>" class="inputbox rowin<?php echo $translate['language_keywords_id'];?>"  name="translate[<?php echo $translate['language_keywords_id'];?>]" />
+        			<?php } ?>
+        		</td>
+			</tr>
+			<?php } ?>
+			<?php } ?>
+		</tbody>
+	</table>
+		
+	<div class="info_line bottom">
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $module;?>/translate/"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+		
+</form>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.tabs a').click(function(){
+		if($(this).hasClass('lg')) {
+			$('#admin_form input[name="hidden_lang"]').val($(this).attr('rel'));
+		} else {
+			$('#admin_form input[name="hidden_mod"]').val($(this).attr('rel'));
+		}
+		$('#admin_form input[type=submit]').click();
+		return false;
+	});
+});
+</script>
+
+<?php if($this->def_lang != $this->sel_lang) { ?>
+<script type="text/javascript">
+    function translateText(text, row) {
+
+    	$.post('<?php echo $module;?>/translate/translateApi', {from:'<?php echo $this->def_lang;?>', to:'<?php echo $this->sel_lang;?>', word:text}, function(data){
+			if(data.text) {
+				$(row).val(data.text);
+			} else if(data.error) {
+				alert(data.error);
+			}
+        }, 'json');
+    }
+</script>
+<?php } ?>
+

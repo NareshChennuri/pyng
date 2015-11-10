@@ -1,0 +1,9 @@
+<?php if($this->is_facebook && $this->oauth_fb_key) { ?>
+<meta property="fb:app_id" content="<?php echo $this->oauth_fb_key;?>"/>
+<meta property="og:site_name" content="<?php echo $this->site_name;?>"/>
+<meta property="og:url" content="<?php echo $this->user['user_url'];?>"/>
+<meta property="og:title" content="<?php echo $this->user['title'];?>"/>
+<meta property="og:description" content="<?php echo $this->user['description'];?>"/>
+<meta property="og:image" content="<?php echo $this->user['avatars']['avatar_image_b'];?>"/>
+<meta property="og:type" content="website"/>
+<?php } ?>

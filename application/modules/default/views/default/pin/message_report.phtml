@@ -1,0 +1,18 @@
+<?php if(!$this->comment_is) { ?>
+<div class="popup">
+	<div class="popuptext">
+		<p><?php echo $this->translate('Thanks for reporting this pin! Our team will review the pin and delete it if it violates the');?> <a href="<?php echo $this->terms_href;?>" class="link"><?php echo $this->terms;?></a>.</p>
+	</div>
+</div>
+<?php } else { ?>
+<div class="popup">
+	<div class="popuptext">
+		<p><?php echo $this->translate('Thanks for reporting this comment! Our team will review the comment and delete it if it violates the');?> <a href="<?php echo $this->terms_href;?>" class="link"><?php echo $this->terms;?></a>.</p>
+	</div>
+</div>
+<?php } ?>
+<script type="text/javascript">
+setTimeout(function(){
+	$('.event-click-open-detail-view[data-opener=<?php echo $this->pin_id;?>]').click()
+}, 5000);
+</script>

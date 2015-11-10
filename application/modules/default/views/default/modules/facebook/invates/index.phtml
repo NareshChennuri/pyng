@@ -1,0 +1,212 @@
+<?php echo $this->header_part; ?>
+<div id="pagecontainer">
+
+	<?php echo $this->methodsforinvates;?>
+
+	<div class="page">
+		<h1><?php echo $this->translate('Facebook');?></h1>
+		<div class="fb-friends">
+			<div class="column-a">
+				<h3 class="title-3"><?php echo $this->translate('Invite Friends');?></h3>
+				<div class="filter">
+					<input type="text" class="event-clear-focus event-live-search" name="filter-term" value="" placeholder="<?php echo $this->translate('Type a Friend\'s Name');?>" />
+				</div>
+				<ul class="friendslist event-live-search-list">
+					<?php foreach($this->not_profile_users AS $f) { ?>
+					<li id="invite_<?php echo $f['id'];?>">
+						<p class="avatar"> <img class="event-load-lazy-load" src="data/images/grey.gif" data-original="<?php echo $f['avatar'];?>" alt="<?php echo $f['name'];?>" /> </p>
+						<p class="name"><?php echo $f['name'];?></p>
+						<p class="button"><a class="grey-button" onclick="sendRequestToRecipients(<?php echo $f['id'];?>, '<?php echo $f['key'];?>');"><?php echo $this->translate('Invite');?></a></p>
+						<div class="clear"></div>
+					</li>
+					<?php } ?>
+				</ul>
+			</div>
+			<div class="column-b">
+				<h3 class="title-3">
+					<?php if($this->friends_not_follow) { ?>
+					<button type="button" class="red-button event-click-follow-all"><?php echo $this->translate('Follow All');?></button>
+					<?php } ?>
+					<?php echo sprintf($this->translate('Friends on %s'), $this->site_name);?>
+				</h3>
+				
+				<ul class="friendslist event-follow">
+					<?php if($this->friends_not_follow) { ?>
+					<?php foreach($this->friends_not_follow AS $friend) { ?>
+					<li>
+						<p class="avatar"> <a href="<?php echo $friend['profile'];?>"> <img src="<?php echo $friend['avatar'];?>" alt="<?php echo $friend['fullname'];?>" /> </a> </p>
+						<p class="name"><a href="<?php echo $friend['profile'];?>"><?php echo $friend['fullname'];?></a></p>
+						<p class="button"><a class="grey-button event-click-follow-user-facebook" href="<?php echo $friend['follow_user'];?>"><?php echo $this->translate('Follow');?></a></p>
+						<div class="clear"></div>
+					</li>
+					<?php } ?>
+					<?php } ?>
+				</ul>
+				
+				<p class="seemore"><strong><?php echo sprintf($this->translate('Already following %d friends'), count($this->friends));?></strong></p>
+				
+				<ul class="friendslist event-unfollow" >
+					<?php if($this->friends) { ?>
+					<?php foreach($this->friends AS $friend) { ?>
+					<li>
+						<p class="avatar"> <a href="<?php echo $friend['profile'];?>"> <img src="<?php echo $friend['avatar'];?>" alt="<?php echo $friend['fullname'];?>" /> </a> </p>
+						<p class="name"><a href="<?php echo $friend['profile'];?>"><?php echo $friend['fullname'];?></a></p>
+						<p class="button"><a class="grey-button event-click-follow-user-facebook disabled" href="<?php echo $friend['follow_user'];?>"><?php echo $this->translate('Unfollow');?></a></p>
+						<div class="clear"></div>
+					</li>
+					<?php } ?>
+					<?php } ?>
+				</ul>
+				
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<div id="fb-root"></div>
+
+<div id="infscr-loading" class="hide"><img alt="<?php echo $this->translate('Loading...');?>" src="data/images/loading.gif" /><div><em><?php echo $this->translate('Loading friends from facebook...');?></em></div></div>
+
+<script type="text/javascript">
+
+	(function() {
+		var e = document.createElement('script'); e.async = true;
+		e.src = document.location.protocol +
+		'//connect.facebook.net/en_US/all.js';
+		document.getElementsByTagName('head')[0].appendChild(e);
+	} ());
+	
+	window.fbAsyncInit = function() {
+		FB.init({
+			appId: '<?php echo $this->oauth_fb_key;?>',
+			status: true,
+			cookie: true,
+			xfbml: true
+		});
+	};
+
+	function sendRequestToRecipients(user_id, key) {
+        
+	  var link_url = "<?php echo $this->invate_href;?>" + key;
+			link_url += link_url.indexOf('?')> -1 ? '&' : '?';
+			link_url += 'og_data[name]=<?php echo urlencode(sprintf($this->translate('Join %s, the Virtual Pinboard'), $this->site_name));?>';
+			link_url += '&og_data[description]=<?php echo urlencode($this->meta_description);?>';
+			link_url += '&og_data[picture]=<?php echo $this->user_avatars['avatar_image_c'];?>';
+			link_url += '&og_data[link]=<?php echo $this->getRequest()->getBaseUrl();?>';
+
+    FB.ui({
+		      method: "send",
+		      to: user_id,
+		      name: "<?php echo sprintf($this->translate('Join %s, the Virtual Pinboard'), $this->site_name);?>",
+		      description: "<?php echo $this->meta_description;?>",
+		      picture: "<?php echo $this->user_avatars['avatar_original_c'];?>",
+		      link: link_url,
+		      display: 'dialog',
+                      show_error: true
+	  }, function(response) {
+	      if (!response){
+	          return;
+	      }
+	
+	      $.post("<?php echo $this->add_to_invate;?>", {
+	    	  user_id: user_id
+	      }, function(data) {
+	          if (data == "success") {
+	              $('#invate_'+user_id).hide(function(){
+						$(this).remove();
+	              });
+	          }
+	      });
+	  });
+	}
+
+	head.ready('jquery', function() {
+		$('#infscr-loading').show(1);
+	});
+
+	head.ready('main', function() {
+		
+		
+		$('.event-click-follow-all').click(function() {
+			$('.event-follow .event-click-follow-user-facebook').click();
+		});
+		  Pins.initFollow('.event-unfollow .event-click-follow-user-facebook', function(){
+			  element = this;
+				$(element).parents('li').slideUp(function(){
+					var $not_followed_friends = $('.event-follow');
+					if($not_followed_friends.size() < 1) {
+						$not_followed_friends = $('<ul>').attr('class','friendslist event-follow');
+						$('.fb-friends .column-b .title-3').after($not_followed_friends);
+					}
+					var cloned = $(element).parents('li');
+					$not_followed_friends.append(cloned);
+					cloned.slideDown(function(){
+						$('#pagecontainer .page .fb-friends .seemore strong').html( ('<?php echo $this->translate('Already following %d friends');?>').replace('%d', $('.event-unfollow li').size()) );
+					});
+				});
+				$(element).html('<?php echo $this->translate('Follow');?>');
+		  });
+		  
+		  Pins.initFollow('.event-follow .event-click-follow-user-facebook', function(element){
+			  element = this;
+				$(element).parents('li').slideUp(function(){
+					var $followed_friends = $('.event-unfollow');
+					if($followed_friends.size() < 1) {
+						$followed_friends = $('<ul>').attr('class','friendslist event-unfollow');
+						$('.fb-friends .column-b').append($followed_friends);
+					}
+					var cloned = $(element).parents('li');
+					$followed_friends.append(cloned);
+					cloned.slideDown(function(){
+						$('#pagecontainer .page .fb-friends .seemore strong').html( ('<?php echo $this->translate('Already following %d friends');?>').replace('%d', $('.event-unfollow li').size()) );
+					});
+					$(element).html('<?php echo $this->translate('Unfollow');?>');
+				});
+		  });
+
+		  $.getJSON('<?php echo $this->getfriends;?>', function(data) {
+				if(data.redirect) {
+					window.location = data.redirect;
+				} else if(data.fb_friends) {
+
+					if(data.fb_friends.friends_unfollow) {
+						$(data.fb_friends.friends_unfollow).each(function(i, user) {
+							$('head').requireTemplate(user.template).tmpl(user).appendTo('.friendslist.event-unfollow').show(1, function() {
+								Pins.lazyLoad($('.event-load-lazy-load',this));
+							});
+						});
+					}
+					if(data.fb_friends.friends_follow) {
+						$(data.fb_friends.friends_follow).each(function(i, user) {
+							$('head').requireTemplate(user.template).tmpl(user).appendTo('.friendslist.event-follow').show(1, function() {
+								Pins.lazyLoad($('.event-load-lazy-load',this));
+							});
+						});
+					}
+					if(data.fb_friends.friends_invate) {
+						$(data.fb_friends.friends_invate).each(function(i, user) {
+							$('head').requireTemplate(user.template).tmpl(user).appendTo('.friendslist.event-live-search-list').show(1, function() {
+								Pins.lazyLoad($('.event-load-lazy-load',this));
+							});
+						});
+						setTimeout(function() {
+							head.js({'liveUpdate':'data/js/jquery_lib/jquery.liveUpdate.js'}, function() {
+								$('.event-live-search').liveUpdate('.event-live-search-list', 'p.name a');
+							});
+						}, 500);
+					}
+
+					$('#pagecontainer .page .fb-friends .seemore strong').html( ('<?php echo $this->translate('Already following %d friends');?>').replace('%d', $('.event-unfollow li').size()) );
+					
+				} else {
+					Pins.error(data);
+				}
+				$('#infscr-loading').hide();
+		  });
+		  
+	});
+      
+    </script> 
+
+<?php echo $this->footer_part; ?>

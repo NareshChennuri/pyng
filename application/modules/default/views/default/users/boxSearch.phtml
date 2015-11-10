@@ -1,0 +1,29 @@
+<div class="box user not-popup" id="<?php echo $this->user['user_id'];?>">
+
+		<div class="preview">
+			
+			<p class="thumb">
+				<a href="<?php echo $this->user['href'];?>">
+					<img data-original="<?php echo $this->user['avatar'];?>" src="data/images/grey.gif" alt="<?php echo $this->user['fullname'];?>" />
+				</a>
+			</p>
+			<h2><?php echo $this->user['fullname'];?></h2>
+			<p class="location colorless"><?php echo $this->user['location'];?></p>
+			
+			<div class="follow">
+			<?php if($this->loged && !$this->user['userFollowIgnore']) { ?>
+		        <?php if($this->user['userIsFollow']) { ?>
+				<a href="<?php echo $this->user['follow'];?>" class="gray">
+					<?php echo $this->translate('Unfollow');?>
+				</a>
+				<?php } else { ?>
+		       	<a href="<?php echo $this->user['follow'];?>">
+					<?php echo $this->translate('Follow');?>
+				</a>
+		       	<?php } ?>
+			<?php } ?>
+			</div>
+			
+		</div>
+
+</div>

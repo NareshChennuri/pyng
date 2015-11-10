@@ -1,0 +1,184 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/gallery-sml.png">
+		<?php echo $this->translate('Waiting for invitation');?>
+	</h3>
+	
+	<?php if($this->successfu_edite || $this->error_permision) { ?>
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<?php } else if($this->error_permision) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error_permision;?></span></span>
+	<?php } ?>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<?php /* ?>
+	<div class="fright mtop3">
+		<a class="button" href="<?php echo $module;?>/invites/create/"><?php echo $this->translate('Add new');?></a>
+	</div>
+	<?php */ ?>
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Users, waiting for invitation');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+<form action="<?php echo $module;?>/invites/" method="get" id="testtt">
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20" class="left">
+				<a href="<?php echo $this->sort_id;?>" <?php if($this->order == 'u.sc_id') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>>#</a>
+			</th>
+			<th class="left">
+				<a href="<?php echo $this->sort_email;?>" <?php if($this->order == 'u.email') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Email');?></a>
+			</th>
+			<th class="left">
+				<?php echo $this->translate('Date');?>
+			</th>
+			<th width="20"><?php echo $this->translate('Send');?></th>
+			<th width="20"><?php echo $this->translate('Delete');?></th>
+		</tr>
+		<tr class="search">
+			<th class="left">
+				<input class="inputbox" type="text" name="filter_id" value="<?php echo $this->filter_id;?>" size="4" />
+			</th>
+			<th class="left">
+				<input class="inputbox filter_email" type="text" name="filter_email" value="<?php echo $this->filter_email;?>" size="12" />
+			</th>
+			
+            
+            <th class="left"> </th>
+            <th class="left">
+            <select name="filter_sent">
+            	<option value="0"><?php echo $this->translate('Request'); ?></option>
+            	<option value="1" <?php if($this->filter_sent==1): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('From User'); ?></option>
+            	<option value="2" <?php if($this->filter_sent==2): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('From Admin'); ?></option>
+            </select> 
+            </th>
+
+            
+            
+			<th colspan="2">
+				<input type="submit" value="<?php echo $this->translate('Filter');?>" class="button">
+				&nbsp; <a href="<?php echo $module;?>/invites/"><img src="cms/<?php echo $module;?>/images/reload.png" class="tooltip"  alt="" title="<?php echo $this->translate('Reset');?>" /></a>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->users) { ?>
+	<?php foreach($this->users AS $user) { ?>
+		<tr>
+			<td><?php echo $user['sc_id'];?>.</td>
+			<td>
+				<?php echo $user['email'];?>
+			</td>
+			<td><?php echo $user['date_added']; ?></td>
+			<td align="center"><a id="sc_<?php echo $user['sc_id']; ?>" class="email" href="javascript:void(0);"><img title="<?php echo $this->translate('Invite');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/mail.png"></a></td>
+           	<td align="center">
+				<a id="item_<?php echo $user['sc_id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="7">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+</form>
+<?php if($this->pagination) { ?>
+<br />
+<div class="fleft">
+<?php echo $this->translate('Page');?> <b><?php echo $this->page_num;?></b> <?php echo $this->translate('from');?> <b><?php echo $this->total_pages;?></b> (<b><?php echo $this->total_rows;?></b> <?php echo $this->translate('records');?>)
+</div>
+<div class="pagination fright">
+	<?php echo $this->pagination;?>
+</div>
+<div class="clear"></div>
+<?php } ?>
+
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function() {       
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/invites/deleteW/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+
+	$('a.email').click(function (e) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/invites/invite/",
+                data: 'id=' + $(this).attr('id').replace('sc_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#19CA2A'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        
+    });
+});
+// ]]>
+</script>
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function(){
+	$('#testtt').submit(function(){
+		window.location = $('#testtt').joform();
+		return false;
+	});
+});
+//]]>
+</script>

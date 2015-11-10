@@ -1,0 +1,161 @@
+<div id="header">
+	<?php if ($this->board_category_change || $this->show_new_password) { 
+		$this->getLayout()->notificationwrapper = true;
+	?>
+	<div id="notificationwrapper">
+		<div id="notification">
+			<p>
+			<?php if ($this->board_category_change) { ?>
+			<?php echo sprintf($this->translate('Please select a category for "%s". You can do it from %s HERE %s!'), $this->board_category_change['title'], '<a href="'.$this->board_category_change['href'].'">', '</a>');?>
+			<?php } elseif ($this->show_new_password) { ?>
+			<?php echo sprintf($this->translate('Please verify your email. If you did not receive an email, you can %s change your email address %s or we can %s resend the email %s. (Also check your spam folder!)'), '<a href="'.$this->settings.'">', '</a>', '<a class="event-resend-email-verification" href="javascript:void(0)">', '</a>');?>	
+			<?php } ?>
+			</p>
+		</div>
+	</div>
+	<?php } ?>
+	<div id="topwrapper">
+		<div id="top">
+			<form action="<?php echo $this->search_action;?>" method="get" class="search">
+				<?php if($this->show_hidden) { ?>
+				<input type="hidden" value="search" name="controller" />
+				<?php if($this->with_action) { ?>
+				<input type="hidden" value="<?php echo $this->with_action;?>" name="action" />
+				<?php } ?>
+				<?php } ?>
+				<p class="keyword">
+					<label for="keyword" class="hide"><?php echo $this->translate('Keyword');?>:<br /></label>
+					<input class="event-auto-complete-search event-clear-focus" type="text" id="keyword" name="q" value="<?php echo $this->keywords;?>" />
+				</p>
+				<p class="submit">
+					<button><img src="data/images/icon-search.gif" alt="Search" /></button>
+				</p>
+				<div class="clear"></div>
+			</form>
+			<?php if( true ) { ?>
+			<p class="show_brand"><strong>Find deals around your Local Stores</strong></p>
+			<?php } ?>
+			<h1 class="logo"><a href="<?php echo $this->baseUrl;?>"><img src="<?php echo $this->site_logo;?>" alt="<?php echo $this->getLayout()->placeholder('title');?>" /></a></h1>
+			<ul class="navlinks">
+				<?php if(JO_Registry::get('isMobile')) { ?>
+				<li><a href="/?remove_full_version" title="<?php echo $this->translate('Mobile Site');?>"><?php echo $this->translate('Mobile Site');?></a></li>
+				<?php } ?>
+				<?php if($this->is_loged && $this->getRequest()->getController() != 'welcome') { ?>
+				<li><a href="<?php echo $this->addPin;?>" class="event-click-open-popup" title="<?php echo $this->translate('Add');?>"><?php echo $this->translate('Add +');?></a></li>
+				<?php } ?>
+				<?php if($this->about_menu) { ?>
+				<li>
+					<a href="javascript:void(0);" class="arrow"><?php echo $this->translate('About');?></a>
+					<div class="dropdown">
+						<ul>
+							<?php foreach($this->about_menu AS $key => $menu) { ?>
+							<li<?php echo ($menu['class']?' class="'.$menu['class'].'"':'');?>><a href="<?php echo $menu['href'];?>"><?php echo $menu['title'];?></a></li>
+							<?php }?>
+						</ul>
+						<div class="clear"></div>
+					</div>
+				</li>
+				<?php } ?>
+				<?php if(!$this->is_loged) { ?>
+				<li><a href="<?php echo $this->login;?>"><?php echo $this->translate('Login');?></a></li>
+				<?php } ?>
+				<?php if($this->is_loged) { ?>
+				<li> 
+					<a href="<?php echo $this->self_profile;?>" class="arrow"><img class="avatar" src="<?php echo $this->self_avatar['avatar_image_a'];?>" alt="" /> <span class="username"><?php echo $this->self_firstname;?></span></a>
+					<div class="dropdown">
+						<ul>
+							<?php foreach($this->methodsforinvates AS $inv) { ?>
+							<li><a href="<?php echo $inv['href'];?>"><?php echo sprintf($this->translate('Invite %s'), $inv['title']);?></a></li>
+							<?php } ?>
+							<li <?php if($this->methodsforinvates) { ?>class="group"<?php } ?>><a href="<?php echo $this->self_profile;?>"><?php echo $this->translate('Boards');?></a></li>
+							<li><a href="<?php echo $this->user_pins;?>"><?php echo $this->translate('Pins');?></a></li>
+							<li><a href="<?php echo $this->user_pins_likes;?>"><?php echo $this->translate('Likes');?></a></li>
+							<li class="group"><a href="<?php echo $this->settings;?>"><?php echo $this->translate('Settings');?></a></li>
+							<li><a href="<?php echo $this->logout;?>"><?php echo $this->translate('Logout');?></a></li>
+						</ul>
+						<div class="clear"></div>
+					</div>
+				</li>
+				<?php } ?>
+			</ul>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div id="categorieswrapper">
+		<div id="categories">
+			<ul class="navlinks">
+				<?php if($this->is_loged) { ?>
+				<li><a href="./"><strong><?php echo $this->translate('Pyngers you follow');?></strong></a></li>
+				<?php } ?>
+				<?php if($this->categories) { ?>
+				<li>
+					<a class="arrow" href="<?php echo $this->all_url;?>"><?php echo $this->translate('Everything');?>
+					<?php if($this->category_active) { ?>
+					: <?php echo $this->category_active;?>
+					<?php } ?>
+					</a>
+					<div class="dropdown" id="twocolumns">
+						<?php $total = count($this->categories); ?>
+						<?php for($r=$i=0; $i<2; $i++) { ?>
+						<ul>
+							<?php for($j=0; $j<ceil( $total/2 ); $j++, $r++) { ?>
+							<?php if(isset($this->categories[$r])) { ?>
+							<?php 
+									$class = $this->categories[$r]['active'] ? 'active' : '';
+									if($r==0 || ceil( $total/2 ) == $r) { $class .= ' first'; }
+									if($r==($total-1) || (ceil( $total/2 )-1) == $r) { $class .= ' last'; }
+									$class = trim($class);
+								?>
+							<li<?php if($class) {?> class="<?php echo $class;?>"<?php } ?>><a href="<?php echo $this->categories[$r]['href'];?>"><?php echo $this->categories[$r]['title'];?></a></li>
+							<?php } ?>
+							<?php } ?>
+						</ul>
+						<?php } ?>
+						<div class="clear"></div>
+					</div>
+				</li>
+				<?php } ?>
+				<li><a href="<?php echo $this->video_url;?>"><?php echo $this->translate('Videos');?></a></li>
+				<li><a href="<?php echo $this->popular_url;?>"><?php echo $this->translate('Popular');?></a></li>
+				<!--<li>
+					<a href="<?php echo $this->gifts;?>" <?php if($this->giftSums) { ?>class="arrow"<?php } ?>><?php echo $this->translate('Gifts');?></a>
+					<?php if($this->giftSums) { ?>
+					<div class="dropdown">
+						<ul>
+							<?php foreach($this->giftSums AS $gift) { ?>
+							<li><a href="<?php echo $gift['href'];?>"><?php echo $gift['title'];?></a></li>
+							<?php } ?>
+						</ul>
+						<div class="clear"></div>
+					</div>
+					<?php } ?>
+				</li>-->
+			</ul>
+			<?php /*if($this->is_loged) { ?>
+			<p class="invitefriends"><a href="<?php echo $this->invites;?>" class="red-button"><?php echo $this->translate('Invite Friends');?></a></p>
+			<?php }*/ ?>
+		</div>
+	</div>
+	<?php if($this->show_header_invate) { ?>
+	<div id="nag">
+		<div class="sheet sheet-1">
+			<p class="slogan"><strong><?php echo sprintf($this->translate('%s '), $this->site_name);?></strong><br /><?php echo $this->translate('Find deals around your Local Stores');?></p>
+			<p class="buttons">
+				<?php if($this->show_landing) { ?>
+				<a href="<?php echo $this->landing;?>" class="red-button big-button"><?php echo $this->translate('Request an Invite &raquo;');?></a>
+				<?php } else { ?>
+				<a href="<?php echo $this->registration;?>" class="red-button big-button"><?php echo $this->translate('Registration &raquo;');?></a>
+				<?php } ?>
+				<a href="<?php echo $this->login;?>" class="grey-button big-button"><?php echo $this->translate('Login');?></a>
+			</p>
+			<div class="clear"></div>
+		</div>
+		<div class="sheet sheet-2"></div>
+		<div class="sheet sheet-3"></div>
+	</div>
+	<?php } ?>
+</div>
+
+<?php if(Helper_Config::get('config_disable_js')) { ?>
+<div class="event-fader-hide" style="opacity:0">
+<?php } ?>

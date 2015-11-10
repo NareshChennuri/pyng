@@ -1,0 +1,105 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+<form name="admin_form" id="admin_form" method="post" action="">
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/page_white_link.png">
+		<?php echo $this->translate('Information & pages Manager >> About menu');?> <?php echo ($this->parent_title ? '» ' . $this->parent_title : '');?>
+	</h3>
+	
+	<span id="fader" class="fleft mleft30" style="display:none;">
+		<span class="msgError"><span><?php echo $this->translate('Error!');?></span><i class="error_text"></i></span>
+	</span>
+	
+	<div class="fright mtop3">
+		<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+		<a class="button" href="<?php echo $this->cancel_url;?>"><?php echo $this->translate('Cancel');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+
+	
+	<table cellspacing="0" cellpadding="0" class="formtable">
+				<thead>
+					<tr>
+						<td>
+							<?php echo $this->translate('Page');?>
+						</td>
+						<td width="100">
+							<?php echo $this->translate('Delete');?>
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($this->about_menu AS $m) { ?>
+					<tr>
+						<td>
+							<select name="about_menu[]">
+								<?php foreach($this->pages_about AS $page) { ?>
+								<?php if( $page['page_id'] == $m['page_id'] ) { ?>
+								<option selected="selected" value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+	        			<td>
+	        				<a class="button" onclick="$(this).parents('tr').remove();"><?php echo $this->translate('Delete');?></a>
+	        			</td>
+					</tr>
+					<?php } ?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td align="center">
+							<a class="button" onclick="addAboutRow();"><?php echo $this->translate('Add row');?></a>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		
+	
+		
+		<div class="info_line bottom">
+			<div class="fright mtop3">
+				<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+				<a class="button" href="<?php echo $this->cancel_url;?>"><?php echo $this->translate('Cancel');?></a>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="clear"></div>
+		
+	</form>
+	
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		$('.formtable').tableDnD();	
+	});
+
+	window.addAboutRow = function() {
+		$('.formtable tbody').append($('#template_about_menu').html()).show(1,function(){
+			$('.formtable').tableDnD();	
+		});
+	};
+	
+</script>
+<script type="text/template" id="template_about_menu">
+<tr>
+	<td>
+		<select name="about_menu[]">
+		<?php foreach($this->pages_about AS $page) { ?>
+			<option value="<?php echo $page['page_id'];?>"><?php echo $page['title'];?></option>
+		<?php } ?>
+		</select>
+	</td>
+	<td>
+		<a class="button" onclick="$(this).parents('tr').remove();"><?php echo $this->translate('Delete');?></a>
+	</td>
+</tr>
+</script>

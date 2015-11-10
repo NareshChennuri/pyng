@@ -1,0 +1,142 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<form action="" method="post">
+
+	<input type="hidden" name="facebook[facebook_methods][]" value="user_login">
+	<input type="hidden" name="facebook[facebook_methods][]" value="user_register">
+	<input type="hidden" name="facebook[facebook_methods][]" value="user_invate_friends">
+	<input type="hidden" name="facebook[facebook_methods][]" value="user_avatar">
+	<input type="hidden" name="facebook[facebook_methods][]" value="pin_oncomplete">
+	<input type="hidden" name="facebook[facebook_methods][]" value="extra_metas">
+	<input type="hidden" name="facebook[facebook_methods][]" value="extensions_config_js">
+
+	<div class="info_line top">
+		<h3 class="fleft title">
+			<img alt="" src="cms/<?php echo $module;?>/images/extensions.png">
+			<a href="<?php echo $this->modules_url;?>"><?php echo $this->translate('Modules');?></a> >> 
+			<a href="<?php echo $this->modules_oauth_url;?>"><?php echo $this->translate('Oauth');?></a> >> 
+			<?php echo $this->translate('Facebook');?>
+		</h3>
+		
+		<?php if($this->successfu_edite || $this->error) { ?>
+		<?php if($this->successfu_edite) { ?>
+		<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+		<?php } else if($this->error) { ?>
+		<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error;?></span></span>
+		<?php } ?>
+		<script type="text/javascript"> 
+		// <![CDATA[
+		$(document).ready(function() {       
+			setTimeout(function() {
+				$("#fader").customFadeOut("slow" ,    
+				function() {       
+					$("#fader").remove();  
+				});
+			},
+			4000);
+		});
+		// ]]>
+		</script>
+		<?php } ?>
+	
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+		</div>
+		
+		<div class="clear"></div>
+	</div>
+	
+	<p class="info">
+		<?php echo $this->translate('Modules >> Facebook Manager');?><br>
+	</p>
+	
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<tr>
+				<td><?php echo $this->translate('Facebook API Key');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->facebook_oauth_key;?>" class="inputbox" name="facebook[facebook_oauth_key]" />
+        			</td>
+				</tr>
+				<tr>
+					<td><?php echo $this->translate('Facebook App Secret');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->facebook_oauth_secret;?>" class="inputbox" name="facebook[facebook_oauth_secret]" />
+        			</td>
+				</tr>
+				<tr>
+					<td><?php echo $this->translate('Facebook Open Graph Namespace');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->facebook_og_namespace;?>" class="inputbox" name="facebook[facebook_og_namespace]" />
+        			</td>
+				</tr>
+				<tr>
+					<td><?php echo $this->translate('Facebook Open Graph Action');?>:</td>
+					<td>
+					<input type="text" size="55" value="<?php echo $this->facebook_og_recipe;?>" class="inputbox" name="facebook[facebook_og_recipe]" />
+					<br />
+					<span class="help">
+						<a href="https://developers.facebook.com/docs/opengraph/tutorial/" target="_blank">
+							<?php echo htmlspecialchars('<meta property="og:type" content="[YOUR_APP_NAMESPACE]:[YOUR_APP_ACTION]" />');?>
+							</a>
+						</span>
+        			</td>
+				</tr>
+				</tbody>
+	</table>
+	
+	<table cellspacing="0" cellpadding="0" class="display" id="sort_order">
+		<thead>
+			<tr class="nodrop nodrag">
+				<th class="left"><?php echo $this->translate('Method');?></th>
+				<th width="130"><?php echo $this->translate('Action');?></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php if($this->methods) { ?>
+		<?php foreach($this->methods AS $type => $methods) { ?>
+			<?php foreach($methods AS $method) { ?>
+			<tr>
+				<td><?php echo $method['title'];?></td>
+				<?php if($type == 'actions') { ?>
+				<td align="center"><a href="<?php echo $method['edit'];?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+				<?php } elseif($type == 'radio') { ?>
+				<td>
+					<span class="input-out">
+						<label for="<?php echo $method['key'];?>_1">
+							<input <?php echo ($this->{$method['key']} == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="facebook[<?php echo $method['key'];?>]" id="<?php echo $method['key'];?>_1" /> <?php echo $this->translate('Yes');?>
+						</label>
+						<label for="<?php echo $method['key'];?>_2">
+							<input <?php echo ($this->{$method['key']} == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="facebook[<?php echo $method['key'];?>]" id="<?php echo $method['key'];?>_2" /> <?php echo $this->translate('No');?>
+						</label>
+					</span>
+				</td>
+				<?php } ?>
+			</tr>
+			<?php } ?>
+			<tr>
+				<td colspan="2" style="background-color:#aaaaaa;height:10px;padding:0;"></td>
+			</tr>
+		<?php } ?>
+		<?php } else { ?>
+			<tr class="nodrop nodrag">
+				<td colspan="2">
+					<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+				</td>
+			</tr>
+		<?php } ?>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="2">
+					<div class="fright mtop3">
+						<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+					</div>
+					<div class="clear"></div>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</form>

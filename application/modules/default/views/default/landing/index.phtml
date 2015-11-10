@@ -1,0 +1,47 @@
+<?php echo $this->header_part; ?>
+
+<?php if($this->successfu_edite) { ?>
+<?php ob_start();?>
+<script type="text/javascript">
+head.ready('main', function(){
+	$('#Success').slideDown();
+});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<?php } ?>
+<?php if($this->error) { ?>
+<?php ob_start();?>
+<script type="text/javascript">
+head.ready('main', function(){
+	Pins.error('<?php echo $this->error;?>');
+});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<?php } ?>
+
+<div id="formcontainerwrapper">
+	<div id="formcontainer">
+		<form method="post" action="" class="main-form">
+			<h3 class="title-9"><span class="note-title-text fright"><?php echo sprintf($this->translate('or %slogin%s to your account'), '<a href="'.$this->login.'">', '</a>');?></span> <?php echo $this->translate('Sign up for an invite to join Pintastic');?></h3>
+			<div class="hide" id="Success">
+	            <p>
+	            <?php echo $this->translate('Thanks! We\'ll send you an invite as soon as we can.');?>
+	            <br>
+	            <?php echo sprintf($this->translate('In the meantime, %s check out some pins %s.'), '<a href="'.$this->baseUrl.'">', '</a>');?>
+	            </p>
+	        </div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="invitationBox"><?php echo $this->translate('Email');?></label>
+				</div>
+				<div class="cell-center">
+					 <input type="text" class="event-clear-focus" name="email" value="<?php echo $this->translate('Email');?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="submit"><button class="red-button big-button"><?php echo $this->translate('Request Invitation');?></button></div>
+		</form>
+	</div>
+</div>
+
+<?php echo $this->footer_part; ?>

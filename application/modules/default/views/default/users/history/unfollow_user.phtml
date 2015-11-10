@@ -1,0 +1,31 @@
+<div class="box follow-box follow-board" id="<?php echo $this->history['history_id'];?>">
+	<div class="left-corner">
+		<div class="bottom-corner">
+			<div class="right-corner">
+				
+				<div class="preview">
+					<h4 class="title">
+						<span class="icon-holder"></span>
+						<?php echo sprintf($this->translate('Unfollowed %s.'), '<a href="'.$this->history['href'].'">'.$this->history['user']['fullname'].'</a>')?>
+						<span><?php echo sprintf($this->translate('%d %s ago'), $this->history['date_dif']['value'], $this->translate($this->history['date_dif']['key']));?></span>
+					</h4>
+					
+					
+					<p class="thumb">
+						<a href="<?php echo $this->history['href'];?>">
+							<img style="margin-left:<?php echo ( (194-$this->history['thumb_width']) / 2 );?>px;width:<?php echo $this->history['thumb_width'];?>px;height:<?php echo $this->history['thumb_height'];?>px;" width="<?php echo $this->history['thumb_width'];?>" height="<?php echo $this->history['thumb_height'];?>" data-original="<?php echo $this->history['thumb'];?>" src="data/images/grey.gif" alt="Image" />
+						</a>
+					</p>
+					
+				</div>
+				
+				<div class="talcenter">
+					<a href="<?php echo $this->history['follow_user'];?>" class="WhiteButton">
+						<?php echo $this->translate($this->history['userIsFollow']?'Unfollow':'Follow');?>
+					</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

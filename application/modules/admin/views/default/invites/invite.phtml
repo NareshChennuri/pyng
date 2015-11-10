@@ -1,0 +1,11 @@
+<p><strong><?php echo $this->translate('You\'re in!'); ?></strong></p>
+
+<p><?php echo sprintf($this->translate('I\'m excited to invite you to join %s, a social catalog. I can\'t wait to have you join our little community.'), JO_Registry::get('site_name')); ?></p>
+
+<p>
+<a href="<?php echo $this->shared_content; ?>" target="_blank"><?php echo $this->shared_content; ?></a>
+</p>
+
+<div>
+	<?php echo html_entity_decode(JO_Registry::get('mail_footer'), ENT_QUOTES, 'utf-8');?>
+</div>

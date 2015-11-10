@@ -1,0 +1,122 @@
+<?php echo $this->header_part; ?>
+
+<?php ob_start(); ?>
+<script type="text/javascript">
+    head.ready('main', function() {
+        $(document).ready(function() {
+            $('.event-price-textarea').priceExpresion({
+                expresions: pintastic_config.regExPrice,
+                callback: function() {
+                    if ($.trim(this.val())) {
+                        $('.event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+                    } else {
+                        $('.event-click-submit-disable').addClass('disabled').attr('disabled', true);
+                    }
+                }
+            }).jqEasyCounter({
+                holder: '.text_counter',
+                maxChars: 500,
+                maxCharsWarning: 470,
+                template: '<?php echo $this->translate('{count} characters remaining'); ?>'
+            });
+            $('.main-form input, .main-form select, .main-form textarea').bind("change keydown keyup keypress focus paste", function() {
+                var textarea_value = $('.event-price-textarea').val();
+                if ($.trim(textarea_value)) {
+                    $('.main-form .event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+                } else {
+                    $('.main-form .event-click-submit-disable').addClass('disabled').attr('disabled', true);
+                }
+                $('.box .description').html(textarea_value);
+            });
+
+            $('#board_id').selectBox();
+
+<?php if ($this->error) { ?>
+                Pins.error('<?php echo $this->error; ?>');
+<?php } ?>
+        });
+    });
+</script>
+<?php $this->placeholder('inhead', ob_get_clean()); ?>
+
+<div class="hide" id="Modal_show_delete">
+    <div class="popup">
+        <div class="popuptext">
+            <p><?php echo $this->translate('Are you sure you want to permanently delete this pin?') ?></p>
+            <p class="buttons"><a onclick="$.fancybox.close();
+                                return false" class="grey-button big-button" href="#"><?php echo $this->translate('Cancel'); ?></a> <a class="red-button big-button" href="<?php echo $this->pin_delete; ?>"><?php echo $this->translate('Delete Pin') ?></a></p>
+        </div>
+    </div>
+</div>
+
+<div id="formcontainerwrapper">
+    <div id="formcontainer">
+        <form method="post" action="" class="main-form event-price-holder">
+            <p class="hide"><input type="hidden" name="price" class="event-price-input-holder" value="<?php echo $this->pin_info['price_formated']; ?>" /></p>
+            <h3 class="title-9"><a class="grey-button big-button fright event-click-open-popup-default" href="#Modal_show_delete" title="<?php echo $this->translate('Delete Pin'); ?>"><?php echo $this->translate('Delete Pin'); ?></a> <?php echo $this->translate('Edit Pin'); ?></h3>
+            <div class="row">
+                <div class="cell-left">
+                    <label><?php echo $this->translate('Image');?></label>
+                </div>
+                <div class="cell-center">
+                    <div class="box review">
+                        <p class="ribbon-price"><strong class="price event-price-html-display <?php echo ($this->pin_info['pin_gift'] ? 'block' : 'hide'); ?>"><?php echo $this->pin_info['price_formated']; ?></strong></p>
+                        <div class="preview">
+                            <p class="thumb"><a href="<?php echo $this->pin_info['href']; ?>"><img src="<?php echo $this->pin_info['images']['thumb_image_b']; ?>" alt="" /></a></p>
+                            <p class="description"><?php echo $this->pin_info['pin_description']; ?></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="row">
+                <div class="cell-left">
+                    <label><?php echo $this->translate('Description'); ?></label>
+                </div>
+                <div class="cell-center">
+                    <textarea class="expand autocomplete_desc event-price-textarea" cols="40" id="message" name="description" rows="2"><?php echo $this->pin_info['pin_description']; ?></textarea>	
+                </div>
+                <div class="cell-right">
+                    <p class="helptext"><span class="text_counter">500</span></p>	
+                </div>
+                <div class="clear"></div>
+            </div>
+            <?php if ($this->form_extensions) { ?>
+                <div class="extensions">
+                    <?php foreach ($this->form_extensions AS $extension) { ?>
+                        <?php echo $extension['html']; ?>
+                    <?php } ?>
+                </div>
+            <?php } ?>
+            <div class="row">
+                <div class="cell-left">
+                    <label for="id_link"><?php echo $this->translate('Link'); ?></label>
+                </div>
+                <div class="cell-center">
+                    <input type="text" id="id_link" value="<?php echo $this->pin_info['pin_from']; ?>" name="from" />	
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="row">
+                <div class="cell-left">
+                    <label for="id_board"><?php echo $this->translate('Board'); ?></label>
+                </div>
+                <div class="cell-center">
+                    <select id="board_id" name="board_id">
+                        <?php foreach ($this->boards AS $board) { ?>
+                            <?php if ($this->pin_info['pin_board_id'] == $board['board_id']) { ?>
+                                <option selected="selected" value="<?php echo $board['board_id']; ?>"><?php echo $board['title']; ?></option>
+                            <?php } else { ?>
+                                <option value="<?php echo $board['board_id']; ?>"><?php echo $board['title']; ?></option>
+                            <?php } ?>
+                        <?php } ?>
+                    </select>	
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="submit"><button class="red-button big-button event-click-submit-disable"><?php echo $this->translate('Save Pin'); ?></button></div>
+        </form>
+    </div>
+</div>
+
+<?php echo $this->footer_part; ?>

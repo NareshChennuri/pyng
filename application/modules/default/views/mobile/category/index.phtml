@@ -1,0 +1,41 @@
+<?php echo $this->header_part; 
+	
+?>
+<script type='text/javascript'>
+	console.log(window.location.href);
+	var model  = new Model;
+	model.get(window.location.href+'?RSP=ajax&page=1&callback=Pins.getPins',function(data){
+		console.log(data);
+		model.getTemplate('pinBox',function(pinBox){
+			$.each(data,function(i,pin){
+				if(pin.template === 'pins'){
+					pin.grayImg = model.grayImg;
+					var pin = $(pinBox).tmpl(pin).appendTo("#container");
+					pin.find('img').LazyLoad();
+				}
+			});
+		});
+	});
+</script>
+
+<script type="text/javascript" src='data_mobile/js/infscroll.js'>
+	$(document).ready(function(){
+		infScroll();
+	})
+</script>
+
+		<div class='banner  <?php echo JO_Session::get('user[user_id]') ? "" : "unloged" ?>'>
+			<h2 class='category'><?php echo $this->category['title']; ?></h2>
+		
+			<div class="stitching">
+             	<div class="stitch"></div>
+                <div class="stitch white"></div>
+           </div>
+		</div>
+		<div id='container'>
+			
+		</div>
+		
+		
+	
+<?php echo $this->footer_part; ?>

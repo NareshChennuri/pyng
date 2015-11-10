@@ -1,0 +1,31 @@
+<?php echo $this->header_part; ?>
+<div id="pagecontainer"> 
+
+	<?php echo $this->methodsforinvates;?>
+
+	<div class="page">
+		<h1><?php echo sprintf($this->translate('Invite Your Friends to %s'), JO_Registry::get('site_name'));?></h1>
+		<form action="" method="post" class="invite-form event-invate-form-send">
+			<?php for($i = 1; $i<$this->invate_limit; $i++) { ?>
+			<p>
+				<label for="email-<?php echo $i;?>" class="hide"><?php echo $this->translate('Email Adress '.$i);?>:<br /></label>
+				<input type="text" name="email-<?php echo $i;?>" id="email-<?php echo $i;?>" class="event-clear-focus event-invate-email-<?php echo $i;?>" value="<?php echo $this->translate('Email Adress '.$i);?>" />
+			</p>
+			<?php if(isset($this->view->result_from_invate[$i]['success'])) { ?>
+			<p class="event-inline-response success"><?php echo $this->view->result_from_invate[$i]['success'];?></p>
+			<?php } elseif(isset($this->view->result_from_invate[$i]['error'])) { ?>
+			<p class="event-inline-response error"><?php echo $this->view->result_from_invate[$i]['error'];?></p>
+			<?php } ?>
+			<?php } ?>
+			<p>
+				<label for="note" class="hide"><?php echo $this->translate('Add a personal note');?>:<br /></label>
+				<textarea name="note" id="note" rows="5" cols="30" class="event-clear-focus event-invate-note"><?php echo $this->translate('Add a personal note');?></textarea>
+			</p>
+			<p class="submit">
+				<button class="red-button big-button"><?php echo $this->translate('Send Invites');?></button>
+			</p>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+<?php echo $this->footer_part; ?>

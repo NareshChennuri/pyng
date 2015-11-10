@@ -1,0 +1,130 @@
+<?php echo $this->header_part;?>
+
+<div id="welcomecontainerwrapper">
+	<div id="welcomecontainer">
+		<div class="click-pins">
+			<div class="click-title">
+				<h1 class="title-3"><?php echo $this->translate('Click a few things you like so we can suggest people to follow');?></h1>
+				<div class="click-progress event-progress">
+					<?php for($i=1; $i<=5; $i++) { ?>
+					<span <?php if($i <= $this->total_following) { ?>class="active"<?php } ?>><?php echo $i;?></span>
+					<?php } ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="click-categories">
+				<ul class="list">
+					<?php foreach($this->categories AS $c) { ?>
+					<li><a class="event-select-category" title="<?php echo $c['title'];?>" href="javascript:void(0);" data-category_id="<?php echo $c['category_id'];?>"><?php echo $c['title'];?></a></li>
+					<?php } ?>
+				</ul>
+			</div>
+			<div class="click-content event-select-follow-boards">
+				<p><?php echo $this->translate('Boards are collections of pins created by users. When you follow a board, you\'ll see it whenever you visit Pinterest. Choose a category from the list on the left to find boards you\'re interested in.');?></p>
+			</div>
+			<div class="clear"></div>
+			<div class="submit"><a class="red-button big-button disabled event-create-boards" href="<?php echo $this->next_step;?>" ><?php echo $this->translate('Next »');?></a></div>
+		</div>
+	</div>
+</div>
+
+<div id="infscr-loading" class="hide"><img alt="<?php echo $this->translate('Loading...');?>" src="data/images/loading.gif" />
+	<div><em><?php echo $this->translate('Loading data...');?></em></div>
+</div>
+
+<script type="text/javascript">
+	head.ready('main', function() {
+		var template = $('head').requireTemplate('welcome_board_select');
+		var posted;
+		$('.event-select-category').click(function() {
+			$('body').append($('<div>').attr('id','hide-site-for-click').css({'opacity': '0.5','background':'#ffffff','top':0,'left':0,'position':'fixed','width':'100%','height':'100%','z-index':99998}));
+			$('#infscr-loading').show().css({
+				'z-index': 99999
+			});
+			var element = this;
+			if(posted) {
+				posted.abort();
+			}
+			$('.event-select-follow-boards p').remove();
+			var holder_title = $('.event-select-follow-boards h4');
+			if(holder_title.size() < 1) {
+				holder_title =  $('<h4 class="title-4">').appendTo('.event-select-follow-boards');
+			}
+			
+			var holder = $('.event-select-follow-boards ul');
+			if(holder.size()<1) {
+				holder = $('<ul class="userBoards">').appendTo('.event-select-follow-boards');
+			}
+
+			posted = $.post('<?php echo $this->load_boards;?>', {category_id: $(this).data('category_id')}, function(data){
+				holder.empty();
+				holder_title.html(('<?php echo $this->translate('Popular boards about %s');?>').replace('%s',$(element).html()));
+				if(data.error) {
+					$('<li>').html(data.error).appendTo(holder);
+				} else if(data.boards) {
+					$(data.boards).each(function(i, board) {
+						template.tmpl(board).hide().appendTo(holder).show(1, function() {
+							Pins.lazyLoad($('.event-load-lazy-load', this));
+						});
+					});
+				}
+				$('#hide-site-for-click').remove();
+				$('#infscr-loading').hide();
+			},'json').error(function() {
+				$('#hide-site-for-click').remove();
+				$('#infscr-loading').hide();
+				holder_title.html(('<?php echo $this->translate('Error loading data %s');?>').replace('%s',$(element).html()));
+			}).fail(function() {
+				$('#hide-site-for-click').remove();
+				$('#infscr-loading').hide();
+				holder_title.html(('<?php echo $this->translate('Error loading data %s');?>').replace('%s',$(element).html()));
+			});
+
+			
+			return false;
+		});
+
+		//follow boards with progres
+		var progres = $('.event-progress');
+		
+		Pins.initFollow('.event-click-follow-board-welcome', function(data) {
+			var element_href = $(this).attr('href');
+			if(data.classs == 'add') {
+				if(data.is_follow_user == false) {
+					$('a[data-boardauthorid='+data.boardauthorid+']').removeClass('disabled').addClass('red-button').removeClass('grey-button').text(data.ok);
+				}
+				progres.find('.active:last').removeClass('active');
+			} else if(data.classs == 'remove') {
+				if(data.is_follow_user == true) {
+					$('a[data-boardauthorid='+data.boardauthorid+']').removeClass('disabled').removeClass('red-button').addClass('grey-button').text(data.ok);
+				}
+				if(progres.find('.active').size() > 0) {
+					progres.find('.active:last').next().addClass('active');
+				} else {
+					progres.find('span:first').addClass('active');
+				}
+			}
+
+			if(progres.find('.active').size() >= 5) {
+				$('.event-create-boards').removeClass('disabled');
+			} else {
+				$('.event-create-boards').addClass('disabled');
+			}
+			
+		});
+
+		$('.event-create-boards').click(function(){
+			if($(this).hasClass('disabled')) {
+				return false;
+			}
+		});
+
+		if(progres.find('.active').size() >= 5) {
+			$('.event-create-boards').removeClass('disabled');
+		} else {
+			$('.event-create-boards').addClass('disabled');
+		}
+		
+	});
+</script> 
+<?php echo $this->footer_part;?>

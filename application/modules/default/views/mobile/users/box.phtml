@@ -1,0 +1,85 @@
+
+<?php $u = $this->user; ?>
+
+<?php if($this->getRequest()->getController() == 'welcome' && 	$this->getRequest()->getAction() == 'second' ): ?>
+	
+	<li style='border-top: solid 1px #CCC;padding-top:15px'>
+		<a class='tappable'>
+			<div class='pinner' style="display: inline-block">
+				<div class='pinner_image' style="float: left">
+					<img src="<?php echo $u['avatar'] ?>" class="profile user_image" alt="Profile picture of <?php echo $u['fullname'] ?>">
+					
+				</div>
+				<div class='user_name' style="float: left;font-weight:bold; font-family: Helvetica;font-size:1.4 em " >
+					<?php echo substr($u['fullname'],0,15) ?>
+					<span class='subtext'>
+						<?php if($u['location'] !== 0): ?>
+						
+							<?php echo $u['location']; ?>
+						
+						<?php endif; ?>
+					</span>
+					
+				</div>
+					<?php // echo print_r($this->user['follow']) ?>
+				 <a class="mbtn user red follow" id='follow'  style="float:right" data-link='<?php echo $this->user['follow'] ?>'>
+       			 <strong><?php echo $this->translate('Follow') ?></strong><span></span>
+   				 </a>
+   				 <a class="mbtn user unfollow disabled pressed" id='unfollow'  data-link='<?php echo $this->user['follow'] ; ?>' style="float:right;margin-top:7px;display:none" >
+       			 <strong><?php echo  $this->translate('Unfollow') ?></strong><span></span>
+   				 </a>
+			</div>
+		</a>
+	</li>
+	
+<?php else: ?>
+
+
+<li>
+	
+	<a class="tappable">
+                                    <table class="pinner">
+                                        <tbody>
+                                            <tr>
+                                                <td class="pinner_image">
+	                                                <a href="<?php echo $u['href'] ?>" style='border:none' />    
+													<img src="<?php echo $u['avatar'] ?>" class="profile user_image" alt="Profile picture of <?php echo $u['fullname'] ?>">
+													</a>
+                                                </td>
+                                                <td>
+                                                	<a href="<?php echo $u['href'] ?>" style='border:none'/>
+                                                    <span class="user_name"><?php echo $u['fullname'] ?></span>
+                                                   </a>
+                                                </td>
+
+                                                <td class="right">
+                									<?php if(isset($_SESSION['pintastic']['user']['user_id'])): ?>
+                										<?php if($this->user['userFollowIgnore'] == 0 ): ?>
+                										<?php if($this->user['userIsFollow'] == 1): ?>
+                										 <a class="mbtn user red follow" id='follow'  style="float:right;display:none" data-link='<?php echo $this->user['follow'] ?>'>
+										       			 <strong><?php echo $this->translate('Follow') ?></strong><span></span>
+										   				 </a>
+										   				 
+										   				 <a class="mbtn user unfollow disabled pressed" id='unfollow'  data-link='<?php echo $this->user['follow'] ; ?>' style="float:right;margin-top:7px;" >
+										       			 <strong><?php echo  $this->translate('Unfollow') ?></strong><span></span>
+										   				 </a>
+										   				  <?php else: ?>
+										   				  <a class="mbtn user red follow" id='follow'  style="float:right;" data-link='<?php echo $this->user['follow'] ?>'>
+										       			 <strong><?php echo $this->translate('Follow') ?></strong><span></span>
+										   				 </a>
+										   				 
+										   				 <a class="mbtn user unfollow disabled pressed" id='unfollow'  data-link='<?php echo $this->user['follow'] ; ?>' style="float:right;margin-top:7px;display:none" >
+										       			 <strong><?php echo  $this->translate('Unfollow') ?></strong><span></span>
+										   				 </a>
+										   				 <?php endif; ?>
+										   				 <?php endif; ?>
+										            <?php endif; ?>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table> <!-- End Pinner -->
+      </a>
+</li>
+
+<?php endif; ?>
+

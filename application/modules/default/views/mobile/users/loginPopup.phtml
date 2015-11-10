@@ -1,0 +1,205 @@
+<?php 
+	$fblink = $twlink = null;
+	if($this->user_login_buttons) {
+		foreach($this->user_login_buttons AS $but) {
+			if($but['key'] == 'facebook') {
+				$fblink = $but['view']->login_url;
+			} elseif($but['key'] == 'twitter') {
+				$twlink = $but['view']->login_url;
+			}
+		}
+	}
+?>
+<script type='text/javascript'>
+	
+</script>
+<script>
+	var emptyValidationMsg = "<?php echo $this->translate('This field is required.') ?>";
+	var error = false;
+	
+	function clearMsg(){
+		$(".loginErrMsg").empty();
+	}
+	
+	function validate(error){
+			clearMsg();
+			if($('#user').val() == ''){
+				$("#user").next().append(emptyValidationMsg)
+				console.log("BN")
+				error = true;
+			
+			
+			}
+			
+			if($('#password').val() == ''){
+				
+				if(document.getElementById('password').style.display == 'none'){
+					console.log("NOSD")
+				}
+				else{
+					$("#password").next().append(emptyValidationMsg)
+					console.log("BN")
+					error = true;
+				}
+				
+			}
+			
+			
+			submit(error);
+		
+	}	
+	
+	
+	function forgottenPassValidate(){
+		clearMsg();
+			if($('#user').val() == ''){
+				$("#user").next().append(emptyValidationMsg)
+				console.log("BN")
+				error = true;
+			
+			
+			}
+	}
+	
+	
+	function submit(error){
+		console.log(error);
+		if(error == false){
+			$('form').submit();
+		}
+		
+		else{
+			error = false;
+		}
+	}
+	
+	
+
+	function forgottenPass(param){
+		if(param == 'show'){
+			$("#password").hide();
+			$("#resetPassword").hide();
+			$("#backToLogin").show();
+			$("#forgotPass").val('1');
+			$("#login").val('1');
+			
+		}
+		
+		else{
+			$("#password").show();
+			$("#backToLogin").hide();
+			$("#resetPassword").show();
+			$("#forgotPass").val('0');
+			$("#login").val('0');
+		}
+		console.log($("#forgotPass").val());
+	}
+	
+
+	$(document).ready(function(){
+	
+		$('.user').focus(function(){
+		console.log('co');
+		$(this).next().empty();
+		$("#resetPassword").live("tap",function(){
+			$(".loginErrMsg").empty();
+		})
+		$("#backToLogin").live("tap",function(){
+			$(".loginErrMsg").empty();
+		})
+	})
+	
+	$(".submit").live('tap',function(){
+		console.log("submit");
+		validate(error);
+	})
+	
+	
+
+	//$('#loginForm').submit()
+})
+
+</script>
+
+    <body class="hdpi">
+        <div class="page short" id="wrapper">
+            <div id="logo_wrapper">
+                <div id="logo">
+                    <a href="/" ontouchstart="">
+                       
+                        	<img src='<?php echo "uploads".Helper_Config::get('site_logo'); ?>' style='height:30px'/>
+                        
+                    </a>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="middle_cont" id="login">
+                <h2><?php echo $this->translate('Login and start pinning.') ?></h2>
+
+                <div id="social">
+                	<?php if($fblink) { ?>
+                    <a href="<?php echo $fblink; ?>">
+                        <div class="facebook"></div>
+                    </a>
+                    <?php } ?>
+					
+					<?php if($twlink) { ?>
+                    <a href="<?php echo $twlink; ?>" ontouchstart="">
+                        <div class="twitter"></div>
+                    </a>
+                    <?php } ?>
+                </div>
+            </div> <!-- End Middle container -->
+
+            <div class="divider bottom"></div>
+
+            <div class="last_cont" id="connect">
+                
+
+            <div id='loginResultError' style="width: 100%; text-align: center; color: red;margin-top:20px">
+            	<?php if($this->error !== 0){
+            		echo $this->translate($this->error); 
+            	} ?>
+            </div>
+            
+            <div id='success' style="width: 100%; text-align: center; color: green ;margin-top:20px">
+            	<?php if($this->successful !== 0){
+            		
+					echo $this->translate($this->successful);
+            	} ?>
+            </div>
+
+                
+                 
+                
+
+                <form action="" method="POST" accept-charset="utf-8" id='loginForm'>
+             		<input type="hidden" id='login' name='login' value="1">
+             		<input type="hidden" id='forgotPass' name='forgot_password' value='0' />
+                    <input class="user" id='user' name="email" placeholder="<?php echo $this->translate('Your Email Address'); ?>" type="text">
+                    <div class='loginErrMsg' style='color:red;text-align:center;padding-bottom:5px '>
+                    	
+                    </div>
+
+
+                    <input class="user password" id='password' name="password" placeholder="<?php echo $this->translate('Your Password') ?>" type="password">
+                      <div class='loginErrMsg' style='color:red;text-align:center;padding-bottom:5px '>
+                    	
+                    </div>
+
+                    <div class="non_inputs">
+                        <a class="red mbtn" type="submit" class="submit">
+                            <strong class="submit"><?php echo $this->translate('Login')?></strong>
+                            <span class="submit"></span>
+                        </a>
+                        <a class="loginLink" id="resetPassword" ontouchstart="forgottenPass('show')" href="#"><?php echo $this->translate('Forgot your password?'); ?></a>
+                        <a class="loginLink" id="backToLogin" ontouchstart="forgottenPass('hide')" href="#"><?php echo $this->translate('Back to login?'); ?></a>
+                    </div>
+                </form>
+
+            </div> <!-- End Bottom container -->
+
+            <div class="push"></div>
+        </div> <!-- End Wrapper -->

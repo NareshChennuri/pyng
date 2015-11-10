@@ -1,0 +1,33 @@
+
+
+<div class="sheet" id="repin" style='overflow: visible;z-index:11000;'>
+	<div  class='repin'>
+		<select name="board_id" id='board_id' >
+		    
+		
+			<?php foreach($this->boards as $board): ?>
+				<option value="<?php echo $board['board_id'];?>"><?php echo $board['title'];?></option>
+			<?php endforeach; ?>
+				<option value='' id='create_new_board'><b><?php echo $this->translate('Create new board'); ?></b></option>
+		</select>
+		<div id="create_board_wrapper" style='display:none'><input data-cb='<?php echo $this->createBoard; ?>' data-msg="<?php echo $this->translate('Please enter a name for your ne board, or select an existing board!') ?>" class="full" placeholder="<?php echo $this->translate('Enter a board title')?>" tabindex="1" type="text" id='createBoardInput'></div>
+		<textarea name='message' id='message'></textarea>
+		<!--<a id="closeRepinButton" class="closeRepinButton" style="float:left;margin-left:-8px"><img class="closeGrey" src="../data/images/fancy_close1.png"><img class="closeRed" src="../data/images/fancy_close1.png" style="display:none"></a>-->
+		<a href='<?php echo $this->from_url ?>' class="submit_repin red mbtn"  id='submitRepin'><strong><?php echo $this->translate('Repyng') ?></strong><span></span></a>
+	
+		
+		
+		</div>
+	
+	<div class="mobile_arrow"></div>
+</div>
+
+<script type="text/javascript">
+
+	
+		var pinData = <?php echo json_encode($this->data) ?>
+	
+	
+	
+		
+</script>

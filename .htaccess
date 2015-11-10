@@ -1,0 +1,70 @@
+#SetEnv APPLICATION_ENV development
+
+Options -Indexes
+Options +FollowSymLinks
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+#check is mod rewrite is enabled
+SetEnv MOD_REWRITE enabled
+
+RewriteEngine on
+
+#RewriteBase /pintastic/
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)\?*$ index.php [L,QSA]
+
+#remove www.
+#RewriteCond %{HTTPS} off
+#RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+#RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+#RewriteRule ^(.*\.(png|jpg|jpeg|gif))$ index.php?controller=minify&action=index&file_path=$1&ext=$2 [L,NC]
+#RewriteRule ^(.*\.(css|js))$ index.php?controller=minify&action=jscss&file_path=$1&ext=$2 [L,NC]
+
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+ErrorDocument 404 index.php
+</IfModule>
+
+<ifModule mod_expires.c>
+	ExpiresActive On
+	ExpiresDefault "access plus 1 seconds"
+	
+	<FilesMatch "\.(gif|jpe?g|png|js|css)$">
+		ExpiresDefault "access plus 5604800 seconds"
+		Header set Cache-Control "public"
+	</FilesMatch>
+	
+	<FilesMatch "\.(html)$">
+		ExpiresDefault "modification plus 5 days"
+		Header set Cache-Control "public"
+	</FilesMatch>
+	
+	#<FilesMatch "\.(php)$">
+	#	Header set Cache-Control "private"
+	#</FilesMatch>
+
+</ifModule>
+
+<IFModule mod_deflate.c>
+	<filesmatch "\.(js|css|html|jpg|jpeg|png|gif)$">
+		SetOutputFilter DEFLATE
+	</filesmatch>
+</IFModule>
+
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|inc|bak|cache)$">
+	Order Allow,Deny
+	Deny from all
+</FilesMatch>
+
+<ifModule mod_headers.c>
+Header set X-Frame-Options GOFORIT
+</ifModule>
+
+
+#AddType text/cache-manifest .appcache

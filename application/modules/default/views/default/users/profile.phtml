@@ -1,0 +1,111 @@
+<?php echo $this->header_part; ?>
+<?php if(in_array($this->class_contaner, array('following', 'followers'))) { ?>
+<?php ob_start();?>
+<script type="text/javascript">
+<!--
+head.ready('jquery', function(){
+	Pins = {
+			container: $('.event-persons-contaner'),
+			masonryEnable: false
+	};
+});
+//-->
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<?php } ?>
+
+<div id="profilecontainerwrapper">
+	<div id="profilecontainer">
+		<div class="profilebox">
+			<a <?php if($this->userdata['image_href']==$this->userdata['avatars']['avatar_image_c']) { ?>onclick="target='_blank'"<?php } ?> class="avatar" href="<?php echo $this->userdata['image_href'];?>"> <img alt="<?php echo sprintf($this->translate('Profile Picture of %s'), $this->userdata['fullname']);?>" src="<?php echo $this->userdata['avatars']['avatar_image_c'];?>" /> </a>
+			<div class="info">
+				<h1 class="title-5"><?php echo $this->userdata['fullname'];?></h1>
+				<?php if($this->userdata['description'] || !$this->enable_edit) { ?>
+				<p class="description"><?php echo $this->userdata['description'];?></p>
+				<?php } else { ?>
+				<p class="nodescription event-click-edit" data-profileid="<?php echo $this->userdata['user_id'];?>"><em><?php echo $this->translate('You have no description right now. Write a little bit about yourself!');?></em> <img src="data/images/ProfileEditIcon.png" alt="" /></p>
+				<?php } ?>
+				<?php if($this->userdata['website'] || $this->userdata['twitter_username'] || $this->userdata['facebook_id'] || $this->userdata['location']) { ?>
+				<ul class="icons">
+					<?php if($this->userdata['website']) { ?>
+					<li><a onclick="target='_blank'" class="icon website" href="<?php echo $this->userdata['website'];?>">&nbsp;</a></li>
+					<?php } ?>
+					<?php foreach($this->userdata['user_social_icons'] AS $icon) { ?>
+					<?php echo $icon;?>
+					<?php } ?>
+					<?php if($this->userdata['location']) { ?>
+					<li><span class="icon location"></span><?php echo $this->userdata['location'];?></li>
+					<?php } ?>
+				</ul>
+				<?php } ?>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php if($this->history_data) { ?>
+		<div class="profilerepins">
+			<h3><?php echo $this->title_right;?></h3>
+			<ul>
+				<?php foreach($this->history_data AS $h) { ?>
+				<li><a href="<?php echo $h['href'];?>"><img class="avatar" alt="<?php echo sprintf($this->translate('Profile Picture of %s'), $h['title']);?>" src="<?php echo $h['avatars']['avatar_image_a'];?>" /> <span class="username"><?php echo $h['title'];?></span><br class="clear" /></a></li>
+				<?php } ?>
+			</ul>
+		</div>
+		<?php } ?>
+		<div class="clear"></div>
+	</div>
+</div>
+<div id="profilebarwrapper">
+	<div id="profilebar">
+		<ul class="menu">
+			<li><a href="<?php echo $this->self_profile;?>" <?php echo ($this->active == 'boards' ? 'class="active"' : '');?>><strong><?php echo $this->userdata['boards'];?></strong> <?php echo ($this->userdata['boards'] == 1 ? $this->translate('Board') : $this->translate('Boards'));?></a></li>
+			<li><a href="<?php echo $this->user_pins;?>" <?php echo ($this->active == 'pins' ? 'class="active"' : '');?>><strong><?php echo $this->userdata['pins'];?></strong> <?php echo ($this->userdata['pins'] == 1 ? $this->translate('Pin') : $this->translate('Pins'));?></a></li>
+			<li><a href="<?php echo $this->user_pins_likes;?>" <?php echo ($this->active == 'likes' ? 'class="active"' : '');?>><strong><?php echo $this->userdata['likes'];?></strong> <?php echo ($this->userdata['likes'] == 1 ? $this->translate('Like') : $this->translate('Likes'));?></a></li>
+			<li><a href="<?php echo $this->user_activity;?>" <?php echo ($this->active == 'activity' ? 'class="active"' : '');?>><?php echo $this->translate('Activity');?></a></li>
+		</ul>
+		<ul class="menu fright">
+			<li><a href="<?php echo $this->user_followers;?>" <?php echo ($this->active == 'followers' ? 'class="active"' : '');?>><strong><?php echo $this->userdata['followers'];?></strong> <?php echo $this->translate('Followers');?></a></li>
+			<li><a href="<?php echo $this->user_following;?>" <?php echo ($this->active == 'following' ? 'class="active"' : '');?>><strong><?php echo $this->userdata['following'];?></strong> <?php echo $this->translate('Following');?></a></li>
+		</ul>
+		<?php if($this->enable_edit) { ?>
+		<div class="action"> 
+			<a class="grey-button <?php if($this->has_edit_boards) { ?>Left<?php } ?> Tab" href="<?php echo $this->settings;?>"><?php echo $this->translate('Edit Profile');?></a>
+			<?php if($this->has_edit_boards) { ?>
+			<a class="grey-button rearrange-button event-sorting-boards" href="javascript:void(0);" title="<?php echo $this->translate('Rearrange Boards');?>"><em>&nbsp;</em></a> <a class="hide close-button event-sorting-boards-cancel" title="<?php echo $this->translate('Cancel');?>" href="<?php echo $this->reload_page;?>"><?php echo $this->translate('close');?></a>
+			<?php } ?>
+		</div>
+		<?php } elseif($this->enable_follow) { ?>
+		<div class="action">
+			<?php if($this->userdata['following_user']) { ?>
+			<a class="grey-button event-click-follow-user" href="<?php echo $this->follow_user;?>" data-userid="<?php echo $this->userdata['user_id'];?>"><?php echo $this->translate('Unfollow All');?></a>
+			<?php } else { ?>
+			<a class="red-button event-click-follow-user" href="<?php echo $this->follow_user;?>" data-userid="<?php echo $this->userdata['user_id'];?>"><?php echo $this->translate('Follow All');?></a>
+			<?php } ?>
+		</div>
+		<?php } ?>
+	</div>
+</div>
+<div id="boxcontainerwrapper">
+	<?php if($this->get_invate_boards) { ?>
+	<h2 class="title-6 inv-title"><?php echo $this->translate('You have new board invitations'); ?></h2>
+	<div id="inv-boards"></div>
+	<script type="text/javascript">
+		head.ready('main', function(){
+			Pins.getInvateBoards();
+		});
+	</script>
+	<?php } ?>
+	<?php if($this->enable_sort) { ?>
+	<div class="hide rearrangebox event-sorting-boards-help">
+		<h2 class="title-6"><?php echo $this->translate('Rearrange Boards');?></h2>
+		<h3 class="title-7"><?php echo $this->translate('Drag around your boards to reorder them.');?></h3>
+	</div>
+	<div id="boxcontainer" class="event-masonry-container event-drag-sort-boards">
+	<?php } elseif(in_array($this->class_contaner, array('following', 'followers'))) { ?>
+	<div id="personscontainer" class="event-persons-contaner">
+	<?php } else { ?>
+	<div id="boxcontainer" class="event-masonry-container">
+	<?php } ?>
+	<?php echo $this->result_data;?>
+	</div>
+</div>
+<?php echo $this->footer_part; ?>

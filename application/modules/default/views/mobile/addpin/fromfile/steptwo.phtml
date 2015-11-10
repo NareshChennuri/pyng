@@ -1,0 +1,35 @@
+
+	<style>
+		
+	</style>
+	<div class='pin'>
+	
+		<div class="image" style=''>        
+			<img style="width:100%;" class="notLoadedImg" alt="" src="<?php echo $this->full_path ?>"> 
+		</div>
+	<form id='addPinForm' style='' action="<?php echo $this->from_url;?>" method="post" enctype="multipart/form-data">
+					
+					<select id='board-id' name="board_id" class="event-board-style">
+								<option value=''><?php echo $this->translate("Choose Board") ?></option>
+								<option style='font-weight:bold' value='cb'><?php echo "<strong>".$this->translate("Create New Board")."</strong>"; ?></strong></option>
+								<?php foreach($this->boards AS $board) { ?>
+								<option value="<?php echo $board['board_id'];?>"><?php echo $board['title'];?></option>
+								<?php } ?>
+					</select>
+					
+					<textarea class="event-price-textarea" name="description" rows="5" cols="30"></textarea>
+					<input type="hidden" name="media" value="<?php echo $this->full_path;?>" />
+					<a id='addPinSubmit' class="red mbtn"><strong><?php echo $this->translate('Upload'); ?></strong><span></span></a>	
+					<a id='addPinCancel' class="red mbtn"><strong><?php echo $this->translate('Cancel'); ?></strong><span></span></a>
+
+	</form>
+		
+	</div>
+	
+	<script type='text/javascript'>
+		var notEmptyMsg = <?php echo "'".$this->translate('Please add description')."'"; ?>;
+		var addBoadrMsg =  <?php echo "'".$this->translate('Please add board name')."'"; ?>;
+		var chooseBoardMsg =  <?php echo "'".$this->translate('Please choose a board')."'"; ?>;
+	</script>
+
+

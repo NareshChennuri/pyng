@@ -1,0 +1,59 @@
+<?php
+/*
+    +--------------------------------------------------------------------------------------------+
+    |   DISCLAIMER - LEGAL NOTICE -                                                              |
+    +--------------------------------------------------------------------------------------------+
+    |                                                                                            |
+    |  This program is free for non comercial use, see the license terms available at            |
+    |  http://www.francodacosta.com/licencing/ for more information                              |
+    |                                                                                            |    
+    |  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; |
+    |  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. |
+    |                                                                                            |
+    |  USE IT AT YOUR OWN RISK                                                                   |
+    |                                                                                            |
+    |                                                                                            |
+    +--------------------------------------------------------------------------------------------+
+
+*/
+/**
+ * phMagick - get image info
+ *
+ * @package    phMagick
+ * @version    0.1.0
+ * @author     Nuno Costa - sven@francodacosta.com
+ * @copyright  Copyright (c) 2007
+ * @license    http://www.francodacosta.com/phmagick/license/
+ * @link       http://www.francodacosta.com/phmagick
+ * @since      2008-03-13
+ */
+class JO_Phpthumb_Factory_Imagick_Phmagick_Plugins_Info {
+	function getInfo(JO_Phpthumb_Factory_Imagick_Phmagick $p, $file=''){
+		if ($file == '') $file = $p->getSource();
+		return getimagesize  ($file);
+	}
+	
+	function getWidth(JO_Phpthumb_Factory_Imagick_Phmagick $p, $file=''){
+		list($width, $height, $type, $attr) = $this->getInfo($p, $file);
+		return $width;
+	}
+	
+	function getHeight(JO_Phpthumb_Factory_Imagick_Phmagick $p, $file=''){
+	   list($width, $height, $type, $attr)	 = $this->getInfo($p, $file);
+	   return $height;
+	}
+	
+	
+	function getBits(JO_Phpthumb_Factory_Imagick_Phmagick $p, $file=''){
+	   if ($file == '') $file = $p->getSource();
+	   $info =  getimagesize  ($file);
+	   return $info["bits"];
+	}
+	
+	function getMime(JO_Phpthumb_Factory_Imagick_Phmagick $p, $file=''){
+		if ($file == '') $file = $p->getSource();
+       $info =  getimagesize  ($file);
+       return $info["mime"];
+	}
+}
+?>

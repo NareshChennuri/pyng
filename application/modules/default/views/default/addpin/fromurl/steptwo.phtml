@@ -1,0 +1,135 @@
+<div id="formcontainer">
+    <div class="popup">
+        <form class="main-form event-price-holder" action="<?php echo $this->from_url; ?>" method="post">
+            <div class="row">
+                <div class="cell-center">
+                    <div class="pin-info">
+                        <div class="thumb">
+                            <p class="ribbon-price">
+                                <strong class="price event-price-html-display"></strong>
+                            </p>
+                            <div class="thumbshadow">
+                                <div class="carousel">
+                                    <ul>
+                                        <?php foreach ($this->images AS $key => $image) { ?>
+                                            <li class="media_<?php echo $key; ?>"> <img src="<?php echo $image['src']; ?>" alt="" /> </li>
+                                        <?php } ?>
+                                    </ul>
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="data">
+                            <select name="board_id" class="event-board-style">
+                                <?php foreach ($this->boards AS $board) { ?>
+                                    <option value="<?php echo $board['board_id']; ?>"><?php echo $board['title']; ?></option>
+                                <?php } ?>
+                            </select>
+                            <input class="inputbox event-clear-focus" type="text" name="cityName" value="City" size="15" />
+                            <input class="inputbox event-clear-focus" type="text" name="placeName" value="Place" size="15" />
+                            <input class="inputbox event-clear-focus" type="text" name="storeName" value="Store" size="15" />
+                            <input class="inputbox event-clear-focus" type="text" name="offerStartsOn" value="<?php echo date('Y-m-d');?>" size="15" />
+                            <input class="inputbox event-clear-focus" type="text" name="offerExpiresOn" value="<?php echo date('Y-m-d');?>" size="15" />
+                            <textarea class="event-price-textarea" name="description" id="message" rows="5" cols="30"><?php echo $this->title; ?></textarea>
+
+
+                            <?php if ($this->form_extensions) { ?>
+                                <div class="extensions">
+                                    <?php foreach ($this->form_extensions AS $extension) { ?>
+                                        <?php echo $extension['html']; ?>
+                                    <?php } ?>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="cell-right">
+                    <p class="helptext helptext-padT">
+                        <span class="text_counter"></span>
+                    </p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="submit"><button class="red-button big-button event-click-submit-disable"><?php echo $this->translate('Pinit'); ?></button></div>
+            <p class="hide">
+                <input type="hidden" name="media" value="<?php echo $this->images[0]['src']; ?>" />
+                <input type="hidden" name="from" value="<?php echo $this->from; ?>" />
+                <input type="hidden" name="price" class="event-price-input-holder" value="" />
+            </p>
+        </form>
+    </div>
+</div>
+<?php $key = str_replace('.', '', microtime(true)); ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('.event-price-textarea').priceExpresion({
+            expresions: pintastic_config.regExPrice,
+            callback: function() {
+                if ($.trim(this.val())) {
+                    $('.event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+                } else {
+                    $('.event-click-submit-disable').addClass('disabled').attr('disabled', true);
+                }
+            }
+        }).jqEasyCounter({
+            holder: '.text_counter',
+            maxChars: 500,
+            maxCharsWarning: 470,
+            template: '<?php echo $this->translate('{count} characters remaining'); ?>'
+        });
+        $('.main-form input, .main-form select, .main-form textarea').bind("change keydown keyup keypress focus paste", function() {
+            var textarea_value = $('.event-price-textarea').val();
+            if ($.trim(textarea_value)) {
+                $('.main-form .event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+            } else {
+                $('.main-form .event-click-submit-disable').addClass('disabled').attr('disabled', true);
+            }
+        });
+
+        $('.carousel').imageCarousel({
+            onScrollEnd: function(page) {
+                $('input[name="media"]').val($('img', page).attr('src'));
+            },
+            onInit: function(page) {
+                $('input[name="media"]').val($('img', page).attr('src'));
+            },
+            textNext: '<?php echo $this->translate('Next'); ?>',
+            textPrev: '<?php echo $this->translate('Prev'); ?>'
+        });
+
+        Pins.initSelectBoxCreateBoard('.event-board-style');
+
+
+        $('.popup form').unbind('submit').submit(function() {
+
+            var button = $('.event-click-submit-disable')
+                    .attr('disabled', true).addClass('disabled');
+            loading.load(button);
+            $.post('<?php echo $this->from_url; ?>', $('.popup form').serialize(), function(result) {
+                if (result.error) {
+                    Pins.error(result.error);
+                } else if (result.pin_url) {
+                    if (pintastic_config.disable_js) {
+                        window.location = result.pin_url;
+                    } else {
+                        Pins.openDetailBox();
+                        var link = $('<a>').attr('href', result.pin_url).addClass('event-click-open-detail-view');
+                        link.appendTo('body').click().remove();
+                    }
+                } else if (result.location) {
+                    window.location = result.location;
+                    return;
+                } else {
+                    Pins.error(result);
+                }
+                loading.stop();
+            }, 'json');
+            return false;
+        });
+
+    });
+
+
+</script>

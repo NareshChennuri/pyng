@@ -1,0 +1,64 @@
+<?php if($this->redirect) { ?>
+<script type="text/javascript">
+window.location = '<?php echo $this->redirect;?>';
+</script>
+<h2><?php echo $this->translate('Redirect to login!');?></h2>
+<?php } else { ?>
+<?php if($this->error_upload_image) { ?>
+<script type="text/javascript">
+$(document).ready(function(){
+	Pins.notify('<?php echo $this->error_upload_image;?>');
+});
+</script>
+<?php } ?>
+<div class="popup">
+	<form action="<?php echo $this->form_action;?>" method="post" enctype="multipart/form-data" class="main-form">
+		<div class="row row-single">
+			<div class="cell-center">
+				<input type="file" name="file" />
+			</div>
+			<div class="clear"></div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript"><!--
+head.js({'AjaxUpload' : 'data/js/lib/AjaxUpload.js'}, function(){
+
+	var template = $('head').requireTemplate('AjaxUpload/upload_form');
+	var new_item = template.tmpl({
+		text_browse: '<?php echo $this->translate('Browse...');?>'
+	});
+
+	$('.popup input[type=file]').replaceWith(new_item).show(1, function() {
+		new AjaxUpload(new_item, {
+			action: '<?php echo $this->form_action;?>',
+			name: 'file',
+			autoSubmit: true,
+			responseType: 'json',
+			onSubmit: function(file, extension) {
+				$('.popup input[type=file]').attr('disabled', true);
+				var button = $('.popup .browse').addClass('disabled');
+				loading.load(button);
+			},
+			onComplete: function(file, json) {
+				if (json.error) {
+					Pins.error(json.error);
+					$('.popup input[type=file]').attr('disabled', false);
+					$('.popup .browse').removeClass('disabled');
+					loading.stop();
+				} else if(json.location) {
+					window.location = json.location;
+					return;
+				} else if (json.success) {
+					$.get('<?php echo $this->upload_action;?>', function(data){
+						Pins.openPopupBoxWithHtml(data);
+					});
+				}
+			}
+		});
+	});
+	
+});
+//--></script>
+<?php } ?>

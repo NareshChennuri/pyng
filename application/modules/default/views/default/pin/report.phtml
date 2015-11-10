@@ -1,0 +1,70 @@
+<div id="formcontainer">
+	<div class="popup">
+		<form class="main-form" action="<?php echo $this->url_form;?>" method="post">
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_email"><?php echo $this->translate('Report Pin');?></label>
+				</div>
+				<div class="cell-center">
+					<?php if(!$this->comment_is) { ?>
+					<p class="simpletext"><?php echo $this->translate('Why are you reporting this pin?');?></p>
+					<?php } else { ?>
+					<p class="simpletext"><?php echo $this->translate('Why are you reporting this comment?');?></p>
+					<?php } ?>
+					<div class="checkboxes checkboxes-block">
+						<?php foreach($this->reportcategories AS $id => $value) { ?>
+						<label for="report<?php echo $id;?>"><input <?php echo ($this->report_category == $id ? 'checked="checked"' : '');?> type="radio" id="report<?php echo $id;?>" name="report_category" value="<?php echo $id;?>" /><?php echo $value;?></label>
+						<?php } ?>
+						<label for="report-1"><input <?php echo ($this->report_category == -1 ? 'checked="checked"' : '');?> type="radio" id="report-1" name="report_category" value="-1" /><?php echo $this->translate('Other');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row message-report <?php echo ($this->report_category == -1 ? '' : 'hide');?>">
+				<div class="cell-left">
+					
+				</div>
+				<div class="cell-center">
+					<textarea rows="5" cols="3" name="report_message"><?php echo $this->report_message;?></textarea>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="submit">
+				<?php if(!$this->comment_is) { ?>
+				<button class="red-button big-button event-click-submit-disable"><?php echo $this->translate('Report Pin');?></button>
+				<?php } else { ?>
+				<button class="red-button big-button event-click-submit-disable"><?php echo $this->translate('Report');?></button>
+				<?php } ?>
+				<?php if(!$this->comment_is) { ?>
+				<a href="<?php echo $this->intellectual_property;?>" class="button-inlinetext"><?php echo $this->translate('Is this your intellectual property?');?></a>
+				<?php } ?>
+			</div>
+			<p class="hide">
+				<input type="hidden" name="pin_id" value="<?php echo $this->pin_id;?>" />
+				<?php if($this->comment_is) { ?>
+				<input type="hidden" name="comment_is" value="<?php echo $this->comment_is;?>" />
+				<?php } ?>
+			</p>
+		</form>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$('#formcontainer form').submit(function(){
+	var button = $('.event-click-submit-disable').addClass('disabled').attr('disabled', true);
+	loading.load(button);
+	jQuery.post('<?php echo $this->url_form;?>', jQuery(this).serialize(), function(result){
+		jQuery('#formcontainer').replaceWith( result );
+	});
+	return false;
+});
+
+$('#formcontainer form input[type=radio]').change(function(){
+	if(this.value == -1) {
+		$('.message-report').slideDown();
+	} else {
+		$('.message-report').slideUp();
+	}
+});
+</script>

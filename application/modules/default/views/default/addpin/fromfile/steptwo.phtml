@@ -1,0 +1,165 @@
+<?php if($this->redirect) { ?>
+<script type="text/javascript">
+window.location = '<?php echo $this->redirect;?>';
+</script>
+
+<h2><?php echo $this->translate('Redirect to login!');?></h2>
+<?php } else { ?>
+<div id="formcontainer">
+	<div class="popup">
+		<form class="main-form event-price-holder" action="<?php echo $this->from_url;?>" method="post" enctype="multipart/form-data">
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_first_name<?php echo ($this->is_edit?'-edit':'');?>"><?php echo $this->translate('File');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="file" name="file" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-center">
+					<div class="pin-info">
+						<div class="thumb">
+							<p class="ribbon-price">
+								<strong class="price event-price-html-display"></strong>
+							</p>
+							<div class="thumbshadow">
+								<img class="event-load-lazy-load" src="data/images/ajax-loader.gif" alt="" data-original="<?php echo $this->full_path;?>" />
+							</div>
+						</div>
+						<div class="data">
+							<select name="board_id" class="event-board-style">
+								<?php foreach($this->boards AS $board) { ?>
+								<option value="<?php echo $board['board_id'];?>"><?php echo $board['title'];?></option>
+								<?php } ?>
+							</select>
+							<textarea class="event-price-textarea" name="description" rows="5" cols="30"></textarea>
+							
+							<?php if($this->form_extensions) { ?>
+							<div class="extensions">
+								<?php foreach($this->form_extensions AS $extension) { ?>
+								<?php echo $extension['html'];?>
+								<?php } ?>
+							</div>
+							<?php } ?>
+							
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="cell-right">
+					<p class="helptext helptext-padT">
+						<span class="text_counter"></span>
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="submit"><button class="red-button big-button event-click-submit-disable"><?php echo $this->translate('Pinit');?></button></div>
+			<p class="hide">
+				<input type="hidden" name="price" class="event-price-input-holder" value="" />
+				<input type="hidden" name="media" value="<?php echo $this->full_path;?>" />
+			</p>
+		</form>
+	</div>
+</div>
+<?php $key = str_replace('.','',microtime(true));?>
+<script type="text/javascript"><!--
+head.js({'AjaxUpload' : 'data/js/lib/AjaxUpload.js'}, function(){
+
+	var template = $('head').requireTemplate('AjaxUpload/upload_form');
+	var new_item = template.tmpl({
+		text_browse: '<?php echo $this->translate('Browse...');?>'
+	});
+
+	$('.popup input[type=file]').replaceWith(new_item).show(1, function() {
+		new AjaxUpload(new_item, {
+			action: '<?php echo $this->form_action;?>',
+			name: 'file',
+			autoSubmit: true,
+			responseType: 'json',
+			onSubmit: function(file, extension) {
+				$('.popup input[type=file]').attr('disabled', true);
+				var button = $('.popup .browse').addClass('disabled');
+				loading.load(button);
+			},
+			onComplete: function(file, json) {
+				if (json.error) {
+					Pins.error(json.error);
+					$('.popup input[type=file]').attr('disabled', false);
+					$('.popup .browse').removeClass('disabled');
+					loading.stop();
+				} else if(json.location) {
+					window.location = json.location;
+					return;
+				} else if (json.success) {
+	
+					$.get('<?php echo $this->upload_action;?>', function(data){
+						Pins.openPopupBoxWithHtml(data);
+					});
+					
+				}
+			}
+		});
+	});
+});
+//--></script> 
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$('.event-price-textarea').priceExpresion({
+		expresions: pintastic_config.regExPrice,
+		callback: function() {
+			if($.trim(this.val())) {
+				$('.event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+			} else {
+				$('.event-click-submit-disable').addClass('disabled').attr('disabled', true);
+			}
+		}
+	}).jqEasyCounter({
+		holder: '.text_counter',
+		maxChars: 500,
+		maxCharsWarning: 470,
+		template: '<?php echo $this->translate('{count} characters remaining');?>'
+	});
+	$('.main-form input, .main-form select, .main-form textarea').bind("change keydown keyup keypress focus paste",function() {
+		var textarea_value = $('.event-price-textarea').val();
+		if($.trim(textarea_value)) {
+			$('.main-form .event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+		} else {
+			$('.main-form .event-click-submit-disable').addClass('disabled').attr('disabled', true);
+		}
+	});
+
+	Pins.initSelectBoxCreateBoard('.event-board-style');
+	
+	Pins.lazyLoad($('.popup .event-load-lazy-load'));
+
+	$('.popup form').unbind('submit').submit(function(){
+		var button = $('.event-click-submit-disable', this).attr('disabled', true).addClass('disabled');
+		loading.load(button);
+		$.post('<?php echo $this->from_url;?>', $(this).serialize(), function(result){
+			if(result.error) {
+				Pins.error(result.error);
+			} else if(result.pin_url) {
+				if(pintastic_config.disable_js) {
+					window.location = result.pin_url;
+				} else {
+					Pins.openDetailBox();
+					var link = $('<a>').attr('href', result.pin_url).addClass('event-click-open-detail-view');
+					link.appendTo('body').click().remove();
+				}
+			} else if(result.location) {
+				window.location = result.location;
+				return;
+			} else {
+				Pins.error(result);
+			}
+			loading.stop();
+		}, 'json');
+		return false;
+	});
+		
+});
+</script>
+<?php } ?>

@@ -1,0 +1,29 @@
+<?php echo $this->header_part; ?>
+
+<div id="detail">
+
+		<div class="no_account_page">
+
+			<div id="SignUp">
+				
+				<h1><strong><?php echo $this->translate('Congratulations!');?></strong> <?php echo sprintf($this->translate('You\'ve been invited to join %s.'),JO_Registry::get('site_name'));?></h1>
+	               
+				<a href="<?php echo $this->facebook_login_url;?>" class="BigButton BlueButton">
+					<strong><?php echo $this->translate('Sign Up with Facebook');?></strong>
+					<img src="data/images/ButtonFacebookFavicon.png" alt="<?php echo $this->translate('Facebook Favicon');?>">
+					<span></span>
+				</a>
+	            
+	            <?php /* ?>
+				<p>
+	                  <a href="#" id="WhyLinkAccounts" title="We require Facebook and Twitter to make it easier to find people you know, and to reduce spam. You can unlink your account any time.">Why link accounts?</a>
+				</p>
+	            <?php */ ?>
+	
+	        </div>	        
+
+	    </div>
+
+</div>
+    
+<?php echo $this->footer_part; ?>

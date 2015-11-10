@@ -1,0 +1,236 @@
+<div id="create-board">
+		
+		<?php if($this->is_edit) { ?>
+		<div class="ButtonHeading">
+			<?php if(!$this->shared) { ?>
+			<a onclick="Modal_show_delete(); return false" id="delete_confirm" href="#" class="Button Delete">
+				<strong><?php echo $this->translate('Delete Board');?></strong>
+				<span></span>
+			</a>
+			<?php } ?>
+			<h3>
+				<?php echo $this->translate('Edit Board');?> / <a href="<?php echo $this->board_href;?>"><?php echo $this->title?></a>
+			</h3>
+		</div>
+		<?php } ?>
+
+		<form name="CreateBoard" method="post" action="<?php echo $this->form_action;?>" class="Form StaticForm" id="CreateBoard<?php echo ($this->is_edit?'-edit':'');?>">
+
+            <ul>
+
+				<?php if(!$this->shared) { ?>
+                <!-- First Name -->
+                <li>
+                    <label for="id_first_name<?php echo ($this->is_edit?'-edit':'');?>"><?php echo $this->translate('Board Name');?></label>
+                    <div class="Right">
+                        <input type="text" id="id_first_name<?php echo ($this->is_edit?'-edit':'');?>" value="<?php echo $this->title?>" name="newboard">
+                        
+                    </div>
+                </li>
+
+                <!-- Last Name -->
+                <li>
+                    <label for="category_id-select<?php echo ($this->is_edit?'-edit':'');?>"><?php echo $this->translate('Board Category');?></label>
+                    <div class="Right">
+                        
+                        <select name="category_id" id="category_id-select<?php echo ($this->is_edit?'-edit':'');?>">
+                        	<?php foreach($this->categories AS $category) { ?>
+                        	<?php if($this->category_id == $category['category_id']) { ?>
+                        	<option selected="selected" value="<?php echo $category['category_id'];?>"><?php echo $category['title'];?></option>
+                        	<?php } else { ?>
+                        	<option value="<?php echo $category['category_id'];?>"><?php echo $category['title'];?></option>
+                        	<?php } ?>
+                        	<?php } ?>
+                        </select>
+                        
+                    </div>
+                </li>
+                <?php } ?>
+
+
+                <!-- Website -->
+                <li>
+                    <label for="id_website"><?php echo $this->translate('Who can pin?');?></label>
+                    <div class="Right">
+                        
+					<div class="add_collaborators Right">
+                        
+                        <div class="board_creator collaborator">
+                            <a href="<?php echo $this->userhref;?>" class="collaborator_image">
+                            	<img alt="<?php echo $this->translate('Collaborator Image');?>" src="<?php echo $this->avatar;?>">
+                            </a>
+                            <a href="<?php echo $this->userhref;?>" class="collaborator_name"><?php echo $this->fullname;?></a>
+                            <span class="note">
+                                <?php echo $this->translate('Creator');?>
+                            </span>
+                        </div>
+                        
+                        
+                        <div class="clearfix">
+                            <span id="invite_response<?php echo ($this->is_edit?'-edit':'');?>">
+                            <?php if($this->another_users) { ?>
+                            	<?php foreach($this->another_users AS $u) { ?>
+                            	<input id="hidden_user_fr_<?php echo $u['user_id']?><?php echo ($this->is_edit?'-edit':'');?>" type="hidden" name="friends[<?php echo $u['user_id']?>]" value="<?php echo $u['user_id']?>" />
+                            	<?php } ?>
+                            <?php } ?>
+                            </span>
+                            <input type="text" class="collaborator_name ui-autocomplete-input" value="<?php echo $this->translate('Add another pinner');?>" name="collaborator_name" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+							
+							<?php /* ?>
+                            <a class="Button WhiteButton Button18 collab_button submit_collaborator" href="#"><strong>Add</strong><span></span></a>
+                            <?php */ ?>
+                            
+                            <ul id="CurrentCollaborators<?php echo ($this->is_edit?'-edit':'');?>">
+                            	<?php if($this->another_users) { ?>
+                            	<?php foreach($this->another_users AS $u) { ?>
+                            	<li class="collaborator invite" id="user_fr_<?php echo $u['user_id']?><?php echo ($this->is_edit?'-edit':'');?>">
+									<a href="<?php echo $u['href']?>">
+										<img alt="<?php echo $this->translate('Collaborator Photo');?>" src="<?php echo $u['avatar']?>" class="collaborator_image">
+									</a>
+									<a href="<?php echo $u['href']?>" class="collaborator_name"><?php echo $u['fullname']?></a>
+									<a class="delete_collaborator invite" href="javascript:void(0);" onclick="deleteFriend('<?php echo $u['user_id']?>');"><?php echo $this->translate('Remove');?></a>
+								</li>
+                            	<?php } ?>
+                            	<?php } ?>
+                            </ul>
+                        </div>
+                    </div>
+                        
+                    </div>
+                </li>
+
+
+            </ul>
+
+            <!-- Button -->
+            <div class="Submit">
+                <a class="Button WhiteButton RedButton create-board" href="javascript:void(0);" onclick="saveBoardData();">
+                	<strong><?php echo ($this->board_id?$this->translate('Edit Board'):$this->translate('Create Board'));?></strong>
+                	<span></span>
+                </a>
+            </div>
+        </form>
+
+    
+    </div>
+    
+    <div class="clear"></div>
+    
+<?php if($this->is_edit) { ?>
+<?php if(!$this->shared) { ?>
+<div class="hide" id="Modal_show_delete">
+	<div id="modal-delete-board-confirm">
+		<p><?php echo $this->translate('Are you sure you want to permanently delete this board?')?></p>
+		<div class="buttons">
+            <a onclick="$.fancybox.close(); return false" class="Button WhiteButton Button18" href="#"><strong><?php echo $this->translate('Cancel');?></strong><span></span></a>&nbsp;&nbsp;&nbsp;
+            <a class="SubmitButton Button RedButton Button18" href="<?php echo $this->board_delete;?>"><strong><?php echo $this->translate('Delete Board')?></strong><span></span></a>
+        </div>
+        <div class="clear"></div>
+	</div>
+</div>
+<script type="text/javascript">
+function Modal_show_delete() {
+	$.fancybox($('#Modal_show_delete').html(),{
+		'titleFormat': function(){
+	    	return '<div id="fancybox-title-over"><?php echo $this->translate('Delete Board');?></div>';
+	    },
+		'overlayOpacity': 0.85,
+		'overlayColor'	: '#fff',
+		'scrolling'		: 'no',
+		'titlePosition' : 'over',
+		'autoDimensions': true,
+		'margin'		: 0,
+		'padding'		: 0,
+		'transitionIn'	: 'none',
+		'transitionOut'	: 'none',
+		'centerOnScroll': true
+	});
+}
+
+</script>
+<?php } ?>
+<?php } ?>
+    
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#category_id-select<?php echo ($this->is_edit?'-edit':'');?>').selectBox();
+	$('input.collaborator_name').clearOnFocus();
+
+	var cache = {};
+	$('.collaborator_name.ui-autocomplete-input').live('keyup', function(){
+		var val = this.value;
+		if(cache[val]) {
+			autocompleteResults(cache[val]);
+		} else {
+			$.post('<?php echo $this->friends_href;?>', {term: val}, function(data){
+				cache[val] = data.users;
+				autocompleteResults(data.users);
+			}, 'json');
+		}
+	}).after('<div class="menu_friends" style="position: absolute; display: none; margin-top: 33px;z-index:2147483647;">');
+	
+	function autocompleteResults(data) {
+
+		var holder = $('.menu_friends').empty();
+		if($(data).objectSize() < 1) {
+			holder.hide();
+			return;
+		}
+		holder.show(function(){
+			$(document).unbind('.joauto').bind('click.joauto',function(e){
+				holder.hide();
+			});
+		});
+		$(data).each(function(i, item){
+			user = $('<div class="option_friends"><img alt="'+item.label+'" src="'+item.image+'"><span>'+item.label+'</span></div>').click(function(){
+				holder.hide();
+				if( $('#user_fr_'+item.value+'<?php echo ($this->is_edit?'-edit':'');?>').size() > 0 ) { return; }
+				$('input.collaborator_name').val('');
+				$('#invite_response<?php echo ($this->is_edit?'-edit':'');?>').append('<input id="hidden_user_fr_'+item.value+'<?php echo ($this->is_edit?'-edit':'');?>" type="hidden" name="friends['+item.value+']" value="'+item.value+'" />');
+
+				template = $('#friend-template<?php echo ($this->is_edit?'-edit':'');?>').html();
+				for(e in item) {
+					template = template.replace(new RegExp(RegExp.quote('{'+e+'}'), 'g'), item[e]);
+				}
+				
+				$('#CurrentCollaborators<?php echo ($this->is_edit?'-edit':'');?>').append(template);
+			}).css({'cursor': 'pointer'});
+			
+			holder.append(user);
+		});
+	}
+
+	RegExp.quote = function(str) {
+	    return (str+'').replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+	};
+		
+	
+});
+
+function saveBoardData() {
+	$.post('<?php echo $this->form_action;?>', $('#CreateBoard<?php echo ($this->is_edit?'-edit':'');?>').serialize(), function(data){
+		if(data.error) {
+			Pins.error(data.error);
+		} else if(data.data) {
+			window.location = data.data.href;
+		}
+	}, 'json');
+	return false;
+}
+
+function deleteFriend(id) {
+	$('#user_fr_'+id+'<?php echo ($this->is_edit?'-edit':'');?>').remove();
+	$('#hidden_user_fr_'+id+'<?php echo ($this->is_edit?'-edit':'');?>').remove();
+}
+
+</script>
+
+<script type="text/template" id="friend-template<?php echo ($this->is_edit?'-edit':'');?>">
+<li class="collaborator invite" id="user_fr_{value}<?php echo ($this->is_edit?'-edit':'');?>">
+	<a href="{href}">
+		<img alt="<?php echo $this->translate('Collaborator Photo');?>" src="{image}" class="collaborator_image">
+	</a>
+	<a href="{href}" class="collaborator_name">{label}</a>
+	<a class="delete_collaborator invite" href="javascript:void(0);" onclick="deleteFriend('{value}');"><?php echo $this->translate('Remove');?></a>
+</li>
+</script>

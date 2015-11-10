@@ -1,0 +1,54 @@
+<div id="embedpin">
+	<form action="" method="post">
+		<p class="input ntp">
+			<input type="text" name="imagewidth" id="imagewidth" value="<?php echo $this->pin['thumb_width'];?>" />
+			<label for="imagewidth"><?php echo $this->translate('px — Image Width');?></label>
+		</p>
+		<p class="input">
+			<input type="text" name="imageheight" id="imageheight" value="<?php echo $this->pin['thumb_height'];?>" />
+			<label for="imageheight"><?php echo $this->translate('px — Image Height');?></label>
+		</p>
+		<p>
+			<label for="sourcecode" class="hide"><?php echo $this->translate('Source Code');?><br /></label>
+			<textarea name="sourcecode" id="sourcecode" rows="5" cols="30"></textarea>
+		</p>
+	</form>
+</div>
+
+<script type="text/javascript">
+var max_width = <?php echo (int)$this->pin['thumb_width'];?>, max_height = <?php echo (int)$this->pin['thumb_height'];?>;
+function generateEmbedHtml() {
+	var template = "<div style='padding-bottom: 2px; line-height: 0px'><a href='<?php echo $this->pin['href'];?>' ><img src='<?php echo $this->pin['thumb'];?>' border='0' <?php if($this->pin['thumb_width']) {?> width='<?php echo $this->pin['thumb_width'];?>'<?php } ?> <?php if($this->pin['thumb_height']) { ?>height ='<?php echo $this->pin['thumb_height'];?>'<?php } ?>/></a></div><div style='float: left; padding-top: 0px; padding-bottom: 0px;'><p style='font-size: 10px; color: #76838b;'><?php echo $this->translate('Source');?>: <a style='text-decoration: underline; font-size: 10px; color: #76838b;' href='<?php echo $this->pin['from'];?>'><?php echo $this->pin['source']['source'];?></a> <?php echo $this->translate('via');?> <a style='text-decoration: underline; font-size: 10px; color: #76838b;' href='<?php echo $this->pin['profile'];?>' ><?php echo $this->pin['user']['firstname'];?></a> <?php echo $this->translate('on');?> <a style='text-decoration: underline; color: #76838b;' href='<?php echo $this->pin['onto_href'];?>' ><?php echo $this->pin['onto_title'];?></a></p></div>";
+	$template = $('<div>').append(template);
+	$template.find('a').attr('target', '_blank');
+	return $template;
+}
+
+$('#sourcecode')
+.html(generateEmbedHtml().html())
+.click(function(){
+	this.select();
+});
+
+<?php if($this->pin['thumb_width'] && $this->pin['thumb_height']) { ?>
+$('#imagewidth').keyup(function(){
+	width = parseInt(this.value);
+	if(width > max_width || !width) { width = max_width; this.value = width; }
+	height = Math.round( <?php echo (int)$this->pin['thumb_height'];?> / ( <?php echo (int)$this->pin['thumb_width'];?>/width ) );
+	$template = generateEmbedHtml();
+	$template.find('div a img').attr('width',width).attr('height',height);
+	$('#imageheight').val(height);
+	$('#sourcecode').html($template.html());
+});
+$('#imageheight').keyup(function(){
+	height = parseInt(this.value);
+	if(height > max_height || !height) { height = max_height; this.value = height; }
+	width = Math.round( <?php echo (int)$this->pin['thumb_width'];?> / ( <?php echo (int)$this->pin['thumb_height'];?>/height ) );
+	$template = generateEmbedHtml();
+	$template.find('div a img').attr('width',width).attr('height',height);
+	$('#imagewidth').val(width);
+	$('#sourcecode').html($template.html());
+});
+<?php } ?>
+
+</script>

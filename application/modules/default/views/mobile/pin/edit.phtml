@@ -1,0 +1,135 @@
+<?php echo $this->header_part; ?>
+
+<?php ob_start();?>
+<script type="text/javascript">
+$(window).load(function() {
+
+	regExPrice.addExpresionLine($('#message').html(), true);
+	
+	$('#message').jqEasyCounter({
+		holder: '.CharacterCount',
+		maxChars: 500,
+		maxCharsWarning: 470,
+		template: '{count}'
+	}).bind("keydown keyup keypress focus paste",function() {
+		regExPrice.addExpresionLine(this.value);
+		if($.trim(this.value)) {
+			$('#emailpin .submit input').removeClass('disabled').attr('disabled', false);
+		} else {
+			$('#emailpin .submit input').addClass('disabled').attr('disabled', true);
+		}
+		regExPrice.addExpresionLine(this.value, false);
+		$('#PinEditPreview #postDescription').html(this.value);
+	});
+	
+	$('#board_id').selectBox();
+
+	<?php if($this->error) { ?>
+	Pins.error('<?php echo $this->error;?>');
+	<?php } ?>
+});
+</script>
+<script type="text/javascript">
+function Modal_show_delete() {
+	$.fancybox($('#Modal_show_delete').html(),{
+		'titleFormat': function(){
+	    	return '<div id="fancybox-title-over"><?php echo $this->translate('Delete Pin');?></div>';
+	    },
+	    'titlePosition': 'over'
+	});
+}
+
+</script>
+
+<?php $this->placeholder('inhead', ob_get_clean()); ?>
+
+<div class="hide" id="Modal_show_delete">
+	<div id="modal-delete-board-confirm">
+		<p><?php echo $this->translate('Are you sure you want to permanently delete this pin?')?></p>
+		<div class="buttons">
+            <a onclick="$.fancybox.close(); return false" class="Button WhiteButton Button18" href="#"><strong><?php echo $this->translate('Cancel');?></strong><span></span></a>&nbsp;&nbsp;&nbsp;
+            <a class="SubmitButton Button RedButton Button18" href="<?php echo $this->pin_delete;?>"><strong><?php echo $this->translate('Delete Pin')?></strong><span></span></a>
+        </div>
+        <div class="clear"></div>
+	</div>
+</div>
+
+<div id="detail">
+
+	<div id="view-profile">		
+
+		<div class="FixedContainer">
+
+        <div id="PinEditPreview">
+        	<div class="imageholder">
+	            <a href="<?php echo $this->pin_info['href'];?>">
+	            	<img src="<?php echo $this->pin_info['thumb'];?>" alt="" />
+	            	<span class="price" <?php echo ($this->pin_info['gift'] ? 'style="display:block;"' : '');?>><?php echo $this->pin_info['price_formated'];?></span>
+	            </a>
+            </div>
+            <p id="postDescription"><?php echo $this->pin_info['description'];?></p>
+        </div>
+
+        <form accept-charset="utf-8" method="POST" action="" class="Form StaticForm PinEdit" id="PinEdit">
+			
+			<div class="hide">
+				<input type="hidden" name="price" value="<?php echo $this->pin_info['price_formated'];?>" />
+			</div>
+			
+            <div class="ButtonHeading">
+                <a onclick="Modal_show_delete(); return false" class="Button WhiteButton Button18 deleteButton" id="delete" href="#"><strong><?php echo $this->translate('Delete Pin');?></strong><span></span></a>
+                <h3><?php echo $this->translate('Edit Pin');?></h3>
+            </div>
+
+            <ul>
+                <li>
+                    <label><?php echo $this->translate('Description');?></label>
+                    <div class="Right">
+                        <div class="editable_shadow pin_edit" id="ta_holder">
+                            <textarea class="expand autocomplete_desc" cols="40" id="message" name="description" rows="2"><?php echo $this->pin_info['description'];?></textarea>
+                        </div>
+                        <span class="CharacterCount colorless hidden">500</span>
+                    </div>
+                </li>
+                <li>
+                    <label for="id_link"><?php echo $this->translate('Link');?></label>
+                    <div class="Right">
+                        <input type="text" id="id_link" value="<?php echo $this->pin_info['from'];?>" name="from">
+                        
+                    </div>
+                </li>
+                <li class="doubleborder">
+                    <label for="id_board"><?php echo $this->translate('Board');?></label>
+                    <div class="Right">
+                        <select id="board_id" name="board_id">
+							<?php foreach($this->boards AS $board) { ?>
+							<?php if($this->pin_info['board_id'] == $board['board_id']) { ?>
+							<option selected="selected" value="<?php echo $board['board_id'];?>"><?php echo $board['title'];?></option>
+							<?php } else {?>
+							<option value="<?php echo $board['board_id'];?>"><?php echo $board['title'];?></option>
+							<?php } ?>
+							<?php } ?>
+						</select>
+                        
+                    </div>
+                </li>
+            </ul>
+
+            <div class="Submit">
+                <p>
+                    <a onclick="$('#PinEdit').submit(); return false" class="Button WhiteButton RedButton Button24" href="#">
+                        <strong><?php echo $this->translate('Save Pin');?></strong>
+                        <span></span>
+                    </a>
+                </p>
+            </div>
+
+        </form>
+
+    </div>
+	
+	</div>
+	<div class="clear"></div>	
+</div>
+
+<?php echo $this->footer_part; ?>

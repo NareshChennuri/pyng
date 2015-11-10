@@ -1,0 +1,32 @@
+<div class="boxeswrapper">
+	<div id="boxes" class="boxes-absolute">
+		<?php if($this->onto_board) { ?>
+		<?php echo $this->onto_board;?>
+		<?php } ?>
+		
+		<?php if($this->source_pins) { ?>
+		<div class="box" style="background-color:white;width:223px;">
+			<div class="apps">
+                <h4 class="title"><?php echo $this->translate('Also from');?></h4>
+                <h5 class="subtitle"><a href="<?php echo $this->pin['from'];?>"><?php echo $this->source['source'];?></a></h5>
+                <ul class="list">
+                    <?php foreach($this->source_pins AS $key => $source) { ?>
+                    <li<?php echo ($key%3==2?' class="last"':'')?>>
+                        <a href="<?php echo $source['href'];?>">
+                            <img src="<?php echo $source['thumb'];?>" alt="<?php echo $this->source['source'];?>" />
+                        </a>
+                    </li>
+                    <?php } ?>
+                </ul>
+                <div class="clear"></div>
+            </div>
+		</div>	
+		<?php } ?>
+		
+	</div>
+</div>
+<?php if($this->loged && !$this->pin['userFollowIgnore']) { ?>
+<script type="text/javascript">
+Pins.initFollow('.box .apps .follow a');
+</script>
+<?php } ?>

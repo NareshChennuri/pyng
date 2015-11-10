@@ -1,0 +1,14 @@
+<div class="popup nopad">
+	<p class="notification"><?php echo $this->pin_text;?></p>
+	<div class="open-links">
+		<?php if($this->methods) { ?>
+			<?php foreach($this->methods AS $method) { ?>
+			<?php echo $method;?>
+			<?php } ?>
+		<?php } else { ?>
+		<p>No valid method's</p>
+		<?php } ?>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+</div>

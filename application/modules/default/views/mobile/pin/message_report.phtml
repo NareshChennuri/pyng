@@ -1,0 +1,15 @@
+<?php if(!$this->comment_is) { ?>
+<div id="reportpin">
+	<h4 class="question text-center"><?php echo $this->translate('Thanks for reporting this pin! Our team will review the pin and delete it if it violates the');?> <a href="<?php echo $this->terms_href;?>" class="link"><?php echo $this->terms;?></a>.</h4>
+</div>
+<?php } else { ?>
+<div id="reportpin">
+	<h4 class="question text-center"><?php echo $this->translate('Thanks for reporting this comment! Our team will review the comment and delete it if it violates the');?> <a href="<?php echo $this->terms_href;?>" class="link"><?php echo $this->terms;?></a>.</h4>
+</div>
+<?php } ?>
+<script type="text/javascript">
+setTimeout(function(){
+	opener = '<?php echo $this->pin_oppener;?>';
+	Pins.initPopupOpener($('<a>').attr('href', '<?php echo $this->pin_href;?>'), opener);
+}, 5000);
+</script>

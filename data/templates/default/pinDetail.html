@@ -1,0 +1,96 @@
+<div class="boxlarge"> 
+	<!-- BEGIN buttons -->
+	<div class="overbuttons">
+		<ul class="event-load-buttons">
+			<li><a href="${url_embed}" class="grey-button small-button embed event-click-open-popup" title="${text_embed}">${text_embed}</a></li>
+			{{if !is_reported}}
+			<li><a href="${url_report}" class="grey-button small-button report{{if loged}} event-click-open-popup{{/if}}" title="${text_report_pin}">${text_report_pin}</a></li>
+			{{/if}}
+			<li><a href="${url_email}" class="grey-button small-button email{{if loged}} event-click-open-popup{{/if}}" title="${text_email}">${text_email}</a></li>
+		</ul>
+	</div>
+	<!-- BEGIN pinner info -->
+	<div class="pinner">
+		<p class="avatar"><a href="${author_profile.href}"><img src="${author_profile.avatars.avatar_image_a}" alt="${author_profile.fullname}" /></a></p>
+		<div class="data">
+			<h3 class="title-10"><a href="${author_profile.href}">${author_profile.fullname}</a> {{if via_profile}} ${text_via} <a onclick="target='_blank'" href="${via_profile.profile}">${via_profile.fullname}</a> {{/if}}</h3>
+
+			{{if mobile_upload}}
+				<p class="time">${text_uploads_date_dif_from} <strong>${text_mobile}</strong></p>
+			{{else}}
+				{{if source.source}}
+				<p class="time">${text_pinned_date_dif_from} <a {{if !target_repin}}onclick="target='_blank'"{{/if}} href="${from}" rel="nofollow">${source.source}</a></p>
+				{{else}}
+				<p class="time">${text_uploads_date_dif}</p>
+				{{/if}} 
+			{{/if}}
+			
+		</div>
+		{{if enable_follow_user}}
+		<p class="button"> {{if user_is_follow}} <a class="grey-button event-click-follow-user" href="${user_follow_href}" data-userid="${author_profile.user_id}">${text_unfollow}</a> {{else}} <a class="red-button event-click-follow-user" href="${user_follow_href}" data-userid="${author_profile.user_id}">${text_follow}</a> {{/if}} </p>
+		{{/if}} 
+		<div class="clear"></div>
+	</div>
+	<!-- BEGIN box preview -->
+	<div class="preview">
+		<p class="icons"> <a href="${url_repin}" class="grey-button small-button repin{{if loged}} event-click-open-popup{{/if}}" title="${text_repin}"><span>${text_repin}</span></a> {{if url_edit}} <a href="${url_edit}" class="grey-button small-button edit login" title="${text_edit}"><span>${text_edit}</span></a> {{else}} <a href="${url_like}" class="grey-button small-button like{{if !loged}} login{{else}} event-click-like-box{{if is_liked}} disabled{{/if}}{{/if}}"><span>${text_like_unlike}</span></a> {{/if}} </p>
+		<p class="thumb"> 
+			{{if is_video}} <span class="video"> {{html video_code}} </span> 
+			{{else}}
+				{{if from}} 
+				<a onclick="target='_blank'" href="${from}"><img width="${images.thumb_width_d}" height="${images.thumb_height_d}" data-original="${images.thumb_image_d}" src="${images.thumb_image_b}" alt="Image" /></a> {{else}} <img width="${images.thumb_width_d}" height="${images.thumb_height_d}" data-original="${images.thumb_image_d}" src="${images.thumb_image_b}" alt="Image" /> 
+				{{/if}}
+			{{/if}} 
+		</p>
+		<!-- BEGIN gallery -->
+		{{if gallery}}
+			{{each gallery}}
+			<br />
+			<p class="thumb">
+				<img width="${$value.thumb_width_d}" height="${$value.thumb_height_d}" data-original="${$value.thumb_image_d}" src="${$value.thumb_image_b}" alt="Image" />
+			</p>
+			{{/each}}
+		{{/if}}
+		<!-- END gallery -->
+	</div>
+	<!-- BEGIN banners --> 
+	
+		{{if banners }}
+		<div class="banners"> 
+			{{each banners}}
+			<div class="item" style="{{if $value.height}}height:${$value.height}px;{{/if}}{{if $value.width}}width:${$value.width}px;{{/if}}"> {{html $value.html}} </div>
+			{{/each}} 
+		</div>
+		{{/if}}
+		
+	<!-- BEGIN description -->
+	<div class="description">Description: {{html description}}</div>
+    <div class="description">${storeName}</div>
+    <div class="description">City: ${cityName}, Place: ${placeName}</div>
+	<!-- BEGIN comments -->
+	<div class="commentsbar">
+		<form action="${pin_url}" method="post" id="pin_commentt_form" class="event-comment-form">
+			<ul class="event-load-comments">
+				{{if loged}}
+				<li class="add-comment event-comment-box">
+					<p class="avatar"><a href="${self_profile.profile}"><img src="${self_profile.avatars.avatar_image_a}" alt="${self_profile.fullname}" /></a></p>
+					<div class="form">
+						<div id="friends_in_comment" class="hide"></div>
+						<textarea name="write_comment" class="event-clear-focus event-tagmate-live" id="comment" rows="5" cols="30">${text_add_comment}</textarea>
+						<div class="post">
+							<button class="grey-button event-comment-add" disabled="disabled">${text_post_comment}</button>
+							<span class="help">${text_post_comment_help}</span>
+							<div class="clear"></div> 
+						</div>
+					</div>
+					<div class="clear"></div>
+				</li>
+				{{else}}
+				<li class="nmh"><strong><a href="${url_login}">${text_login_comment}</a></strong></li>
+				{{/if}}
+			</ul>
+		</form>
+	</div>
+	<div class="event-load-footer-data"><div class="loader-holder"><span class="loader"></span></div></div>
+</div>
+{{html extra_metas}}

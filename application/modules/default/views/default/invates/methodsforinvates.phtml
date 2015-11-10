@@ -1,0 +1,9 @@
+<?php if($this->user_invate_friends) { ?>
+<div class="pagenav">
+	<ul>
+		<?php foreach($this->user_invate_friends AS $inv) { ?>
+		<li><a href="<?php echo $inv['href'];?>"<?php if($inv['active']) { ?> class="active"<?php } ?>><span class="<?php echo $inv['class_icon'];?>">&nbsp;</span><?php echo $inv['title'];?></a></li>
+		<?php } ?>
+	</ul>
+</div>
+<?php } ?>

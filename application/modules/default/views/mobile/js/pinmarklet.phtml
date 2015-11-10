@@ -1,0 +1,524 @@
+(function(k, o, p, l) {
+  var WM = k[l.k] = {
+    win: k,
+    doc: o,
+    nav: p,
+    opt: l,
+    str: {},
+    pintastic: function() {
+      return {
+        callback: [],
+        kill: function(b) {
+          b.parentNode && b.parentNode.removeChild(b)
+        },
+        get: function(b, c) {
+          var e = null;
+          return e = b[c] || b.getAttribute(c)
+        },
+        makeElement: function(b) {
+          var c = false,
+              e, d;
+          for (e in b) if (b[e].hasOwnProperty) {
+            c = WM.doc.createElement(e);
+            for (d in b[e]) if (b[e][d].hasOwnProperty) if (typeof b[e][d] === "string") c[d] = b[e][d];
+            break
+          }
+          return c
+        },
+        eventListen: function(b, c, e) {
+          if (typeof WM.win.addEventListener !== "undefined") b.addEventListener(c, e, false);
+          else typeof WM.win.attachEvent !== "undefined" && b.attachEvent("on" + c, e)
+        },
+        getSelection: function() {
+          return ("" + (WM.win.getSelection ? WM.win.getSelection() : WM.doc.getSelection ? WM.doc.getSelection() : WM.doc.selection.createRange().text)).replace(/(^\s+|\s+$)/g, "")
+        },
+        pin: function(b) {
+          var c = b.getElementsByTagName("IMG")[0],
+              e = "false",
+              d = WM.opt.pin + "?",
+              f = (new Date).getTime();
+          if (b.rel === "video") e = "true";
+          d = d + "media=" + encodeURIComponent(c.src);
+          d = d + "&url=" + encodeURIComponent(c.getAttribute("url") || WM.doc.URL);
+          d = d + "&title=" + encodeURIComponent(c.title || WM.doc.title);
+          d = d + "&is_video=" + e;
+          d = d + "&description=" + encodeURIComponent(WM.v.selectedText || c.title || c.alt);
+		  d = d + "&charset=" + (document.characterSet || document.charset || document.inputEncoding);
+          WM.v.isIOS && WM.win.setTimeout(function() {
+            WM.win.location = "pinit12:" + d
+          }, 25);
+          WM.win.open(d, "pin" + f, WM.opt.pop)
+        },
+        close: function(b) {
+          if (WM.str.bg) {
+            WM.doc.b.removeChild(WM.str.shim);
+            WM.doc.b.removeChild(WM.str.bg);
+            WM.doc.b.removeChild(WM.str.bd)
+          }
+          k.hazPinningNow = false;
+          b && WM.win.alert(b);
+          WM.v.hazGoodUrl = false;
+          WM.win.scroll(0, WM.v.saveScrollTop)
+        },
+        click: function(b) {
+          b = b || WM.win.event;
+          var c = null;
+          if (c = b.target ? b.target.nodeType === 3 ? b.target.parentNode : b.target : b.srcElement) if (c === WM.str.x) WM.pintastic.close();
+          else if (c.parentNode.className === WM.opt.k + "_pintasticContainer" || c.className === WM.opt.k + "_pintasicButton") {
+            WM.pintastic.pin(c.parentNode.getElementsByTagName("A")[0]);
+            WM.win.setTimeout(function() {
+              WM.pintastic.close()
+            }, 10)
+          }
+        },
+		getParentByTagName: function(obj, tag) {
+			var obj_parent = obj.parentNode;
+			if (!obj_parent) return false;
+			if (obj_parent.tagName && obj_parent.tagName.toLowerCase() == tag) return obj_parent;
+			else return WM.pintastic.getParentByTagName(obj_parent, tag);
+		},
+        behavior: function() {
+          WM.pintastic.eventListen(WM.str.bd, "click", WM.pintastic.click)
+        },
+        presentation: function() {
+          var b = WM.pintastic.makeElement({
+            STYLE: {
+              type: "text/css"
+            }
+          }),
+              c = WM.opt.rules.join("\n").replace(/#_/g, "#" + l.k + "_").replace(/\._/g, "." + l.k + "_").replace(/\{CellSize\}/g, WM.opt.thumbCellSize);
+          if (b.styleSheet) b.styleSheet.cssText = c;
+          else b.appendChild(WM.doc.createTextNode(c));
+          WM.doc.h.appendChild(b)
+        },
+        thumb: function(b, c, e, d, f, g) { 
+          if (WM.v.hazSrc[b] !== true) WM.v.hazSrc[b] = true;
+          else if (!WM.v.isIE) return;
+          WM.v.hazAtLeastOneGoodThumb = true;
+          d || (d = "image");
+          var h = WM.pintastic.makeElement({
+            SPAN: {
+              className: WM.opt.k + "_pintasticContainer"
+            }
+          }),
+              j = WM.pintastic.makeElement({
+              A: {
+                rel: d
+              }
+            }),
+              i = new Image,
+              m, n;
+          i.setAttribute("nopin", "nopin");
+          i.style.visibility = "hidden";
+          if (f) i.title = f;
+          g && i.setAttribute("url", g);
+          i.onload = function() {
+          
+          	var i = this.width,
+                h = this.height;
+            if (h === i) this.width = this.height = WM.opt.thumbCellSize;
+            if (h > i) {
+                 this.width = WM.opt.thumbCellSize;
+                 this.height = WM.opt.thumbCellSize * (h / i);
+                 this.style.marginTop = 0 - (this.height - WM.opt.thumbCellSize) / 2 + "px"
+            }
+            if (h < i) {
+                 this.height = WM.opt.thumbCellSize;
+                 this.width = WM.opt.thumbCellSize * (i / h);
+                 this.style.marginLeft = 0 - (this.width - WM.opt.thumbCellSize) / 2 + "px"
+            }
+            
+          	/*
+            m = this.width;
+            n = this.height;
+            
+            this.style.marginTop = n < WM.opt.thumbCellSize ? -n / 2 + "px" : "-" + WM.opt.thumbCellSize / 2 + "px";
+            this.style.marginLeft = m < WM.opt.thumbCellSize ? -m / 2 + "px" : "-" + WM.opt.thumbCellSize / 2 + "px";
+            */
+            
+            this.style.visibility = "";
+          };
+          i.src = b;
+          j.appendChild(i);
+          if (d !== "image") {
+            b = WM.pintastic.makeElement({
+              B: {}
+            });
+            j.appendChild(b)
+          }
+          c = WM.pintastic.makeElement({
+            CITE: {
+              innerHTML: c + " x " + e
+            }
+          });
+          j.appendChild(c);
+          h.appendChild(j);
+          h.appendChild(WM.pintastic.makeElement({
+            SPAN: {
+              className: WM.opt.k + "_pintasicButton"
+            }
+          }));
+          if (d !== "image")(d = WM.str.bd.getElementsByTagName("SPAN")[1]) ? d.parentNode.insertBefore(h, d) : WM.str.bd.appendChild(h);
+          else WM.str.bd.appendChild(h)
+        },
+        call: function(b, c) {
+        
+        	if(!WM.win[WM.opt.k]) { WM.win[WM.opt.k] = {}; }
+        	if(!WM.win[WM.opt.k].f) { WM.win[WM.opt.k].f = {}; }
+        	if(!WM.win[WM.opt.k].f.callback) { WM.win[WM.opt.k].f.callback = []; }
+        
+          var e = WM.opt.k + ".f.callback[" + WM.pintastic.callback.length + "]",
+              d = WM.doc.createElement("SCRIPT");
+          /*WM.pintastic.callback.push(function(f) {
+            c(f);
+            WM.pintastic.kill(e);
+          });*/
+          
+          WM.win[WM.opt.k].f.callback[WM.pintastic.callback.length] = function(f) {
+            c(f);
+            WM.pintastic.kill(e);
+          };
+          
+          WM.pintastic.callback.push(e);
+          
+          d.id = e;
+          d.src = b + e;
+          d.type = "text/javascript";
+          d.charset = "utf-8";
+          WM.v.firstScript.parentNode.insertBefore(d, WM.v.firstScript)
+        },
+        ping: {
+          check: function(b) {
+            b && b.ok === false && WM.pintastic.close(WM.opt.msg.noPin)
+          },
+          vimeo: function(b) {
+            var c;
+            if (b[0] && b[0].thumbnail_large && b[0].embed_privacy === "anywhere") {
+              c = "";
+              if (b[0].title) c += b[0].title;
+              if (b[0].user_name) c = c + ". Video by " + b[0].user_name;
+              if (b[0].user_description) c = c + ". " + b[0].user_description;
+              c += ".";
+              WM.pintastic.thumb(b[0].thumbnail_large, 150, 200, "video", c, b[0].url)
+            }
+          }
+        },
+        hazUrl: {
+          vimeo: function() {
+            var b = WM.doc.URL.split("/").pop(),
+                c = WM.doc.getElementsByTagName("LI"),
+                e = WM.doc.getElementsByTagName("A"),
+                d, f; 
+            b = parseInt(b, 10);
+            if (b > 1 && WM.v.hazCalledForThumb["_" + b] !== true) {
+              WM.pintastic.call("http://vimeo.com/api/v2/video/" + b + ".json?callback=", WM.pintastic.ping.vimeo);
+              WM.v.hazCalledForThumb["_" + b] = true
+            }
+            d = c.length;
+            for (f = 0; f < d; f += 1) if (c[f].id && c[f].id.split("clip_")[1]) {
+              b = c[f].id.split("clip_")[1];
+              b = parseInt(b, 10);
+              if (b > 1 && WM.v.hazCalledForThumb["_" + b] !== true) {
+                WM.v.hazCalledForThumb["_" + b] = true;
+                WM.pintastic.call("http://vimeo.com/api/v2/video/" + b + ".json?callback=", WM.pintastic.ping.vimeo)
+              }
+            }
+            d = e.length;
+            for (f = 0; f < d; f += 1) if (e && e[f].href) {
+              b = parseInt(e[f].href.split("/").pop(), 10);
+              if (b > 1 && WM.v.hazCalledForThumb["_" + b] !== true) {
+                WM.pintastic.call("http://vimeo.com/api/v2/video/" + b + ".json?callback=", WM.pintastic.ping.vimeo);
+                WM.v.hazCalledForThumb["_" + b] = true
+              }
+            }
+          },
+          pintastic: function() {
+            WM.pintastic.close(WM.opt.msg.installed)
+          },
+          facebook: function() {
+            WM.pintastic.close(WM.opt.msg.privateDomain.replace(/%privateDomain%/, "Facebook"))
+          },
+          googleReader: function() {
+            WM.pintastic.close(WM.opt.msg.privateDomain.replace(/%privateDomain%/, "Google Reader"))
+          },
+          stumbleUpon: function() {
+            var b = 0,
+                c = WM.opt.stumbleFrame.length,
+                e;
+            for (b = 0; b < c; b += 1) if (e = WM.doc.getElementById(WM.opt.stumbleFrame[b])) {
+              WM.pintastic.close();
+              if (WM.win.confirm(WM.opt.msg.bustFrame)) {
+                WM.doc.location = e.src;
+                WM.win.open(e.src)
+              }
+              break
+            }
+          }
+        },
+        hazSite: {
+          youtube: {
+            iframe: function(b) {
+              b = b.src.split("?")[0].split("&")[0].split("/");
+              WM.pintastic.thumb("http://img.youtube.com/vi/" + b.pop() + "/0.jpg", 360, 480, "video")
+            },
+            video: function(b) {
+              b.getAttribute("data-youtube-id") && WM.pintastic.thumb("http://img.youtube.com/vi/" + b.getAttribute("data-youtube-id") + "/0.jpg", 360, 480, "video")
+            },
+            embed: function(b) {
+              var c = b.getAttribute("flashvars"),
+                  e = "";
+              (e = c ? c.split("video_id=")[1].split("&")[0] : b.src.split("?")[0].split("&")[0].split("/").pop()) && WM.pintastic.thumb("http://img.youtube.com/vi/" + e + "/0.jpg", 360, 480, "video")
+            },
+            object: function(b) {
+              b = b.getAttribute("data");
+              var c = "";
+              if (b) c = b.split("?")[0].split("&")[0].split("/").pop();
+              c && WM.pintastic.thumb("http://img.youtube.com/vi/" + c + "/0.jpg", 360, 480, "video")
+            }
+          },
+          vimeo: {
+            iframe: function(b) {
+              WM.pintastic.call("http://vimeo.com/api/v2/video/" + b.src.split("/").pop() + ".json?callback=", WM.pintastic.ping.vimeo)
+            }
+          }
+        },
+        hazTag: {
+          img: function(b) {
+            var c;
+            if (!b.src.match(/^data/)) {
+              c = new Image;
+              c.src = b.src;
+		      c.height = b.height;
+		      c.width = b.width;
+		      url = WM.pintastic.getParentByTagName(b, 'a');
+		      title = (b.title || b.alt);
+		      
+		      if(url && url.href) {
+		      	d = url.href.split(".").pop().split("?")[0].split("#")[0];
+		      	if (d === "gif" || d === "jpg" || d === "jpeg" || d === "png") {
+		      		d = new Image;
+					d.onload = function () {
+						this.height > WM.opt.minImgSize && c.width > WM.opt.minImgSize && WM.pintastic.thumb(
+							this.src,
+							this.height,
+							this.width,
+							null,
+							this.title);
+						};
+						d.title = url.title || url.alt || b.title || b.alt;
+						d.src = url.href;
+		      	} else {
+		      		c.height > WM.opt.minImgSize && c.width > WM.opt.minImgSize && WM.pintastic.thumb(c.src, c.height, c.width, null, title, url)		
+		      	}
+		      } else {
+		      	c.height > WM.opt.minImgSize && c.width > WM.opt.minImgSize && WM.pintastic.thumb(c.src, c.height, c.width, null, title, url)
+		      }
+		      
+              
+
+            }
+          },
+          meta: function(b) {
+            b.name && b.name.toUpperCase() === "PINTASTIC" && b.content && b.content.toUpperCase() === "NOPIN" && WM.pintastic.close(WM.opt.msg.noPin)
+          }
+        },
+        checkTags: function() {
+          var b, c, e, d, f, g, h, j, i;
+          WM.v.tag = [];
+          b = 0;
+          for (c = WM.opt.check.length; b < c; b += 1) {
+            f = WM.doc.getElementsByTagName(WM.opt.check[b]);
+            e = 0;
+            for (d = f.length; e < d; e += 1) {
+              g = f[e];
+              !g.getAttribute("nopin") && g.style.display !== "none" && g.style.visibility !== "hidden" && WM.v.tag.push(g)
+            }
+          }
+          b = 0;
+          for (c = WM.v.tag.length; b < c; b += 1) {
+            f = WM.v.tag[b];
+            g = f.tagName.toLowerCase();
+            if (WM.pintastic.hazTag[g]) WM.pintastic.hazTag[g](f);
+            else if (WM.opt.tag[g]) for (h in WM.opt.tag[g]) if (WM.opt.tag[g][h].hasOwnProperty) {
+              j = WM.opt.tag[g][h];
+              if (i = WM.pintastic.get(f, j.att)) {
+                e = 0;
+                for (d = j.match.length; e < d; e += 1) i.match(j.match[e]) && WM.pintastic.hazSite[h][g](f)
+              }
+            }
+          }
+        },
+        structure: function() {
+          WM.str.shim = WM.pintastic.makeElement({
+            IFRAME: {
+              height: "100%",
+              width: "100%",
+              allowTransparency: true,
+              id: WM.opt.k + "_shim"
+            }
+          });
+          WM.str.shim.setAttribute("nopin", "nopin");
+          WM.doc.b.appendChild(WM.str.shim);
+          WM.str.bg = WM.pintastic.makeElement({
+            DIV: {
+              id: WM.opt.k + "_background"
+            }
+          });
+          WM.doc.b.appendChild(WM.str.bg);
+          WM.str.bd = WM.pintastic.makeElement({
+            DIV: {
+              id: WM.opt.k + "_bd"
+            }
+          });
+          WM.str.x = WM.pintastic.makeElement({
+            A: {
+              id: WM.opt.k + "_x",
+              innerHTML: WM.opt.msg.cancelTitle
+            }
+          });
+          WM.str.bd.appendChild(WM.str.x);
+          WM.str.logo = WM.pintastic.makeElement({
+            SPAN: {
+              id: WM.opt.k + "_logo"
+            }
+          });
+          WM.str.logo_A = WM.pintastic.makeElement({
+            A: {
+              href: "<?php echo $this->baseUrl;?>",
+              target: "_blank"
+            }
+          });
+          WM.str.logo_A.appendChild(WM.str.logo);
+          WM.str.bd.appendChild(WM.str.logo_A);
+          WM.doc.b.appendChild(WM.str.bd);
+          WM.win.scroll(0, 0)
+        },
+        checkUrl: function() {
+          var b;
+          for (b in WM.opt.url) if (WM.opt.url[b].hasOwnProperty) if (WM.doc.URL.match(WM.opt.url[b])) {
+            WM.pintastic.hazUrl[b]();
+            if (WM.v.hazGoodUrl === false) return false
+          }
+          return true
+        },
+        checkPage: function() {
+          if (WM.pintastic.checkUrl()) { 
+            WM.pintastic.checkTags();
+            if (WM.v.hazGoodUrl === false) return false
+          } else
+          return false;
+          return true
+        },
+        initPintastic: function() {
+          WM.doc.b = WM.doc.getElementsByTagName("BODY")[0];
+          WM.doc.h = WM.doc.getElementsByTagName("HEAD")[0];
+          if (!(!WM.doc.b || !WM.doc.h || k.hazPinningNow === true)) {
+            var b, c = WM.nav.userAgent;
+            WM.v = {
+              saveScrollTop: WM.win.pageYOffset,
+              hazGoodUrl: true,
+              hazAtLeastOneGoodThumb: false,
+              hazSrc: {},
+              hazCalledForThumb: {},
+              isIE: function() {
+                return /msie/i.test(c) && !/opera/i.test(c)
+              }(),
+              isIOS: function() {
+                return c.match(/iP/) !== null
+              }(),
+              firstScript: WM.doc.getElementsByTagName("SCRIPT")[0],
+              selectedText: WM.pintastic.getSelection()
+            };
+            b = WM.opt.checkpoint.url + "?url=" + encodeURIComponent(WM.doc.URL) + "&callback=";
+            WM.pintastic.call(b, WM.pintastic.ping.check);
+            WM.pintastic.structure();
+            WM.pintastic.presentation();
+            if (WM.pintastic.checkPage()) if (WM.v.hazGoodUrl === true) {
+              WM.pintastic.behavior(); 
+              if (!(WM.pintastic.callback.length > 1)) if (WM.v.hazAtLeastOneGoodThumb === false || WM.v.tag.length === 0) {
+                WM.pintastic.close(WM.opt.msg.notFound);
+                return
+              }
+            }
+            k.hazPinningNow = true
+          }
+        }
+      }
+    }()
+  };
+  WM.pintastic.initPintastic()
+})(window, document, navigator, {
+  k: "PINTASTIC_" + (new Date).getTime(),
+  checkpoint: {
+    url: "<?php echo $this->checkpoint;?>"
+  },
+  pin: "<?php echo $this->bookmarklet;?>",
+  minImgSize: 80,
+  thumbCellSize: 200,
+  check: ["meta", "iframe", "embed", "object", "img", "video", "a"],
+  url: {
+    vimeo: /^https?:\/\/.*?\.?vimeo\.com\//,
+    facebook: /^https?:\/\/.*?\.?facebook\.com\//,
+    googleReader: /^https?:\/\/.*?\.?google\.com\/reader\//,
+    pintastic: /^https?:\/\/.*?\.?<?php echo $this->domain;?>\//,
+    stumbleUpon: /^https?:\/\/.*?\.?stumbleupon\.com\//
+  },
+  stumbleFrame: ["tb-stumble-frame", "stumbleFrame"],
+  tag: {
+    video: {
+      youtube: {
+        att: "src",
+        match: [/videoplayback/]
+      }
+    },
+    embed: {
+      youtube: {
+        att: "src",
+        match: [/^http:\/\/s\.ytimg\.com\/yt/, /^http:\/\/.*?\.?youtube-nocookie\.com\/v/]
+      }
+    },
+    iframe: {
+      youtube: {
+        att: "src",
+        match: [/^http:\/\/www\.youtube\.com\/embed\/([a-zA-Z0-9\-_]+)/]
+      },
+      vimeo: {
+        att: "src",
+        match: [/^http?s:\/\/vimeo.com\/(\d+)/, /^http:\/\/player\.vimeo\.com\/video\/(\d+)/]
+      }
+    },
+    object: {
+      youtube: {
+        att: "data",
+        match: [/^http:\/\/.*?\.?youtube-nocookie\.com\/v/]
+      }
+    }
+  },
+  msg: {
+    check: "",
+    cancelTitle: "<?php echo $this->translate('Cancel Pin');?>",
+    bustFrame: "<?php echo $this->translate('We need to remove the StumbleUpon toolbar before you can pin anything. Click OK to do this or Cancel to stay here.');?>",
+    noPin: "<?php $this->translate('This site doesn\'t allow pinning to Pinterest. Please contact the owner with any questions. Thanks for visiting!');?>",
+    privateDomain: "<?php echo $this->translate('Sorry, can\'t pin directly from %privateDomain%.');?>",
+    notFound: "<?php echo $this->translate('Sorry, couldn\'t find any large images or video on this page.');?>",
+    installed: "<?php echo $this->translate('The bookmarklet is installed! Now you can click your Pin It button to pin images as you browse sites around the web.');?>"
+  },
+  pop: "status=no,resizable=no,scrollbars=yes,personalbar=no,directories=no,location=no,toolbar=no,menubar=no,width=560,height=320,left=0,top=0",
+  rules: [
+  			"#_background {position:fixed;z-index:8675309; top:0; right:0; bottom:0; left:0; background-color:#f2f2f2; opacity:.95; }", 
+  			"#_shim {position:fixed; background: transparent; z-index:8675308; top:0; right:0; bottom:0; left:0; }", 
+  			"#_bd {position: absolute; text-align: center; padding-top: 36px; top: 0; left: 0; right: 0; z-index:8675320; font:16px hevetica neue,arial,san-serif; }", 
+  			"#_bd span { zoom:1; display: inline-block; background: #fff; height:{CellSize}px; width:{CellSize}px; border: 1px solid #ddd; border-top: none; border-left:none; text-decoration: none;  text-shadow: 0 1px #fff; position: relative; cursor: pointer; vertical-align:middle;  }", 
+  			"#_bd span#_logo {background: #FCF9F9 url(<?php echo $this->site_logo;?>) 50% 50% no-repeat; box-shadow: none; }", 
+  			'#_bd a#_x {height: 36px; line-height: 36px; position: fixed; font-size: 14px; font-weight: bold; display: block; width:auto; top: 0; left: 0; right: 0; margin: 0; background: url("<?php echo $this->imagefolder;?>fullGradient07Normal.png") repeat-x scroll 0 0 #FFFFFF; border-bottom: 1px solid #CCCCCC; color: #211922; text-align: center; z-index:8675321; cursor:pointer; }', 
+  			'#_bd a#_x:active {background-color: #211922; background-image: url("<?php echo $this->imagefolder;?>fullGradient07Inverted.png"); border-color: #211922; text-shadow: 0 -1px #211922; }', 
+  			"#_bd a#_x:hover {color: #fff; text-decoration: none; background-color: #1389e5; border-color: #1389e5; text-shadow: 0 -1px #46A0E6;}", 
+  			"#_bd a img {z-index:8675312; position:absolute; }", 
+  			"#_bd span._pintasticContainer:hover a img { opacity: 0.65; }",
+			"#_bd a b { z-index: 8675315; position: absolute; top: 50%; left: 50%; height: 50px; width: 50px; background: transparent url(<?php echo $this->imagefolder;?>VideoIndicator.png) 0 0 no-repeat; margin-top: -25px; margin-left: -25px; }", 
+  			"#_bd a cite {z-index: 8675316; position: absolute; font-size: 10px; font-style: normal; bottom: 0; width: 200px; left: 0; text-align: center; color: #000; background: #eee; opacity: 0.75; padding: 4px;}", 
+  			"#_bd span._pintasticContainer {overflow:hidden;z-index: 8675320; height: {CellSize}px; width: {CellSize}px; background: #fff; }", 
+  			"#_bd span._pintasicButton {z-index: 8675320; height: {CellSize}px; width: {CellSize}px; background: transparent; }", 
+  			"#_bd span._pintasicButton:hover {height: {CellSize}px; width: {CellSize}px; background: transparent url(<?php echo $this->imagefolder;?>PinThis.png) 50% 50% no-repeat;  }"
+  		]
+});

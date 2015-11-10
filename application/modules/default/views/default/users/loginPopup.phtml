@@ -1,0 +1,93 @@
+<?php ob_start();?>
+<script type="text/javascript">
+<!--
+head.ready('main', function(){
+	$(document).ready(function(){
+		$('#formcontainer .submit a').click(function(){
+			if( $('.password_holder').is(':visible') ) {
+				$('.password_holder').slideUp();
+				$('#resetPassword').hide();
+				$('#backToLogin').show();
+				$('input[name=forgot_password]').val('1');
+				$('#formcontainer .submit button').text('<?php echo $this->translate('Send');?>');
+			} else {
+				$('.password_holder').slideDown();
+				$('#resetPassword').show();
+				$('#backToLogin').hide();
+				$('input[name=forgot_password]').val('0');
+				$('#formcontainer .submit button').text('<?php echo $this->translate('Login');?>');
+			}
+			return false;
+		});
+	});
+});
+//-->
+</script>
+<?php if($this->error) { ?>
+<script type="text/javascript">
+head.ready('main',function(){
+	Pins.error('<?php echo $this->error;?>');
+});
+</script>
+<?php } ?>
+<?php if($this->successful) { ?>
+<script type="text/javascript">
+head.ready('main',function(){
+	Pins.success('<?php echo $this->successful;?>');
+});
+</script>
+<?php } ?>
+<?php $this->placeholder('inhead', ob_get_clean())?>
+<div id="formcontainer">
+	<?php if($this->popup) { ?>
+	<div class="popup">
+	<?php } ?>
+	<form method="post" action="<?php echo $this->login_login;?>" class="main-form">
+		<p class="hide"><input type="hidden" name="next" value="<?php echo $this->next;?>" /><input type="hidden" name="forgot_password" value="<?php echo $this->is_forgot_password;?>" />
+		<h3 class="title-9"><?php echo $this->translate('Login');?></h3>
+		<?php if($this->user_login_buttons) { ?>
+		<div class="row">
+			<div class="cell-left">&nbsp;</div>
+			<div class="cell-center">
+				<div class="socbuttons">
+					<?php foreach($this->user_login_buttons AS $button) { ?>
+					<?php echo $button['html'];?>
+					<?php } ?>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php } ?>
+		
+		<div class="row">
+			<div class="cell-left">
+				<label for="id_email"><?php echo $this->translate('Email Address');?></label>
+			</div>
+			<div class="cell-center">
+				<input id="id_email" name="email" type="text" />
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="row password_holder <?php echo ($this->is_forgot_password ? 'hide' : '');?>">
+			<div class="cell-left">
+				<label for="id_password"><?php echo $this->translate('Password');?></label>
+			</div>
+			<div class="cell-center">
+				<input id="id_password" name="password" type="password" />
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="submit">
+			<?php if($this->is_forgot_password) { ?>
+			<button class="red-button big-button" name="login"><?php echo $this->translate('Send');?></button>
+			<?php } else { ?>
+			<button class="red-button big-button" name="login"><?php echo $this->translate('Login');?></button>
+			<?php } ?>
+            <a id="resetPassword" class="button-inlinetext <?php echo ($this->is_forgot_password ? 'hide' : '');?>" href="#"><?php echo $this->translate('Forgot your password?');?></a>
+            <a id="backToLogin" class="button-inlinetext <?php echo ($this->is_forgot_password ? '' : 'hide');?>" href="#"><?php echo $this->translate('Back to Login?');?></a>
+        </div>
+	</form>
+	<?php if($this->popup) { ?>
+	</div>
+	<?php } ?>
+</div>

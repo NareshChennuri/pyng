@@ -1,0 +1,217 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/gallery-sml.png">
+		<?php echo $this->translate('Users Preview');?>
+	</h3>
+	
+	<?php if($this->successfu_edite || $this->error_permision) { ?>
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<?php } else if($this->error_permision) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error_permision;?></span></span>
+	<?php } ?>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<?php  ?>
+	<div class="fright mtop3">
+		<a class="button" href="<?php echo $module;?>/users/create/"><?php echo $this->translate('Add new');?></a>
+	</div>
+	<?php ?>
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('User Manager');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+<form action="<?php echo $module;?>/users/" method="get" id="testtt">
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20" class="left">
+				<a href="<?php echo $this->sort_id;?>" <?php if($this->order == 'u.user_id') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>>#</a>
+			</th>
+			<th class="left">
+				<a href="<?php echo $this->sort_name;?>" <?php if($this->order == 'u.firstname') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Name');?></a>
+			</th>
+			<th class="left">
+				<a href="<?php echo $this->sort_username;?>" <?php if($this->order == 'u.firstname') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Username');?></a>
+			</th>
+			<th class="left">
+				<a href="<?php echo $this->sort_email;?>" <?php if($this->order == 'u.email') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Email');?></a>
+			</th>
+			
+            <th align="center">
+            	<a href="<?php echo $this->sort_pins;?>" <?php if($this->order == 'u.pins') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Pins');?></a>
+            </th>
+            <th align="center">
+            	<a href="<?php echo $this->sort_boards;?>" <?php if($this->order == 'u.boards') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Boards');?></a>
+            </th>
+            <th align="center">
+            	<a href="<?php echo $this->sort_likes;?>" <?php if($this->order == 'u.likes') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Likes');?></a>
+            </th>
+            <th align="center">
+            	<a href="<?php echo $this->sort_status;?>" <?php if($this->order == 'u.status') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Status');?></a>
+            </th>
+			<th width="20"><?php echo $this->translate('Delete Request');?></th>
+			<th width="20"><?php echo $this->translate('Edit');?></th>
+			<th width="20"><?php echo $this->translate('Delete');?></th>
+		</tr>
+		<tr class="search">
+			<th class="left">
+				<input class="inputbox" type="text" name="filter_id" value="<?php echo $this->filter_id;?>" size="4" />
+			</th>
+			<th class="left">
+				<input class="inputbox filter_username" type="text" name="filter_name" value="<?php echo $this->filter_name;?>" size="8" />
+			</th>
+			<th class="left">
+				<input class="inputbox filter_username" type="text" name="filter_username" value="<?php echo $this->filter_username;?>" size="8" />
+			</th>
+			<th class="left">
+				<input class="inputbox filter_username" type="text" name="filter_email" value="<?php echo $this->filter_email;?>" size="8" />
+			</th>
+            
+            <th class="left"> </th>
+            <th class="left"> </th>
+            <th class="left"> </th>
+            <th class="left"> </th>
+            <th class="left">
+				<select name="filter_delete_account">
+					<?php if($this->filter_delete_account == '*') { ?>
+					<option selected="selected" value="*"></option>
+					<option value="1"><?php echo $this->translate('Yes')?></option>
+					<option value="0"><?php echo $this->translate('No')?></option>
+					<?php } else if($this->filter_delete_account == '1') { ?>
+					<option value="*"></option>
+					<option selected="selected" value="1"><?php echo $this->translate('Yes')?></option>
+					<option value="0"><?php echo $this->translate('No')?></option>
+					<?php } else { ?>
+					<option value="*"></option>
+					<option value="1"><?php echo $this->translate('Yes')?></option>
+					<option selected="selected" value="0"><?php echo $this->translate('No')?></option>
+					<?php } ?>
+				</select>
+			</th>
+            
+            
+			<th colspan="2">
+				<input type="submit" value="<?php echo $this->translate('Filter');?>" class="button">
+				&nbsp; <a href="<?php echo $module;?>/users/"><img src="cms/<?php echo $module;?>/images/reload.png" class="tooltip"  alt="" title="<?php echo $this->translate('Reset');?>" /></a>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->users) { ?>
+	<?php foreach($this->users AS $user) { ?>
+		<tr>
+			<td><?php echo $user['user_id'];?>.</td>
+			<td>
+				<a href="<?php echo $user['profile_url']; ?>">
+				<?php echo $user['firstname'];?> <?php echo $user['lastname'];?>
+				</a>
+			</td>
+			<td>
+				<a href="<?php echo $user['username_href']; ?>"><?php echo $user['username'];?></a>
+			</td>
+			<td>
+				<?php echo $user['email'];?>
+			</td>
+			<td align="center">
+				<a href="<?php echo $user['username_href']; ?>"><?php echo $user['pins'];?></a>
+			</td>
+			<td align="center">
+				<a href="<?php echo $user['boards_href']; ?>"><?php echo $user['boards'];?></a>
+			</td>
+			<td align="center">
+				<?php echo $user['likes'];?>
+			</td>
+			
+			<td align="center"><?php echo ($user['status'] ? $this->translate('Active') : $this->translate('Noactive'));?></td>
+			<td align="center"><?php echo ($user['delete_account'] ? $user['delete_account_date'] : $this->translate('No'));?></td>
+			<td align="center"><a href="<?php echo $user['edit_href'];?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+           	<td align="center">
+				<?php if(JO_Session::get('user[user_id]') != $user['user_id']) {?>
+				<a id="item_<?php echo $user['user_id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+				<?php } ?>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="11">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+</form>
+<?php if($this->pagination) { ?>
+<br />
+<div class="fleft">
+<?php echo $this->translate('Page');?> <b><?php echo $this->page_num;?></b> <?php echo $this->translate('from');?> <b><?php echo $this->total_pages;?></b> (<b><?php echo $this->total_rows;?></b> <?php echo $this->translate('records');?>)
+</div>
+<div class="pagination fright">
+	<?php echo $this->pagination;?>
+</div>
+<div class="clear"></div>
+<?php } ?>
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function() {       
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/users/delete/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+});
+// ]]>
+</script>
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function(){
+	$('#testtt').submit(function(){
+		window.location = $('#testtt').joform();
+		return false;
+	});
+});
+//]]>
+</script>

@@ -1,0 +1,102 @@
+<div class="box event-box event-mouseenter event-masonry" id="{{if history_id}}${history_id}_{{/if}}${pin_id}">
+	
+	<!-- BEGIN ribbons -->
+	{{if vip}}
+	<p class="ribbon-vip">
+		<strong class="vip">${text_vip}</strong>
+	</p>
+	{{/if}}
+	
+	{{if gift}}
+	<p class="ribbon-price">
+		<strong class="price">${price}</strong>
+	</p>
+	{{/if}}
+	
+	<!-- BEGIN title -->
+	{{if set_activity_title}}
+	<div class="title ${activity_class}">
+		<h3>{{html set_activity_title}}</h3>
+		<p class="date">${text_date_dif}</p>
+	</div>
+	{{/if}}
+	
+	<!-- BEGIN box preview -->
+	<div class="preview">
+		<p class="icons">
+			<a href="${url_repin}" class="grey-button small-button repin {{if !loged}} login{{else}} event-click-open-popup{{/if}}" title="${text_repin}"><span>${text_repin}</span></a> 
+			{{if url_edit}}
+			<a href="${url_edit}" class="grey-button small-button edit login" title="${text_edit}"><span>${text_edit}</span></a> 
+			{{else}}
+			<a href="${url_like}" class="grey-button small-button like {{if !loged}} login{{else}} event-click-like-box{{if is_liked}} disabled{{/if}}{{/if}}" title="${text_like_unlike}"><span>${text_like_unlike}</span></a> 
+			{{/if}}
+			<a href="${url_comment}" class="grey-button small-button comment{{if !loged}} login{{else}} event-click-open-comment-box{{/if}}" title="${text_comment}"><span>${text_comment}</span></a>
+		</p>
+		<p class="thumb">
+			<a href="${pin_url}" class="event-click-open-detail-view" rel="pin_gallery" data-opener="${pin_id}">
+				{{if is_video}}
+				<img src="data/images/VideoIndicator.png" alt="Video" class="playicon" />
+				{{/if}}
+				<img class="event-load-lazy-load" style="width:${images.thumb_width_b}px;height:${images.thumb_height_b}px;" width="${images.thumb_width_b}" height="${images.thumb_height_b}" data-original="${images.thumb_image_b}" src="data/images/grey.gif" alt="Image" />
+			</a>
+		</p>
+		<p class="description">{{html description}}</p>
+		<p class="stats">
+			<span class="likes">${text_total_likes}</span> &nbsp; <span class="comments">${text_total_comments}</span> &nbsp; <span class="repins">${text_total_repins}</span>
+		</p>
+	</div>
+	
+	<!-- BEGIN comments -->
+	<div class="commentsbar event-coments-box">
+		<ul>
+			<li class="creator-pin">
+				<p class="avatar">
+					<a href="${author_profile.href}">
+						<img src="${author_profile.avatars.avatar_image_a}" alt="${author_profile.fullname}" />
+					</a>
+				</p>
+				<p class="message">
+					<a href="${author_profile.href}">${author_profile.fullname}</a> 
+					{{if via_profile}}
+					${text_via}
+					<a href="${via_profile.profile}">${via_profile.fullname}</a> 
+					{{/if}}
+					${text_onto} 
+					<a href="${board_url}">${text_board}</a>
+				</p>
+				<div class="clear"></div>
+			</li>
+			{{if comments}}
+			{{each pin_comments_data}}
+			<li>
+				<p class="avatar"><a href="${$value.user.profile}"><img src="${$value.user.avatars.avatar_image_a}" alt="${$value.user.fullname}" /></a></p>
+				<p class="message"><a href="${$value.user.profile}">${$value.user.fullname}</a> {{html $value.comment}}</p>
+				<div class="clear"></div>
+			</li>
+			{{/each}}
+			{{/if}}
+			
+			{{if loged}}
+			<li class="add-comment event-open-comment-box">
+				<p class="avatar">
+					<a href="${self_profile.href}">
+						<img src="${self_profile.avatars.avatar_image_a}" alt="${self_profile.fullname}" />
+					</a>
+				</p>
+				<form action="${url_comment}" method="post" class="comment-form">
+					<textarea name="write_comment" class="event-clear-focus">${text_add_comment}</textarea>
+					<button class="comment-button grey-button small-button event-comment-add-list disabled" disabled="disabled">${text_comment}</button>
+					<div class="clear"></div>
+				</form>
+				<div class="clear"></div>
+			</li>
+			{{/if}}
+			
+		</ul>
+		<div class="clear"></div>
+		{{if text_all_comments}}
+		<p class="allcomments event-coments-total"><a href="${pin_url}">${text_all_comments}</a></p>	
+		{{/if}}
+	</div>
+
+</div>

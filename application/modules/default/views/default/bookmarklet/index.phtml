@@ -1,0 +1,100 @@
+<?php ob_start();?>
+<script type="text/javascript">
+head.ready('main',function(){
+
+	<?php if($this->error) { ?>
+	Pins.error('<?php echo $this->error;?>');
+	<?php } ?>
+
+	$('.event-price-textarea').priceExpresion({
+		expresions: pintastic_config.regExPrice,
+		callback: function() {
+			if($.trim(this.val())) {
+				$('.event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+			} else {
+				$('.event-click-submit-disable').addClass('disabled').attr('disabled', true);
+			}
+		}
+	}).jqEasyCounter({
+		holder: '.text_counter',
+		maxChars: 500,
+		maxCharsWarning: 470,
+		template: '<?php echo $this->translate('{count} characters remaining');?>'
+	});
+	$('.main-form input, .main-form select, .main-form textarea').bind("change keydown keyup keypress focus paste",function() {
+		var textarea_value = $('.event-price-textarea').val();
+		if($.trim(textarea_value)) {
+			$('.main-form .event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+		} else {
+			$('.main-form .event-click-submit-disable').addClass('disabled').attr('disabled', true);
+		}
+		$('.box .description').html(textarea_value);
+	});
+
+	Pins.initSelectBoxCreateBoard('.event-board-style');
+
+	$('.event-price-holder').submit(function(){
+		var button = $('.event-click-submit-disable',this).addClass('disabled').attr('disabled', true);
+		loading.load(button);
+	});
+
+});
+</script>
+<?php $this->placeholder('inhead');?>
+
+<div id="formcontainer">
+	<div class="popup">
+			<form action="" method="post" class="main-form event-price-holder">
+				<div class="row">
+					<div class="cell-center">
+						<div class="pin-info">
+							<div class="thumb">
+								<p class="ribbon-price">
+									<strong class="price event-price-html-display"></strong>
+								</p>
+								<div class="thumbshadow">
+									<img class="event-load-lazy-load" src="data/images/ajax-loader.gif" alt="" data-original="<?php echo $this->media;?>" />
+								</div>
+							</div>
+							<div class="data">
+								<select name="board_id" class="event-board-style">
+									<?php foreach($this->boards AS $board) { ?>
+									<option value="<?php echo $board['board_id'];?>"><?php echo $board['title'];?></option>
+									<?php } ?>
+								</select>
+								<textarea class="event-price-textarea" name="description" rows="5" cols="30"><?php echo ($this->description?$this->description:$this->title);?></textarea>
+							
+								<?php if($this->form_extensions) { ?>
+								<div class="extensions">
+									<?php foreach($this->form_extensions AS $extension) { ?>
+									<?php echo $extension['html'];?>
+									<?php } ?>
+								</div>
+								<?php } ?>
+							
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<div class="cell-right">
+					<p class="helptext helptext-padT">
+						<span class="text_counter"></span>
+					</p>
+				</div>
+				<div class="clear"></div>
+				</div>
+				<div class="submit">
+					<button class="red-button big-button event-click-submit-disable disabled" type="submit"><?php echo $this->translate('Pinit');?></button>
+				</div>
+				<div class="hide">
+					<input type="hidden" name="title" value="<?php echo $this->title;?>">
+					<input type="hidden" name="from" value="<?php echo $this->url;?>">
+					<input type="hidden" name="media" value="<?php echo $this->media;?>">
+					<input type="hidden" name="is_video" value="<?php echo $this->is_video;?>">
+					<input type="hidden" name="charset" value="<?php echo $this->charset;?>">
+					<input type="hidden" name="pinmarklet" value="1">
+					<input class="event-price-input-holder" type="hidden" name="price" value="">
+				</div>
+			</form>
+	</div>
+</div>

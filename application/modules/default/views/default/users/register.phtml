@@ -1,0 +1,97 @@
+<?php echo $this->header_part; ?>
+
+<?php if($this->error) { ?>
+<script type="text/javascript">
+head.ready('main',function(){
+	Pins.error('<?php echo $this->error;?>');
+});
+</script>
+<?php } ?>
+<div id="formcontainerwrapper">
+	<div id="formcontainer">
+		<form method="post" action="" class="main-form">
+			<h3 class="title-9"><?php echo $this->translate('Complete your registration');?></h3>
+			<?php if($this->user_login_buttons) { ?>
+			<div class="row">
+				<div class="cell-left">&nbsp;</div>
+				<div class="cell-center">
+					<div class="socbuttons">
+						<?php foreach($this->user_login_buttons AS $button) { ?>
+						<?php echo $button['html'];?>
+						<?php }?>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<?php } ?>
+			<?php /*if($this->error) { ?>
+			<div class="error-box">
+				<?php echo $this->error;?>
+			</div>
+			<?php }*/ ?>
+			<div class="row">
+				<div class="cell-left">
+					<label for="email"><?php echo $this->translate('Email');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" name="email" id="email" value="<?php echo $this->email;?>" />
+				</div>
+				<div class="cell-right">
+					<p class="helptext"><?php echo $this->translate('Not shown publicly');?></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="firstname"><?php echo $this->translate('First name');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" name="firstname" id="firstname" value="<?php echo $this->firstname;?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="lastname"><?php echo $this->translate('Last name');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" name="lastname" id="lastname" value="<?php echo $this->lastname;?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="username"><?php echo $this->translate('Username');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" name="username" id="username" value="<?php echo $this->username;?>" />
+				</div>
+				<div class="cell-right">
+					<p class="helptext"><?php echo $this->baseUrl;?>username</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="password"><?php echo $this->translate('Password');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="password" name="password" id="password" value="<?php echo $this->password;?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="password2"><?php echo $this->translate('Password again');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="password" name="password2" id="password2" value="<?php echo $this->password2;?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="submit"><button class="red-button big-button"><?php echo $this->translate('Save Profile');?></button></div>
+		</form>
+	</div>
+</div>
+    
+<?php echo $this->footer_part; ?>

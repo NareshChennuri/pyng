@@ -1,0 +1,52 @@
+<?php ob_start();?>
+<script type="text/javascript">
+head.ready('main', function() {
+	head.js({'facebook': 'data/js/lib/facebook.js'});
+});
+
+head.ready('switcherSlider', function() {
+	$('.event-facebook-connect').switcherSlider({
+			text: {
+				on: '<?php echo $this->translate('ON');?>',
+				off: '<?php echo $this->translate('OFF');?>'
+			},
+			stageClass: 'event-facebook-connect-click'
+	});
+
+	$('.event-facebook-connect-click').live('click',function() {
+		Facebook.startFacebookConnect("<?php echo $this->facebook_connect_url;?>","email,user_likes,user_birthday,offline_access,read_friendlists", false, true, "<?php echo $this->facebook_connect_url;?>");
+	});
+	
+});
+
+<?php if($this->add_pin_to_facebook_timeline) { ?>
+head.ready('switcherSlider', function() {
+	$('.event-facebook-timeline').switcherSlider({
+		text: {
+			on: '<?php echo $this->translate('ON');?>',
+			off: '<?php echo $this->translate('OFF');?>'
+		},
+		stageClass: 'event-facebook-connect-timeline-click'
+	});
+	
+	$('.event-facebook-connect-timeline-click').live('click',function() {
+		Facebook.startFacebookConnect("<?php echo $this->facebook_timeline_connect_url;?>","publish_actions", true, true, "<?php echo $this->facebook_timeline_connect_url;?>");
+	});
+});
+<?php } ?>
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+
+<div class="row">
+	<div class="cell-left">
+		<label><?php echo $this->translate('Facebook');?></label>
+	</div>
+	<div class="cell-center">
+		<div class="custom-checkboxes">
+			<label for="facebook_connect"><input class="event-facebook-connect" type="checkbox" id="facebook_connect" <?php echo ($this->facebook_connect ? 'checked="checked"' : '');?> /> <?php echo $this->translate('Link to Facebook');?></label>	
+			<label for="facebook_timeline" class="event-connect-facebook-hide large" <?php echo (!$this->facebook_connect ? 'style="display:none;"' : '');?>><input class="event-facebook-timeline" type="checkbox" id="facebook_timeline" <?php echo ($this->facebook_connect ? '' : 'disabled="disabled"');?> <?php echo ($this->facebook_connect && $this->facebook_timeline ? 'checked="checked"' : '');?> name="facebook_timeline" /> <?php echo sprintf($this->translate('Add %s to Facebook Timeline'),$this->site_name);?></label>
+		</div>
+		<p <?php echo (!$this->facebook_connect ? 'style="display:none;"' : '');?> class="button-newrow event-connect-facebook-hide"><a class="grey-button big-button <?php echo (!$this->facebook_connect ? 'hide' : '');?>" href="<?php echo $this->facebook_invites_fb;?>"><?php echo sprintf($this->translate('Find Facebook Friends on %s'), $this->site_name);?></a></p>
+	</div>
+	<div class="clear"></div>
+</div>

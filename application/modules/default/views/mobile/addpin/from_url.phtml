@@ -1,0 +1,156 @@
+
+
+<div id="create_new_pin">
+	<div id="content-holder">
+		<div id="emailpin">
+			<form action="<?php echo $this->from_url;?>" method="post">
+				
+				<div class="hide">
+					<input type="hidden" name="title" value="<?php echo $this->title;?>">
+					<input type="hidden" name="price" value="">
+					<input type="hidden" name="media" value="<?php echo $this->images[0]['src'];?>">
+					<input type="hidden" name="is_video" value="<?php echo $this->is_video;?>">
+					<input type="hidden" name="from" value="<?php echo $this->from;?>">
+				</div>
+				
+				<div class="imageholder image-carousel">
+					
+						<ul>
+							<?php foreach($this->images AS $key => $image) { ?>
+							<li class="media_<?php echo $key;?>">
+								<img src="<?php echo $image['src'];?>" alt="" />
+							</li>
+							<?php } ?>
+						</ul>
+						
+					<span class="price"></span>
+				</div>
+				<div class="left w335px">
+					<p class="ntp">
+						<label for="board_id" class="hide"><?php echo $this->translate('Board');?>:<br></label>
+						
+						<select name="board_id" id="board_id">
+							<?php foreach($this->boards AS $board) { ?>
+							<option value="<?php echo $board['board_id'];?>"><?php echo $board['title'];?></option>
+							<?php } ?>
+						</select>
+					</p>
+					<p>
+						<label for="message" class="hide"><?php echo $this->translate('Message');?>:<br></label>
+						<textarea name="message" id="message" rows="5" cols="30"><?php echo $this->title;?></textarea>
+					</p>
+					<p class="text_counter"></p>
+					<p class="submit"><input type="submit" value="<?php echo $this->translate('Pinit');?>"></p>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<?php $key = str_replace('.','',microtime(true));?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	regExPrice.addExpresionLine($('#message').html(), true);
+	
+	$('#message').jqEasyCounter({
+		holder: 'p.text_counter',
+		maxChars: 500,
+		maxCharsWarning: 470,
+		template: '{count}'
+	}).bind("keydown keyup keypress focus paste",function() {
+		regExPrice.addExpresionLine(this.value);
+		if($.trim(this.value)) {
+			$('#emailpin .submit input').removeClass('disabled').attr('disabled', false);
+		} else {
+			$('#emailpin .submit input').addClass('disabled').attr('disabled', true);
+		}
+		regExPrice.addExpresionLine(this.value, false);
+	});
+
+	$('.image-carousel').imageCarousel({
+		onScrollEnd: function(page){
+			$('input[name="media"]').val($('img', page).attr('src'));
+		},
+		onInit: function(page){
+			$('input[name="media"]').val($('img', page).attr('src'));
+		},
+		textNext: '<?php echo $this->translate('Next →');?>',
+		textPrev: '<?php echo $this->translate('← Prev');?>'
+	});
+
+	if($.trim($('#message').val())) {
+		$('#emailpin .submit input').removeClass('disabled').attr('disabled', false);
+	} else {
+		$('#emailpin .submit input').addClass('disabled').attr('disabled', true);
+	}
+
+	$('#board_id').selectBox().selectBox('onReady', selectBoxCallback);
+
+	function selectBoxCallback(){
+
+		if($('#newBoardCreate<?php echo $key;?>').size() > 0) return;
+		
+		newbord = $('<p><input name="newboard" value="<?php echo $this->translate('Create New Board')?>" class="newboardcreator" id="newboardcreator<?php echo $key;?>" /></p>').unbind('keydown').bind('keydown', function(e){
+			if (e.keyCode == 13) { // enter key
+                return false
+            }
+		});
+		button = $('<input type="button" class="newboardcreator2">').attr('id','newboardcreator2<?php echo $key;?>').val('<?php echo $this->translate('Create')?>').unbind('click').bind('click',function(){
+
+			$.post('<?php echo $this->createBoard;?>', $('#newBoardCreate<?php echo $key;?>').serialize(),function(data){
+				if(data.data) {
+					board_id_h = $('#board_id');
+					board_id_h.find('option').attr('selected', false);
+					board_id_h.append('<option value="'+data.data.board_id+'" selected="selected">'+data.data.title+'</option>')
+					.selectBox('destroy').selectBox().selectBox('onReady', selectBoxCallback);
+				} else if(data.error) {
+					Pins.error(data.error);
+				} else {
+					Pins.error(data);
+				}			
+
+			}, 'json');
+			return false;
+		});
+		newsubmit = $('<p>').addClass('submit').append(button);
+		bform = $('<form action="" method="post" id="newBoardCreate<?php echo $key;?>">').append(newbord).append(newsubmit);
+		new_board = $('<li>').addClass('createBoard').append(bform).append('<div class="clear"></div>');
+		$('.selectBox-dropdown-menu.selectBox-options').append(new_board);
+		$('#newBoardCreate<?php echo $key;?>').submit(function(){ return false; });
+		$('.newboardcreator').clearOnFocus();
+	}
+
+	$('#emailpin form').unbind('submit').submit(function(){
+		$('#emailpin form .submit input').after('<img src="data/images/loading_2.gif" id="loading_button" />');
+		$('#emailpin form .submit input').attr('disabled', true).addClass('disabled');
+		$.post('<?php echo $this->from_url;?>', $('#emailpin form').serialize(), function(data){
+			if(data.indexOf('http://') === 0) {
+				window.location = data;
+			} else {
+				$.fancybox(data, {
+					'titleFormat': function(){
+			        	return '<div id="fancybox-title-over"><?php echo $this->translate('Add a Pin');?></div>';
+			        },
+			        titlePosition: 'over'
+				});
+			}
+			$('#loading_button').remove();
+			
+			/*$.fancybox(data, {
+				'titleFormat': function(){
+		        	return '<div id="fancybox-title-over"><?php echo $this->translate('Add a Pin');?></div>';
+		        },
+		        titlePosition: 'over'
+			});*/
+			
+		});
+		return false;
+	});
+		
+});
+
+
+</script>

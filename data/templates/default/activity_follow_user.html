@@ -1,0 +1,18 @@
+<div class="box follow-box event-masonry" id="history_${history_id}">
+	<div class="title ${activity_class}">
+		<h3>{{html title}}</h3>
+		<p class="date">${date_dif}</p>
+	</div>
+	<div class="preview">
+		<p class="thumb"><a href="${user_href}"><img class="event-load-lazy-load" width="${avatars.avatar_width_c}" height="${avatars.avatar_height_c}" data-original="${avatars.avatar_image_c}" src="data/images/grey.gif" alt="" /></a></p>
+	</div>
+	{{if enable_follow_user}}
+	<div class="followbuttons"> 
+		{{if following_user}} 
+		<a class="grey-button disabled event-click-follow-user" href="${user_follow_href}" data-userid="${user_id}">${text_unfollow}</a> 
+		{{else}} 
+		<a class="grey-button event-click-follow-user" href="${user_follow_href}" data-userid="${user_id}">${text_follow}</a> 
+		{{/if}} 
+	</div>
+	{{/if}}
+</div>

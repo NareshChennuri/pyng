@@ -1,0 +1,225 @@
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="49%" valign="top">
+			<div class="info_line top">
+				<h3 class="fleft title mbottom0">
+					<img alt="" src="cms/admin/images/quiz.png">
+					<?php echo $this->translate('Statistics');?>
+				</h3>
+				<div class="clear"></div>
+			</div>
+			
+			<table class="display statistics" cellpadding="0" cellspacing="0">
+				<tbody>
+					<tr>
+						<td><?php echo $this->translate('Total users');?></td>
+						<td width="100" class="right" id="total_users">
+							<img src="cms/admin/images/ajax-loader.gif" alt="" />
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Total pins');?></td>
+						<td class="right" id="total_pins">
+							<img src="cms/admin/images/ajax-loader.gif" alt="" />
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Total boards');?></td>
+						<td class="right" id="total_boards">
+							<img src="cms/admin/images/ajax-loader.gif" alt="" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</td>
+		<td width="2%">&nbsp;</td>
+		<td width="49%" valign="top">
+			
+			<div class="info_line top">
+				<h3 class="fleft title mbottom0">
+					<img alt="" src="cms/admin/images/gallery-sml.png">
+					<?php echo $this->translate('Waiting for invitation');?>
+				</h3>
+				<div class="clear"></div>
+			</div>
+			
+			<table class="display waiting_invitation" cellpadding="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th><?php echo $this->translate('Email');?></th>
+						<th><?php echo $this->translate('Date');?></th>
+						<th><?php echo $this->translate('Send');?></th>
+						<th><?php echo $this->translate('Delete');?></th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" colspan="3" style="padding-top:20px;">
+		
+			<div class="info_line top">
+				<h3 class="fleft title mbottom0">
+					<img alt="" src="cms/admin/images/quiz.png">
+					<?php echo $this->translate('Statistics');?>
+				</h3>
+				<div class="fright mtop3">
+					<select id="select_year_chart">
+						<?php foreach($this->years_select AS $year) { ?>
+						<option value="<?php echo $year;?>"><?php echo $year;?></option>
+						<?php } ?>
+					</select>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+			<div id="container_statistic" style="height: 500px;text-align: center;">
+				<img src="cms/admin/images/ajax-loader.gif" alt="" style="margin-top: 150px;" />
+			</div>
+			
+		</td>
+	</tr>
+</table>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	var table = $('table.waiting_invitation');
+	$.get('admin/?action=waiting_invitation', function(data){
+		if(data && data.users) {
+			for( i in data.users ) {
+				html =  '<tr>';
+				html += '<td>'+data.users[i].email+'</td>';
+				html += '<td>'+data.users[i].date_added+'</td>';
+				html += '<td align="center"><a id="waiting_invate_'+data.users[i].sc_id+'" class="email" href="javascript:void(0);"><img title="<?php echo $this->translate('Invite');?>" alt="" class="tooltip" src="cms/admin/images/mail.png"></a></td>';
+				html += '<td align="center"><a id="waiting_delete_'+data.users[i].sc_id+'" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/admin/images/delete.png"></td>';
+				html += '</tr>';
+				$('tbody',table).prepend(html);
+			}
+			initInvateWaiting();
+		}
+	}, 'json');
+
+	function initInvateWaiting() {
+		$('table.waiting_invitation .tooltip').simpletooltip();
+		$('table.waiting_invitation a.delete').click(function (e) {
+	        if (confirm(lang.confirm)) {
+	            e.preventDefault();
+	            var parent = $(this).parents('table.waiting_invitation tr');
+	            $.ajax({
+	                type: 'post',
+	                url: "admin/invites/deleteW/",
+	                data: 'id=' + $(this).attr('id').replace('waiting_delete_', ''),
+	                beforeSend: function () {
+	                    parent.animate({
+	                        'backgroundColor': '#FFBFBF'
+	                    }, 400);
+	                },
+	                success: function () {
+	                    parent.fadeOut(400, function () {
+	                        parent.remove();
+	                    });
+	                }
+	            });
+	        }
+	    });
+
+		$('table.waiting_invitation a.email').click(function (e) {
+	            e.preventDefault();
+	            var parent = $(this).parents('table.waiting_invitation tr');
+	            $.ajax({
+	                type: 'post',
+	                url: "admin/invites/invite/",
+	                data: 'id=' + $(this).attr('id').replace('waiting_invate_', ''),
+	                beforeSend: function () {
+	                    parent.animate({
+	                        'backgroundColor': '#19CA2A'
+	                    }, 400);
+	                },
+	                success: function () {
+	                    parent.fadeOut(400, function () {
+	                        parent.remove();
+	                    });
+	                }
+	            });
+	        
+	    });
+	}
+	
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$('table.statistics td[id]').each(function(i, item){
+		selector = $(item).attr('id');
+		$.get('admin/?action='+selector, function(data){
+			$(item).html(data.total);
+		}, 'json');
+	});
+
+});
+</script>
+
+<script type="text/javascript" src="cms/admin/assets/highcharts/highcharts.js"></script>
+<script type="text/javascript">
+var chart;
+
+options = {
+		chart: {
+			renderTo: 'container_statistic',
+			type: 'column'
+		},
+		title: {
+			text: ''
+		},
+		subtitle: {
+			text: ''
+		},
+		xAxis: {
+			categories: []
+		},
+		yAxis: {
+			min: 0,
+			title: {
+				text: ''
+			}
+		},
+		legend: {
+			layout: 'vertical',
+			backgroundColor: '#FFFFFF',
+			align: 'left',
+			verticalAlign: 'top',
+			x: 100,
+			y: 70,
+			floating: true,
+			shadow: true
+		},
+		tooltip: {
+			formatter: function() {
+				return ''+ this.x +': '+ this.y;
+			}
+		},
+		plotOptions: {
+			column: {
+				pointPadding: 0.2,
+				borderWidth: 0
+			}
+		},
+		series: [],
+		credits: {enabled:''}
+	}
+
+$(document).ready(function() {
+	$('#select_year_chart').change(function(){
+		$.get('admin/?action=monthly_chart', {year: this.value}, function(data) {
+			options = $.extend({}, options, data);
+			chart = new Highcharts.Chart(options);
+		}, 'json');
+	}).change();
+});
+</script>

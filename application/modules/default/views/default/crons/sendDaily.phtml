@@ -1,0 +1,316 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    
+    	
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<title><?php echo sprintf($this->translate('Your Daily %s'), $this->site_name);?></title>
+                <style type="text/css">
+                    <!-- body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;
+                    margin:0; padding:0; background-color:#f7f5f5; background:#f7f5f5 url('<?php echo $this->base_href;?>data/images/mail/paper.jpg')
+                    repeat;} .ExternalClass {width:100%;} .symbolfix img{width:10px !important;height:10px
+                    !important;} .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass
+                    font, .ExternalClass td, .ExternalClass div {line-height: 100%;} table
+                    td {border-collapse: collapse;} @media (max-width: 480px) { td[class=hide]
+                    {display:none !important;} td[id=wrapper] {padding:10px 10px 20px !important;}
+                    table[id=content] {width:300px !important;} td[class=header] {background-image:url('<?php echo $this->base_href;?>data/images/mail/double_rules_full18.gif');}
+                    td[class=header] h1 {font-size:20px !important;line-height:19px !important;}
+                    td[class=header] h2 {font-size:19px !important;line-height:18px !important;}
+                    td[id=news] table tbody, td[id=news] table tbody tr {display:inline;} td[class=news_body]
+                    {display:block !important;width:300px !important;margin:0 auto !important;padding:0
+                    !important;} td[class=news_image_container] {display:block !important;margin:0
+                    auto !important;width:300px !important;height:170px !important;} td[class=news_image_container]
+                    td[class="shadow"] {width:298px;} td[class=news_image] a img {display:none
+                    !important;} td[class=news_image] a {background-position:center;background-size:278px
+                    auto;display:block !important;width:278px !important;height:146px !important;position:relative;overflow:
+                    hidden;} td[class=news_image] a[id=one] {background-image:url('<?php echo $this->history['avatars']['avatar_image_b'];?>');}
+                    table[id=followers] {height:auto !important;} table[id=followers] tbody
+                    tr td {display:block !important;float:left !important;} td[id=boards] table
+                    tbody, td[id=boards] table tbody tr {display:inline;} td[class=board] {display:block
+                    !important;width:226px !important;margin:0 auto !important;} td[id=pins]
+                    table tbody, td[id=pins] table tbody tr {display:inline;} td[class=pins_column]
+                    {display:block !important;width:226px !important;margin:0 auto !important;}
+                    td[class=pin] {display:block !important;width:226px !important;margin:0
+                    auto !important;} td[id=badge_rule] {background-image:url('<?php echo $this->base_href;?>data/images/mail/badge_rule300.gif');}
+                    span[id=email_settings_link] {display:block;} } -->
+                </style>
+                <style type="text/css">
+                    <!-- td[class=hide] {display:none !important;} td[id=wrapper] {padding:10px
+                    10px 20px !important;} table[id=content] {width:300px !important;} td[class=header]
+                    {background-image:url('<?php echo $this->base_href;?>data/images/mail/double_rules_full18.gif');}
+                    td[class=header] h1 {font-size:20px !important;line-height:19px !important;}
+                    td[class=header] h2 {font-size:19px !important;line-height:18px !important;}
+                    td[id=news] table tbody, td[id=news] table tbody tr {display:inline;} td[class=news_body]
+                    {display:block !important;width:300px !important;margin:0 auto !important;padding:0
+                    !important;} td[class=news_image_container] {display:block !important;margin:0
+                    auto !important;width:300px !important;height:170px !important;} td[class=news_image_container]
+                    td[class="shadow"] {width:298px;} td[class=news_image] a img {display:none
+                    !important;} td[class=news_image] a {background-position:center;background-size:278px
+                    auto;display:block !important;width:278px !important;height:146px !important;position:relative;overflow:
+                    hidden;} td[class=news_image] a[id=one] {background-image:url('<?php echo $this->history['avatars']['avatar_image_b'];?>');}
+                    table[id=followers] {height:auto !important;} table[id=followers] tbody
+                    tr td {display:block !important;float:left !important;} td[id=boards] table
+                    tbody, td[id=boards] table tbody tr {display:inline;} td[class=board] {display:block
+                    !important;width:226px !important;margin:0 auto !important;} td[id=pins]
+                    table tbody, td[id=pins] table tbody tr {display:inline;} td[class=pins_column]
+                    {display:block !important;width:226px !important;margin:0 auto !important;}
+                    td[class=pin] {display:block !important;width:226px !important;margin:0
+                    auto !important;} td[id=badge_rule] {background-image:url('<?php echo $this->base_href;?>data/images/mail/badge_rule300.gif');}
+                    span[id=email_settings_link] {display:block;} -->
+                </style>
+
+    </head>
+    <body lang="en" style="background-color:#f7f5f5;background:#f7f5f5 url('<?php echo $this->base_href;?>data/images/mail/paper.jpg') repeat;padding:0;margin:0;">
+        
+        <table cellspacing="0" cellpadding="0" width="100%" border="0" background="<?php echo $this->base_href;?>data/images/mail/paper.jpg">
+            <tbody>
+                <tr>
+                    <td style="padding:20px 20px 40px" id="wrapper">
+
+                        <table cellspacing="0" cellpadding="0" width="700" border="0" align="center"
+                        id="content">
+                            <tbody>
+                                <tr>
+                                    <td align="center" style="padding:20px 0 40px">
+                                        <a target="_blank" style="border:none" title="<?php echo sprintf($this->translate('Visit %s'), $this->site_name);?>" href="<?php echo $this->base_href;?>"> 
+                                        	<img alt="<?php echo sprintf($this->translate('Your Daily %s'), $this->site_name);?>" style="vertical-align:top;outline:none;border:none;" src="<?php echo $this->site_logo;?>">
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td background="<?php echo $this->base_href;?>data/images/mail/double_rules_full22.gif"
+                                    align="center" class="header">
+                                        <table cellspacing="0" cellpadding="0" border="0" align="center">
+                                            <tbody>
+                                                <tr>
+                                                    <td background="<?php echo $this->base_href;?>data/images/mail/paper.jpg">
+                                                        <h1 style="font-family:georgia,serif;font-weight:normal;font-size:22px;line-height:21px;color:#211922 !important;text-shadow:0 1px 0 #FFFFFF;margin:0;padding:0 20px;"><?php echo sprintf($this->translate('Hi, %s!'), $this->history['firstname']);?></h1>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:20px 0 30px" id="news">
+                                        <table cellspacing="0" cellpadding="0" border="0" align="center">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding:10px 0" class="news_story">
+                                                        <table cellspacing="0" cellpadding="0" border="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="124" height="124" class="news_image_container">
+                                                                        <table cellspacing="0" cellpadding="0" border="0">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td width="1" style="background-color:#eceaeb"></td>
+                                                                                    <td style="background-color:#FFFFFF;padding:10px;border-top:1px solid #eae9e9;border-right:1px solid #d4d2d3;border-bottom:1px solid #b2b1b1;border-left:1px solid #d4d2d3;"
+                                                                                    class="news_image">
+                                                                                        <a target="_blank" title="<?php echo $this->history['firstname'];?> <?php echo $this->history['lastname'];?>" href="<?php echo $this->history['profile'];?>"
+                                                                                        id="one"> <img width="100" height="100" alt="<?php echo $this->history['firstname'];?> <?php echo $this->history['lastname'];?>" style="vertical-align:top;outline:none;border:none;" src="<?php echo $this->history['avatars']['avatar_image_b'];?>"> </a>
+                                                                                    </td>
+                                                                                    <td width="1" style="background-color:#eceaeb"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td width="1" style="background-color:#eceaeb"></td>
+                                                                                    <td height="1" style="background-color:#d5d3d4" class="shadow"></td>
+                                                                                    <td width="1" style="background-color:#eceaeb"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td width="1"></td>
+                                                                                    <td height="1" style="background-color:#e8e6e7" class="shadow"></td>
+                                                                                    <td width="1"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                    <td width="560" valign="top" style="padding:0 15px" class="news_body">
+                                                                        <h3 style="font-family:georgia,serif;font-weight:normal;font-size:18px;color:#211922 !important;text-shadow:0 1px 0 #FFFFFF;margin:0;padding:10px 0 5px;"><?php echo $this->translate('Today...');?></h3>
+                                                                        
+                                                                        <?php 
+                                                                        /// follow
+                                                                        if($this->history['history_follow_total']) { ?>
+                                                                        <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:14px;color:#211922;text-shadow:0 1px 0 #FFFFFF;margin:0;padding:5px 0;">
+                                                                        	<?php if($this->history['history_follow_total'] == 1) { ?>
+                                                                        	1 <?php echo $this->translate('new person started following you!');?>
+                                                                        	<?php } else { ?>
+                                                                        	<?php echo $this->history['history_follow_total'];?> <?php echo $this->translate('new person\'s started following you!');?>
+                                                                        	<?php } ?>
+                                                                        </p>
+                                                                        <table cellspacing="0" cellpadding="0" height="30" border="0" style="margin:0 0 5px;padding:0;" id="followers">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                	<?php foreach($this->history['history_follow'] AS $user) { ?>
+                                                                                    <td style="padding:0 1px 1px 0">
+                                                                                        <a target="_blank" title="<?php echo $user['fullname'];?>" href="<?php echo $user['profile'];?>"> 
+                                                                                        	<img width="30" height="30" alt="<?php echo $user['fullname'];?>" style="outline:none;border:none;margin:0;padding:0;" src="<?php echo $user['avatars']['avatar_image_a'];?>"> 
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <?php } ?>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:12px;color:#8c7e7e;text-shadow:0 1px 0 #FFFFFF;margin:0;padding:2px 0 0;">
+                                                                        	<?php echo sprintf( $this->translate('See all of your followers on %s your profile page. %s'), '<a target="_blank" style="color:#8c7e7e;font-weight:bold;text-decoration:none;text-shadow:0 1px 0 #FFFFFF;" href="'.$this->history['user_followers'].'">', '</a>');?>
+                                                                        </p>
+                                                                        <?php } ?>
+                                                                        
+                                                                        <?php 
+                                                                        //// comments
+                                                                        if($this->history['history_comments_total']) { ?>
+                                                                        <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:14px;color:#211922;text-shadow:0 1px 0 #FFFFFF;margin:0;padding:5px 0;">
+                                                                        	<?php if($this->history['history_comments_total'] == 1) { ?>
+                                                                        	1 <?php echo $this->translate('person has been comment your pin!');?>
+                                                                        	<?php } else { ?>
+                                                                        	<?php echo $this->history['history_comments_total'];?> <?php echo $this->translate('persons has been comment your pin!');?>
+                                                                        	<?php } ?>
+                                                                        </p>
+                                                                        <table cellspacing="0" cellpadding="0" height="30" border="0" style="margin:0 0 5px;padding:0;" id="followers">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                	<?php foreach($this->history['history_comments'] AS $user) { ?>
+                                                                                    <td style="padding:0 1px 1px 0">
+                                                                                        <a target="_blank" title="<?php echo $user['fullname'];?>" href="<?php echo $user['profile'];?>"> 
+                                                                                        	<img width="30" height="30" alt="<?php echo $user['fullname'];?>" style="outline:none;border:none;margin:0;padding:0;" src="<?php echo $user['avatars']['avatar_image_a'];?>"> 
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <?php } ?>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <?php } ?>
+                                                                        
+                                                                        <?php 
+                                                                        //// like
+                                                                        if($this->history['history_like_total']) { ?>
+                                                                        <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:14px;color:#211922;text-shadow:0 1px 0 #FFFFFF;margin:0;padding:5px 0;">
+                                                                        	<?php if($this->history['history_like_total'] == 1) { ?>
+                                                                        	1 <?php echo $this->translate('person has been like your pin!');?>
+                                                                        	<?php } else { ?>
+                                                                        	<?php echo $this->history['history_like_total'];?> <?php echo $this->translate('persons has been likes your pin!');?>
+                                                                        	<?php } ?>
+                                                                        </p>
+                                                                        <table cellspacing="0" cellpadding="0" height="30" border="0" style="margin:0 0 5px;padding:0;" id="followers">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                	<?php foreach($this->history['history_like'] AS $user) { ?>
+                                                                                    <td style="padding:0 1px 1px 0">
+                                                                                        <a target="_blank" title="<?php echo $user['fullname'];?>" href="<?php echo $user['profile'];?>"> 
+                                                                                        	<img width="30" height="30" alt="<?php echo $user['fullname'];?>" style="outline:none;border:none;margin:0;padding:0;" src="<?php echo $user['avatars']['avatar_image_a'];?>"> 
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <?php } ?>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <?php } ?>
+                                                                        
+                                                                        <?php 
+                                                                        //// repin
+                                                                        if($this->history['history_repin_total']) { ?>
+                                                                        <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:14px;color:#211922;text-shadow:0 1px 0 #FFFFFF;margin:0;padding:5px 0;">
+                                                                        	<?php if($this->history['history_repin_total'] == 1) { ?>
+                                                                        	1 <?php echo $this->translate('person has been repin your pin!');?>
+                                                                        	<?php } else { ?>
+                                                                        	<?php echo $this->history['history_repin_total'];?> <?php echo $this->translate('persons has been repin your pin!');?>
+                                                                        	<?php } ?>
+                                                                        </p>
+                                                                        <table cellspacing="0" cellpadding="0" height="30" border="0" style="margin:0 0 5px;padding:0;" id="followers">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                	<?php foreach($this->history['history_repin'] AS $user) { ?>
+                                                                                    <td style="padding:0 1px 1px 0">
+                                                                                        <a target="_blank" title="<?php echo $user['fullname'];?>" href="<?php echo $user['profile'];?>"> 
+                                                                                        	<img width="30" height="30" alt="<?php echo $user['fullname'];?>" style="outline:none;border:none;margin:0;padding:0;" src="<?php echo $user['avatars']['avatar_image_a'];?>"> 
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <?php } ?>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <?php } ?>
+                                                                        
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                               
+                                
+                                <tr>
+                                    <td width="100%" height="18" background="<?php echo $this->base_href;?>data/images/mail/badge_rule.gif"
+                                    align="center" id="badge_rule"></td>
+                                </tr>
+                                <?php if($this->on_facebook || $this->pin_it) { ?>
+                                <tr>
+                                    <td align="center" style="padding:30px 0">
+                                        <table cellspacing="0" cellpadding="0" border="0">
+                                            <tbody>
+                                                <tr>
+                                                	<?php if($this->on_facebook) { ?>
+                                                    <td width="100" align="right" style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:12px;color:#8c7e7e;text-shadow:0 1px 0 #FFFFFF;">
+                                                        <a target="_blank" title="<?php echo sprintf($this->translate('Like %s on Facebook'),$this->site_name);?>" style="color:#8c7e7e;text-decoration:none;text-shadow:0 1px 0 #FFFFFF;" href="<?php echo $this->on_facebook;?>"><?php echo $this->translate('Like us');?></a>
+                                                    </td>
+                                                    <td style="padding:0 10px">
+                                                        <a target="_blank" title="<?php echo sprintf($this->translate('Like %s on Facebook'),$this->site_name);?>" href="<?php echo $this->on_facebook;?>"><img width="27" height="28" style="vertical-align:top;outline:none;border:none;" src="<?php echo $this->base_href;?>data/images/mail/icon_facebook.jpg"></a>
+                                                    </td>
+                                                    <?php } ?>
+                                                    <?php if($this->pin_it) { ?>
+                                                    <td style="padding:0 10px">
+                                                        <a target="_blank" title="<?php echo $this->translate('Get the app');?>" href="<?php echo $this->pin_it;?>"><img width="27" height="28" style="vertical-align:top;outline:none;border:none;" src="<?php echo $this->base_href;?>data/images/mail/icon_pinterest_app.jpg"></a>
+                                                    </td>
+                                                    <td width="100" align="left" style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:12px;color:#8c7e7e;text-shadow:0 1px 0 #FFFFFF;">
+                                                        <a target="_blank" title="<?php echo $this->translate('Get the app');?>" style="color:#8c7e7e;text-decoration:none;text-shadow:0 1px 0 #FFFFFF;"
+                                                        href="<?php echo $this->pin_it;?>"><?php echo $this->translate('Get the app');?></a>
+                                                    </td>
+                                                    <?php } ?>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                                <tr>
+                                    <td align="center" style="padding:0 0 15px">
+                                        <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:11px;color:#999999;text-shadow:0 1px 0 #FFFFFF;line-height:1.35em;margin:0;padding:0;"><?php echo $this->translate('This email was sent to');?>
+                                            <a target="_blank" style="color:#999;text-decoration:none;text-shadow:0 1px 0 #FFFFFF;" href="mailto:<?php echo $this->history['email'];?>"><?php echo $this->history['email'];?></a>.
+                                            <br><?php echo sprintf($this->translate('Don’t want your daily %s?'),$this->site_name);?>
+                                            <span id="email_settings_link">
+                                                <a target="_blank" title="<?php echo $this->translate('Unsubscribe or manage your email preferences');?>"
+                                                style="color:#999;text-decoration:underline;text-shadow:0 1px 0 #FFFFFF;"
+                                                href="<?php echo $this->settings;?>"><?php echo $this->translate('Change your email preferences');?></a>.</span>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <p style="font-family:'helvetica neue',helvetica,arial,sans-serif;font-size:10px;color:#999999;text-shadow:0 1px 0 #FFFFFF;line-height:1.35em;margin:0;padding:0;">
+                                            <?php echo sprintf($this->translate('&copy; %d %s. All Rights Reserved.'), date('Y'), $this->site_name);?>
+                                            
+                                            <?php if($this->pages) { ?>
+                                            <br />
+                                            <?php foreach($this->pages AS $key => $page) { ?>
+                                            <?php if($key) { echo ' <font style="color:#AAA;padding:0 2px;">|</font> '; }?>
+											<a target="_blank" style="color:#999;text-decoration:underline;text-shadow:0 1px 0 #FFFFFF;" href="<?php echo $page['href'];?>"><?php echo $page['title'];?></a>                                            
+                                            <?php } ?>
+                                            <?php } ?>
+
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </body>
+</html>

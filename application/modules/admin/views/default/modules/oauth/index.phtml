@@ -1,0 +1,79 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/extensions.png">
+		<a href="<?php echo $this->modules_url;?>"><?php echo $this->translate('Modules');?></a> >> <?php echo $this->translate('Oauth');?>
+	</h3>
+	
+	<?php if($this->successfu_edite || $this->error_permision) { ?>
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<?php } else if($this->error_permision) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error_permision;?></span></span>
+	<?php } ?>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Oauth Manager');?>.<br>
+</p>
+
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th class="left"><?php echo $this->translate('Module');?></th>
+			<th width="50"><?php echo $this->translate('Action');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->modules) { ?>
+	<?php foreach($this->modules AS $mod) { ?>
+		<tr>
+			<td><?php echo $mod['name'];?></td>
+			<td align="center">
+				<?php if(!$mod['is_installed']) { ?>
+				<a href="<?php echo $mod['install'];?>">
+					<img title="<?php echo $this->translate('Install');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/add.png">
+				</a>
+				<?php } else { ?>
+				<a href="<?php echo $mod['uninstall'];?>">
+					<img title="<?php echo $this->translate('Uninstall');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/uninstall.gif">
+				</a>
+				<a href="<?php echo $mod['edit'];?>">
+					<img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/mod-config.png">
+				</a>
+				<?php } ?>
+			</td>
+			
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="2">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>

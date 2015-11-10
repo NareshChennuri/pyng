@@ -1,0 +1,94 @@
+
+    <div style="background:white">
+	<div id='head'>
+		<div class='holder'>
+			<p><?php echo $this->translate('Welcome to'); ?></p>
+			<img src='<?php echo $this->site_logo; ?>'/>
+		</div>
+	
+
+			
+		</div>
+			<div style="-webkit-box-shadow: 1px -1px 10px grey;height:5px;overflow: hidden"></div>
+			<div id='h' style='margin-top: -5px;overflow: hidden;width: 100%;background: white;'>
+				<p style="text-align: center;z-index:100"><?php echo $this->translate('Step 2 of 2') ?></p>
+				<h1><?php echo $this->translate('Follow People:') ?></h1>
+			</div>
+			
+			<div id='wrapper'>
+				<ul class='taplist'>
+				<?php echo $this->boards; ?>
+				</ul>
+			</div>
+
+</div>
+<div id='foot'>
+	<div style="-webkit-box-shadow: 1px -1px 5px grey;height:5px;z-index:-100"></div>
+
+		<div id='thumbRow'>
+		
+			<div id='buttonHolder' style='display: block'>
+				<a href='<?php echo $this->direct_path ?>' class='red mbtn' id='nextButton' style='width:40%'; >
+       			<strong><?php echo $this->translate('Finish') ?></strong>
+       			<span></span>
+       		</a>
+       		
+			</div>
+		</div>
+	
+</div>
+     
+    
+	<script>
+			
+	
+				
+		
+		console.log('load')
+		document.addEventListener('touchstart',function(e){
+			var target = $(e.target).parent();
+			console.log(target);
+			$(target).attr('id') == 'follow' ? submitQuery(target,'follow') : null;
+			$(target).attr('id') == 'unfollow' ? submitQuery(target,'unfollow') : null;
+		
+		})
+		
+		
+		function clearLoader(target){
+			$("#loader").remove();
+			target.parent().removeClass('loading');
+		}
+		
+		function follow(target){
+			clearLoader(target);
+			target.hide();
+			target.next().show();
+			
+		}
+		
+		function unfollow(target){
+			clearLoader(target);
+			target.hide();
+			target.prev().show();
+		}
+		
+		function submitQuery(target,type){
+		if(	!target.parent().hasClass('loading')){
+				
+			target.parent().append("<img id='loader' src='/data/images/loading_2.gif'/ style='float:right;height:10px;width:10px'>").addClass('loading');
+			$.ajax({
+				url:target.attr('data-link'),
+				dataType:'json',
+				success:function(data){
+					console.log(data.ok);
+					data.ok == 'Follow' ? follow(target) : unfollow(target)
+				}
+			})
+		   
+		   }
+			
+  		}
+  		
+  		
+		
+	</script>

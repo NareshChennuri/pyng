@@ -1,0 +1,290 @@
+<?php echo $this->header_part; ?>
+
+<div id="formcontainerwrapper">
+	<div id="formcontainer">
+		<div class="delete-conformation event-delete-conformation">
+			<?php echo $this->delete_account;?>
+			<p><?php echo $this->translate('If you want to permanently delete your account, please click the checkbox below:');?></p>
+			<p><label for="enable_button"><input type="checkbox" id="enable_button" class="event-confirm-delete"> <strong><?php echo $this->translate('Yes, I want to delete my boards and pins permanently.');?></strong></label></p>
+			<p><a class="grey-button big-button disabled event-delete-account-button" href="<?php echo $this->delete_username;?>"><?php echo $this->translate('Delete My Account');?></a> &nbsp; <a href="#" class="canceldeletion event-cancel-deletion"><strong><?php echo $this->translate('No, I\'ve changed my mind!');?></strong></a></p>
+		</div>
+		<form method="post" action="" class="main-form">
+			<h3 class="title-9"><a class="grey-button big-button fright event-click-delete-profile" href="#"><?php echo $this->translate('Delete Account');?></a> <?php echo $this->translate('Edit Profile');?></h3>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_email"><?php echo $this->translate('Email');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" id="id_email" value="<?php echo $this->user_data['new_email'];?>" name="email" />	
+				</div>
+				<div class="cell-right">
+					<p class="helptext"><?php echo $this->translate('Not shown publicly');?></p>	
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('Notifications');?></label>
+				</div>
+				<div class="cell-center">
+					<a class="grey-button big-button" href="<?php echo $this->prefs_action;?>"><?php echo $this->translate('Change Email Settings');?></a>	
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('Password');?></label>
+				</div>
+				<div class="cell-center">
+					<a class="grey-button big-button" href="<?php echo $this->new_password;?>"><?php echo $this->translate('Change Password');?></a>	
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_first_name"><?php echo $this->translate('First Name');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" id="id_first_name" value="<?php echo $this->user_data['firstname'];?>" name="firstname" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_last_name"><?php echo $this->translate('Last Name');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" id="id_last_name" value="<?php echo $this->user_data['lastname'];?>" name="lastname" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_username"><?php echo $this->translate('Username');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" id="id_username" value="<?php echo $this->user_data['username'];?>" name="username" />
+				</div>
+				<div class="cell-right">
+					<p class="helptext event-username-available"><?php echo $this->base_href;?>username</p>	
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_gender_0"><?php echo $this->translate('Gender');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="checkboxes">
+						<label for="id_gender_0"><input <?php echo ($this->user_data['gender'] == 'male' ? 'checked="checked"' : '');?> type="radio" name="gender" value="male" id="id_gender_0"><?php echo $this->translate('Male');?></label>
+						<label for="id_gender_1"><input <?php echo ($this->user_data['gender'] == 'female' ? 'checked="checked"' : '');?> type="radio" name="gender" value="female" id="id_gender_1"><?php echo $this->translate('Female');?></label>
+						<label for="id_gender_2"><input <?php echo ($this->user_data['gender'] == 'unspecified' ? 'checked="checked"' : '');?> type="radio" name="gender" value="unspecified" id="id_gender_2"><?php echo $this->translate('Unspecified');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_about"><?php echo $this->translate('About');?></label>
+				</div>
+				<div class="cell-center">
+					<textarea name="description" cols="54" rows="3" id="id_about"><?php echo $this->user_data['description'];?></textarea>
+				</div>
+				<div class="cell-right">
+					<p class="helptext"><span class="text_counter"></span></p>	
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_location"><?php echo $this->translate('Location');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" id="id_location" value="<?php echo $this->user_data['location'];?>" name="location" />
+				</div>
+				<div class="cell-right">
+					<p class="helptext"><?php echo $this->translate('e.g. Palo Alto, CA');?></p>	
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_website"><?php echo $this->translate('Website');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" id="id_website" value="<?php echo $this->user_data['website'];?>" name="website" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_img"><?php echo $this->translate('Image');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="current-avatar">
+						<img alt="" src="<?php echo $this->user_data['avatar'];?>" class="thumb" />
+						<div class="buttons">
+							<p class="button"><a class="grey-button big-button event-ajax-upload-avatar" href="#"><?php echo $this->translate('Upload an Image');?></a></p>
+							<?php foreach($this->user_avatars AS $avatar) { ?>
+							<p class="button"><?php echo $avatar;?></p>
+							<?php } ?>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<?php foreach($this->user_login_buttons AS $button) { ?>
+			<?php echo $button;?>
+			<?php } ?>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_dont_search_index"><?php echo $this->translate('Hide');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="id_dont_search_index"><input type="checkbox" id="id_dont_search_index" name="dont_search_index" <?php echo ($this->user_data['dont_search_index'] ? 'checked="checked"' : '');?> /><?php echo $this->translate('Hide your Pintastic profile from search engines');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			
+			<?php /* v2.2 */ if($this->config_enable_follow_private_profile) { ?>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_public"><?php echo $this->translate('Private profile');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="id_public"><input type="checkbox" id="id_public" name="public" <?php echo (!$this->user_data['public'] ? 'checked="checked"' : '');?> /><?php echo $this->translate('Hide your Pintastic profile for visit only from friends');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_enable_follow"><?php echo $this->translate('Follow');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="id_enable_follow"><input type="checkbox" id="id_enable_follow" name="enable_follow" <?php echo (!$this->user_data['enable_follow'] ? 'checked="checked"' : '');?> /><?php echo $this->translate('Disable users follow you');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<?php } /* v2.2 */?>
+			
+			<div class="submit"><button type="submit" class="red-button big-button"><?php echo $this->translate('Save Profile');?></button></div>
+		</form>
+	</div>
+</div>
+<?php ob_start();?>
+<script type="text/javascript">
+head.ready('main', function() {
+
+		head.js({'AjaxUpload' : 'data/js/lib/AjaxUpload.js'} ,function(){
+			new AjaxUpload($('.event-ajax-upload-avatar'), {
+				action: '<?php echo $this->form_action;?>',
+				name: 'file',
+				autoSubmit: true,
+				responseType: 'json',
+				onSubmit: function(file, extension) {
+					$(".main-form .current-avatar .thumb").hide();
+				},
+				onComplete: function(file, json) {
+					if (json.error) {
+						Pins.error(json.error);
+						$('.main-form .current-avatar .thumb').show();
+					} else if (json.success) {
+						var image = new Image();
+						image.src = json.success;
+						image.onload = function(){
+							$('.main-form .current-avatar .thumb').attr('src', image.src).show();
+						}
+						image.onerror = function(){
+							$('.main-form .current-avatar .thumb').show();
+						}
+					}
+				}
+			});
+		});
+
+		head.ready('switcherSlider', function() {
+			$('#id_dont_search_index').switcherSlider({
+				text: {
+					on: '<?php echo $this->translate('ON');?>',
+					off: '<?php echo $this->translate('OFF');?>'
+				}
+			});
+		});
+
+		<?php /* v2.2 */ if($this->config_enable_follow_private_profile) { ?>
+		head.ready('switcherSlider', function() {
+			$('.custom-checkboxes input[type=checkbox]').switcherSlider({
+				text: {
+					on: '<?php echo $this->translate('ON');?>',
+					off: '<?php echo $this->translate('OFF');?>'
+				}
+			});
+		});
+		<?php } ?>
+	
+		$('.event-click-delete-profile').click(function(){
+			$('.event-delete-conformation').show();
+			$(this).hide();
+			return false;
+		});
+	
+		$('.event-cancel-deletion').click(function(){
+			$('.event-click-delete-profile').show();
+			$('.event-delete-conformation').hide();
+			return false;
+		});
+	
+		$('.event-confirm-delete').change(function(){
+			if($(this).is(':checked')) {
+				$('.event-delete-account-button').removeClass('disabled');
+			} else {
+				$('.event-delete-account-button').addClass('disabled');
+			}
+		}).change();
+
+		head.ready('jqEasyCounter', function(){
+			$('#id_about').jqEasyCounter({
+				holder: '#aboutCount',
+				maxChars: 400,
+				maxCharsWarning: 370,
+				template: '<?php echo $this->translate('{count} characters remaining');?>'
+			});
+		});
+	
+
+	
+		<?php if($this->successfu_edite) { ?>
+		Pins.success('<?php echo $this->translate('Information is successfully changed!');?>');
+		<?php } ?>
+		<?php if($this->error) { ?>
+		Pins.error('<?php echo $this->error;?>');
+		<?php } ?>
+	
+		$('.event-confirm-delete').click(function(){
+			if($(this).is(':checked')) {
+				$('.event-delete-account-button').removeClass('disabled').unbind('click');
+			} else {
+				$('.event-delete-account-button').addClass('disabled').unbind('click').click(function(){ return false; });
+			}
+		});
+		
+		$('.event-delete-account-button').unbind('click').click(function(){ return false; });
+
+		head.js({'checkAvailable':'data/js/jquery_lib/jquery.checkAvailable.js'}, function() {
+			$('#id_username').checkAvailable({
+				'url' : '<?php echo $this->check_username;?>',
+				'holder': '.event-username-available'
+			});
+		});
+		
+});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<?php echo $this->footer_part; ?>

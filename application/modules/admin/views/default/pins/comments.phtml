@@ -1,0 +1,122 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/push_pin.png">
+		<?php echo $this->translate('Pin comments');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<a class="button" href="javascript:void(0);" onclick="multiActionSelected('deleteMultiComments');"><?php echo $this->translate('Delete selected');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Pin comments Manager');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+<form action="<?php echo $module;?>/pins/comments/" method="get" id="testtt">
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20">
+				<input type="checkbox" class="check_all_list" />
+			</th>	
+			<th width="20" class="left">
+				#
+			</th>
+			<th class="left">
+				<?php echo $this->translate('User');?>
+			</th>
+			<th class="left">
+				<?php echo $this->translate('Comment');?>
+			</th>
+
+			<th width="20"><?php echo $this->translate('Delete');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->comments) { ?>
+	<?php foreach($this->comments AS $comment) { ?>
+		<tr id="<?php echo $comment['comment_id'];?>">
+			<td>
+				<input type="checkbox" class="check_list" name="action_check[]" value="<?php echo $comment['comment_id'];?>" />
+			</td>
+			<td>
+				<?php echo $comment['comment_id'];?>.
+			</td>
+			<td>
+				<a href="<?php echo $module;?>/users/?filter_id=<?php echo $comment['user_id'];?>" target="_blank">
+					<?php echo $comment['fullname'];?>
+				</a>
+			</td>
+			<td>
+				<?php echo $comment['comment'];?>
+			</td>
+			<td align="center">
+				<a id="item_<?php echo $comment['comment_id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="5">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+</form>
+
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function() {       
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/pins/deleteComment/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+});
+// ]]>
+</script>

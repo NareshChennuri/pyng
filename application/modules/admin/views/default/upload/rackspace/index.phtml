@@ -1,0 +1,36 @@
+
+<div class="info_line top">
+	<h3 class="title mtop6"> <?php echo $this->translate('Rackspace Cloud Files');?> </h3>
+
+	<div class="clear"></div>
+</div>
+
+<table cellspacing="0" cellpadding="0" class="formtable">
+	<tbody>
+		<tr>
+			<td width="150"><?php echo $this->translate('Default');?>:</td>
+			<td>
+				<span class="input-out">
+					<label for="default_upload_method_rackspace">
+						<input <?php echo ($this->default_upload_method == 'rackspace' ? 'checked="checked"' : '');?> type="radio" value="rackspace" name="config[default_upload_method]" id="default_upload_method_rackspace" /> <?php echo $this->translate('Yes');?>
+					</label>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('API Username');?>:</td>
+			<td>
+				<input type="text" size="55" value="<?php echo $this->rsUsername;?>" class="inputbox" name="config[rsUsername]" />
+        	</td>
+		</tr>
+				
+		<tr>
+			<td><?php echo $this->translate('API Key');?>:</td>
+			<td>
+				<input type="text" size="55" value="<?php echo $this->rsApiKey;?>" class="inputbox" name="config[rsApiKey]" />
+        	</td>
+		</tr>
+
+				
+	</tbody>
+</table>

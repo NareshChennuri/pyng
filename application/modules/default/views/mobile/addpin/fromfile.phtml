@@ -1,0 +1,55 @@
+<div id="emailpin" class="addapin">
+	<form action="<?php echo $this->form_action;?>" method="post" enctype="multipart/form-data" id="button-option-holder">
+		<p class="ntp">
+			<label for="url" class="hide"><?php echo $this->translate('File');?>:<br /></label>
+			<input type="file" name="file" />
+			<br class="clear" />
+		</p>
+		<p class="submit"><input type="submit" value="<?php echo $this->translate('Find Images');?>" /></p>
+		<div class="clear"></div>
+	</form>
+</div>
+
+<script type="text/javascript"><!--
+$(document).ready(function(){
+
+	$Div = $('<span class="button-option" />');
+	$File = $('<input type="text" id="file-holder" readonly="readonly" />');
+	$Button = $('<a class="ajax-upload" />').html('<?php echo $this->translate('Browse...');?>');
+	$('#emailpin .ntp input[type=file]').replaceWith($Div.append($File).append($Button).append('<br class="clear" />'));
+	$('#emailpin .submit').html('');
+
+	new AjaxUpload($('.button-option'), {
+		action: '<?php echo $this->form_action;?>',
+		name: 'file',
+		autoSubmit: true,
+		responseType: 'json',
+		onSubmit: function(file, extension) {
+			
+			$Button.after('<img src="data/images/loading_2.gif" id="loading_button" />');
+			$('#emailpin .ntp input[type=file]').attr('disabled', true);
+			$('#emailpin .ajax-upload').addClass('disabled');
+			$("#jqpageflow-block").show();
+		},
+		onComplete: function(file, json) {
+			$("#jqpageflow-block").hide();
+			$('#emailpin .ntp input[type=file]').attr('disabled', false);
+			$('#emailpin .ajax-upload').removeClass('disabled');
+			if (json.error) {
+				Pins.error(json.error)
+			} else if (json.success) {
+
+				$.getJSON('<?php echo $this->upload_action;?>', function(json){
+					$.fancybox(json.success, {
+						'titleFormat': function(){
+				        	return '<div id="fancybox-title-over"><?php echo $this->translate('Upload a Pin');?></div>';
+				        },
+				        titlePosition: 'over'
+					});
+				});
+				
+			}
+		}
+	});
+});
+//--></script>

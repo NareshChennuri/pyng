@@ -1,0 +1,216 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/push_pin.png">
+		<?php echo $this->translate('Reported comments');?>
+	</h3>
+	
+	<?php if($this->successfu_edite || $this->error_permision) { ?>
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<?php } else if($this->error_permision) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error_permision;?></span></span>
+	<?php } ?>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<a class="button" href="javascript:void(0);" onclick="multiActionSelected('deleteMulti');"><?php echo $this->translate('Delete selected');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Reported comments Manager');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+<form action="<?php echo $module;?>/reportedcomments/" method="get" id="testtt">
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20"></th>	
+			<th width="20" class="left">
+				<a href="<?php echo $this->sort_date_added;?>" <?php if($this->order == 'rp.date_added') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>>#</a>
+			</th>
+			<th class="left"  width="35%">
+				<?php echo $this->translate('Comment');?>
+			</th>
+			
+			<th class="left">
+				<a href="<?php echo $this->sort_pin_id;?>" <?php if($this->order == 'p.pin_id') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Pin');?></a>
+			</th>
+			<th class="left">
+				<?php echo $this->translate('Category');?>
+			</th>
+			<th class="left">
+				<?php echo $this->translate('Reported By');?>
+			</th>
+			<th class="left">
+				<?php echo $this->translate('Date reported');?>
+			</th>
+			
+
+			<th width="20"><?php echo $this->translate('Delete comment');?></th>
+			<th width="20"><?php echo $this->translate('Delete report');?></th>
+		</tr>
+		<tr class="search">
+			<th width="20">
+				<input type="checkbox" class="check_all_list" />
+			</th>	
+			<th class="left">
+				<input class="inputbox" type="text" name="filter_pr_id" value="<?php echo $this->filter_pr_id;?>" size="4" />
+			</th>
+			<th class="left">
+			
+			</th>
+			<th class="left">
+			
+			</th>
+			<th class="left">
+			<select name="filter_prc_id">
+				<option value=""><?php echo $this->translate('All'); ?></option>
+				<?php foreach($this->categories as $cat): ?>
+				<option value="<?php echo $cat['prc_id']; ?>" <?php if($this->filter_prc_id == $cat['prc_id']):?>selected="selected"<?php endif; ?>><?php echo $cat['title']; ?></option>
+				<?php endforeach;?>
+				<option value="-1" <?php if($this->filter_prc_id == '-1'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Other'); ?></option>
+			</select>
+			</th>
+			<th class="left"> </th>
+			<th class="left"> </th>
+
+	
+            
+			<th colspan="2">
+				<input type="submit" value="<?php echo $this->translate('Filter');?>" class="button">
+				&nbsp; <a href="<?php echo $module;?>/reportedcomments/"><img src="cms/<?php echo $module;?>/images/reload.png" class="tooltip"  alt="" title="<?php echo $this->translate('Reset');?>" /></a>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->pins) { ?>
+	<?php foreach($this->pins AS $pin) { ?>
+		<tr id="<?php echo $pin['pr_id'];?>">
+			<td>
+				<input type="checkbox" class="check_list" name="action_check[]" value="<?php echo $pin['pr_id'];?>" />
+			</td>
+			<td>
+				
+					<?php echo $pin['pr_id'];?>.
+			</td>
+			
+			<td width="35%">
+				<?php echo $pin['comment'];?>
+			</td>
+		
+			<td>
+				<a href="<?php echo $pin['pin_href'];?>" target="_blank">
+					<?php echo $pin['board_title'];?>
+				</a>
+			</td>
+			<td>
+				<?php echo $pin['category_title'] ? $pin['category_title'] : $this->translate('Other');?>
+			</td>
+			<td>
+				<a href="<?php echo $pin['user_href'];?>" target="_blank">
+					<?php echo $pin['fullname'];?>
+				</a>
+			</td>
+			<td>
+				<?php echo $pin['date_added'];?>
+			</td>
+			
+			<td align="center">
+				<a id="pin_<?php echo $pin['pr_id'];?>" class="delete_pin" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+			<td align="center">
+				<a id="item_<?php echo $pin['pr_id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="11">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+</form>
+<?php if($this->pagination) { ?>
+<br />
+<div class="fleft">
+<?php echo $this->translate('Page');?> <b><?php echo $this->page_num;?></b> <?php echo $this->translate('from');?> <b><?php echo $this->total_pages;?></b> (<b><?php echo $this->total_rows;?></b> <?php echo $this->translate('records');?>)
+</div>
+<div class="pagination fright">
+	<?php echo $this->pagination;?>
+</div>
+<div class="clear"></div>
+<?php } ?>
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function() {       
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/reportedcomments/delete/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+	$('a.delete_pin').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/reportedcomments/deletep/",
+                data: 'id=' + $(this).attr('id').replace('pin_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+});
+// ]]>
+</script>

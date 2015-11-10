@@ -1,0 +1,25 @@
+<?php echo $this->header_part; ?>
+
+<div id="detail">
+
+	<div class="FixedContainer">
+
+		<form accept-charset="utf-8" method="POST" action="" class="Form StaticForm mtop100" id="profileEdit">
+	
+			<h1><?php echo $this->translate('Success!');?></h1>
+			<p style="font-size: 24px;">
+				<?php echo $this->translate('You should receive an email shortly.');?>
+				<?php if($this->support_page) { ?>
+				<br />
+				<?php echo sprintf($this->translate('If you still need assistance, contact %s'), '<a href="'.$this->support_page.'">'.sprintf($this->translate('%s Support'), $this->site_name).'</a>');?>
+				<?php } ?>
+			</p>
+	
+		</form>
+	
+	</div>
+
+	<div class="clear"></div>	
+</div>
+
+<?php echo $this->footer_part; ?>

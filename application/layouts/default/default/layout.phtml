@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
+	
+	<head<?php echo $this->head_attributes;?>>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=9" />
+		<title><?php echo $this->placeholder('title');?></title>
+		
+		<?php if($this->placeholder('favicon')) { ?>
+		<link rel="icon" href="<?php echo $this->placeholder('favicon');?>" type="image/x-icon" />
+		<?php } ?>
+		
+		<?php /*?>
+		<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<?php */ ?>
+		
+		
+		<base href="<?php echo $this->getRequest()->getBaseUrl();?>" />
+		
+		
+		<link href="<?php echo WM_Minify::minifyCSS('data/css/main.css');?>" rel="stylesheet" type="text/css" />
+		<link href="<?php echo WM_Minify::minifyCSS('data/css/sec.css');?>" rel="stylesheet" type="text/css" />
+		
+		
+		<script type="text/javascript" src="data/js/head.min.js"></script>
+		<script type="text/javascript" src="data/js/bootstrap.js"></script>
+		<!--[if (gte IE 6)&(lte IE 8)]>
+		<script type="text/javascript" src="data/js/lib/selectivizr-min.js"></script>
+		<![endif]-->
+		
+		
+		<?php echo $this->placeholder('header_metas');?>
+		
+		<?php echo $this->placeholder('inhead');?>
+		
+		<?php echo $this->placeholder('google_analytics');?>
+		
+	</head>
+	
+	<body class="<?php echo ($this->getRequest()->getQuery('popup') == 'true' && $this->getRequest()->getAction() == 'login' ? 'bookmarklet' : $this->getRequest()->getController());?>-body <?php echo $this->getRequest()->getAction();?>-action <?php echo (!JO_Session::get('user[user_id]')?($this->notificationwrapper?' pad-3':' pad-1'):($this->notificationwrapper?' pad-4':' pad-2'));?>">
+
+		<noscript>
+    		<div id="NoScript">
+		        <h1><?php echo $this->translate('You need to enable Javascript.');?></h1>
+		    </div>
+		</noscript>
+		
+		<?php echo $this->placeholder('content');?>
+		
+	</body>
+</html>

@@ -1,0 +1,299 @@
+
+<?php if($this->getRequest()->getController() == 'index' && $this->getRequest()->getAction() == 'index') : ?>
+		
+<div class='pin' data-id='<?php echo $this->pin['pin_id'] ?>'>
+	
+	<table class='pinner'>
+			<tbody>
+				<tr>
+					<td class="pinner_image">
+				
+						<a href='<?php echo $this->author['profile'] ?>'>
+							<img src='<?php echo $this->author['avatar']; ?>' alt='Picture of <?php echo $this->author['fullname'] ?>'/>
+						</a>
+					</td>
+					<td class='pinner_name'>
+						<a href='<?php echo $this->author['profile'] ?>' class='name_link'>
+							<?php echo $this->author['fullname'] ?>
+						</a>
+					</td>
+					<td class='right'>
+						
+						<a href='<?php echo $this->pin['onto_href'] ?>' class='board link'>
+								
+								<?php echo $this->pin['board']; ?>
+							
+						</a>
+					</td>
+				</tr>
+			</tbody>
+	</table>
+	<div class='image' style='background:#D9D9D9 !important'>
+		
+		<a href='<?php echo $this->pin['from'] ?>' target='_blank' class='pinImg' >
+				<img  class='notLoadedImg' alt='' src='../data_mobile/images/white_dim.png' data-src='<?php echo $this->pin['popup'];?>' style='width:70%' />
+		</a>
+	</div>
+	<p class='pin_description'>
+		<?php echo $this->pin['description']; ?>
+	</p>
+	<p class='pin_source'>
+		<!--  decide wether to type pinned or repinned by checkin for the user_via array. if its empty it is pinned and not  repinned-->
+		<?php if($this->pin['user_via'] == ''): ?>
+			<?php echo $this->translate('Pinned by')?> <span class='pin_method'><a class='link' href='<?php echo $this->author['profile']?>'> <?php echo $this->author['fullname'] ?> </a></span> <?php echo sprintf($this->translate('%d %s ago'),$this->pin['date_dif']['value'], $this->translate($this->pin['date_dif']['key']));?>
+		
+		<!-- if it is not empty it means it is repinned -->
+		<?php else: ?>
+			
+			<?php echo $this->translate('Repynged')." ".sprintf($this->translate('%d %s ago'),$this->pin['date_dif']['value'], $this->translate($this->pin['date_dif']['key']))." ".$this->translate('via')." <span class='pin_method'><a class='link' href='".$this->author['profile']."'>".$this->pin['user_via']['fullname']."</a></span>" ?>
+		<?php endif; ?>
+	</p>
+	
+		
+	<div class='pin_comments' style='display:block'>
+		<div class='inner' style='margin: -10px'>
+		<?php if($this->pin['comments'] > 0): ?>
+		<table>
+			<tbody>
+				<tr>
+					<td class='icon'></td>
+						<td class='comment_text'>
+							<?php foreach($this->pin['latest_comments'] as $comm): ?>
+				
+								<p>
+									<a class='link' href=''>
+										<?php echo $comm['user']['fullname'] ?>
+									</a>
+									<span>
+										<?php echo $comm['comment']; ?>
+									</span>
+								</p>
+					
+			   				<?php endforeach; ?>
+						</td>
+				</tr>
+			</tbody>
+		</table>
+			<?php endif; ?>
+		</div>
+	</div>
+
+	<div class='pin_stats'>
+		
+		<div class='pin_likes' style='display: block'>
+			
+			 <div class='likeIcon <?php if($this->pin['likes'] > 0) echo "icon"?>'></div>
+			 <span>
+			 	<?php if($this->pin['likes'] > 0): ?>
+			 	<?php  echo $this->pin['likes']." ".$this->translate('Likes');  ?>
+			 	<?php endif; ?>
+			 </span>
+			
+		</div>
+		
+		<div class="pin_repins" style="display: block;">
+                    <div class="repinIcon <?php if($this->pin['repins'] > 0) echo 'icon'; ?>"></div>
+                    <span>
+                        <?php 
+                        if($this->pin['repins'] > 0){
+                       echo $this->pin['repins']." ".$this->translate('Repins'); 
+						}
+                        ?>
+                    </span>
+        </div>
+          
+   
+	</div>
+			
+			<?php if(JO_Session::get('user[user_id]')) { ?>
+							<div style='text-align: center;width: 100%;padding-bottom:10px' >
+    				<a class="comment_btn white mbtn" title=""  ><strong><?php echo $this->translate('Comment');?></strong><span></span></a>
+    			    <a href='<?php echo $this->pin['url_like'] ?>' class="white mbtn like_btn" data-liked='<?php echo $this->pin['liked'] ?>'> 
+           				<strong>
+           				 	<?php if($this->pin['liked']  == 0)
+           				 		  {
+           				 			echo $this->translate('Like');
+           				 		  }
+								  else
+								  {
+								  	echo $this->translate("Unlike");
+								  }
+           				 	?>
+           				</strong>
+           				<span></span>
+    			    </a>
+    			 
+    				<a class="repin_btn white mbtn" href="<?php echo $this->pin['url_repin'] ?>" title=""><strong>Repyng</strong><span></span></a>
+			     </div>
+			<?php } ?>
+	
+	</div>
+
+
+<?php endif; ?>
+
+
+
+
+<!-- if the controller is catgegory and action is index -->
+
+<?php if( $this->getRequest()->getController() == 'category' || 
+	      $this->getRequest()->getController() == 'popular'  ||
+		  $this->getRequest()->getController() == 'gifts' 	 ||
+		  $this->getRequest()->getController() == 'all' 	 ||
+		  $this->getRequest()->getController() == 'boards'   
+		 
+		  ) : ?>
+
+
+<div class='pin' data-id='<?php echo $this->pin['pin_id'] ?>'>
+	
+	<table class='pinner'>
+			<tbody>
+				<tr>
+					<td class="pinner_image">
+					<!--	<pre>
+						<?php 
+						//var_dump($this->pin); 
+						?>
+					</pre> --> 
+						<a href='<?php echo $this->author['profile'] ?>'>
+							<img src='<?php echo $this->author['avatar']; ?>' alt='Picture of <?php echo $this->author['fullname'] ?>'/>
+						</a>
+					</td>
+					<td class='pinner_name'>
+						<a href='<?php echo $this->author['profile'] ?>' class='name_link'>
+							<?php echo $this->author['fullname'] ?>
+						</a>
+					</td>
+					<td class='right'>
+						
+						<a href='<?php echo $this->pin['onto_href'] ?>' class='board link' style='overflow: hidden'>
+						
+								<?php echo $this->pin['board']; ?>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+	</table>
+	<div class='image' style='background:#D9D9D9 !important'>
+			
+		<a href='<?php echo $this->pin['from'] ?>' target='_blank' >
+			<img  class='notLoadedImg' alt='' src='../data_mobile/images/white_dim.png' data-src='<?php echo $this->pin['popup'];?>' style='width:70%' />
+		</a>
+
+	</div>
+	<p class='pin_description'>
+		<?php echo $this->pin['description']; ?>
+	</p>
+	<p class='pin_source'>
+		<!--  decide wether to type pinned or repinned by checkin for the user_via array. if its empty it is pinned and not  repinned-->
+		<?php if($this->pin['user_via'] == '') { ?>
+			<?php echo $this->translate('Pinned by')?> <span class='pin_method'><a class='link' href='<?php echo $this->author['profile']?>'> <?php echo $this->author['fullname'] ?> </a></span> <?php echo sprintf($this->translate('%d %s ago'),$this->pin['date_dif']['value'], $this->translate($this->pin['date_dif']['key']));?>
+		
+		<!-- if it is not empty it means it is repinned -->
+		<?php } else { ?>
+			
+			<?php echo $this->translate('Repynged')." ".sprintf($this->translate('%d %s ago'),$this->pin['date_dif']['value'], $this->translate($this->pin['date_dif']['key']))." ".$this->translate('via')." <span class='pin_method'><a class='link' href='".$this->author['profile']."'>".$this->pin['user_via']['fullname']."</a></span>" ?>
+		<?php } ?>
+	</p>
+	
+		
+	<div class='pin_comments' style='display:block'>
+		<?php if($this->pin['comments'] > 0) { ?>
+		<table>
+			<tbody>
+				<tr>
+					<td class='icon'></td>
+						<td class='comment_text'>
+							<?php foreach($this->pin['latest_comments'] as $comm) { ?>
+				
+								<p>
+									<a class='link' href=''>
+										<?php echo $comm['user']['fullname'] ?>
+									</a>
+									<span>
+										<?php echo $comm['comment']; ?>
+									</span>
+								</p>
+					
+			   				<?php } ?>
+						</td>
+				</tr>
+			</tbody>
+		</table>
+			<?php } ?>
+	</div>
+
+	<div class='pin_stats'>
+		
+		<div class='pin_likes' style='display: block'>
+			
+			 <div class='likeIcon <?php if($this->pin['likes'] > 0) echo "icon"?>'></div>
+			 <span>
+			 	<?php if($this->pin['likes'] > 0) { ?>
+			 	<?php echo $this->pin['likes']." ".$this->translate("Likes"); ?>
+			 	<?php } ?>
+			 </span>
+			
+		</div>
+		
+		<div class="pin_repins" style="display: block;">
+                    <div class="repinIcon <?php if($this->pin['repins'] > 0) echo 'icon'; ?>"></div>
+                    <span>
+                        <?php 
+                        if($this->pin['repins'] > 0){
+                        echo $this->pin['repins']." ".$this->translate('Repins'); 
+						}
+                        ?>
+                    </span>
+        </div>
+          
+   
+	</div>
+			
+			<?php if(JO_Session::get('user[user_id]')) { ?>
+							<div style='text-align: center;width: 100%;padding-bottom:10px' >
+    				<a class="comment_btn white mbtn"  title="" ontouchstart="commentPin(event)" ><strong><?php echo $this->translate('Comment');?></strong><span></span></a>
+    			    <a href='<?php echo $this->pin['url_like'] ?>'  ontouchstart='likePin(event)' class="white mbtn like_btn" data-liked='<?php echo $this->pin['liked'] ?>'> 
+           				<strong>
+           				 	<?php if($this->pin['liked']  == 0)
+           				 		  {
+           				 			echo $this->translate('Like');
+           				 		  }
+								  else
+								  {
+								  	echo $this->translate("Unlike");
+								  }
+           				 	?>
+           				</strong>
+           				<span></span>
+    			    </a>
+    			 
+    				<a class="repin_btn white mbtn" href="<?php echo $this->pin['url_repin'] ?>" title="" ontouchstart="repin(event)"><strong>Repyng</strong><span></span></a>
+			     </div>
+			<?php } ?>
+	
+	</div>
+<?php endif; ?>
+
+
+<!-- if the controller is user and action is pins -->
+
+<?php if($this->getRequest()->getAction() == 'pins' ||
+	   $this->getRequest()->getController() == 'search'
+
+) : ?>
+	
+	
+	<div class='pin'>
+	
+		<a href='/pin/<?php echo $this->pin['pin_id']; ?>'>
+			<img alt='' src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-original='<?php echo $this->pin['thumb'];?>' width='93' height='<?php echo round( 93 / ( $this->pin['thumb_width']/$this->pin['thumb_height'] ) );?>'/>
+		
+		</a>
+	
+
+	</div>
+<?php endif; ?>
+

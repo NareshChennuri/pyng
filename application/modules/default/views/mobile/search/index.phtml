@@ -1,0 +1,194 @@
+<?php //var_dump($this->loged);exit; ?>
+<?php echo $this->header_part; ?>
+<style>
+					#profile ul li {
+					position: relative !important;
+					font-weight: bold !important;
+					list-style: none !important;
+					padding: 0;}
+					#profile ul li a, #profile .user_boards li {
+					border-top: 1px solid #CCC !important;
+					padding: 10px !important;}
+				</style>
+ 	<script type='text/javascript'>
+	var model = new Model;
+	
+	$(document).ready(function(){
+		
+		model.get(window.location.href+"?RSP=ajax&callback=Pins.loadPinDetails",function(data){
+			
+			
+			if(data[0]['template'] === 'people_search'){
+				model.getTemplate('searchPeople',function(pinBox){
+					
+					$.each(data,function(i,pin){
+						if(pin.template === 'people_search'){
+							console.log(pin);
+							pin.grayImg = model.grayImg;
+							var pin = $(pinBox).tmpl(pin).appendTo("#container ul");
+							pin.find('img').LazyLoad();
+						}
+					});
+				});
+			}
+			if(data[0]['template'] === 'boards'){
+				
+				model.getTemplate('board',function(pinBox){
+				
+					$.each(data,function(i,pin){
+					
+							
+							
+							var pin = $(pinBox).tmpl(pin).appendTo("#profile .user_boards");
+							pin.find('img').LazyLoad();
+					
+					});
+				});
+			
+			}
+			
+			if(data[0]['template'] === 'pins'){
+				model.getTemplate('pinBox',function(pinBox){
+					
+					$.each(data,function(i,pin){
+					
+						
+							
+							var pin = $(pinBox).tmpl(pin).appendTo("#container");
+							pin.find('img').LazyLoad();
+					
+					});
+				});
+			
+			}
+			
+			
+		});
+	});
+	
+</script>
+
+	<div class="banner <?php echo JO_Session::get('user[user_id]') ? "" : "unloged" ?> " id="search">
+                    <ul class="filters">
+                      <?php foreach($this->menuSearch as $key => $value):
+					  		$t = '';
+					  		if($value['title']=='People'){
+					  			$t = 'person';
+								$href='/search/people?q='.$_GET['q'];
+					  		}
+							
+							if($value['title']=='Boards'){
+					  			$t = 'board';
+								$href='/search/boards?q='.$_GET['q'];
+					  		}
+							
+							if($value['title']=='Pins'){
+					  			$t = 'pin';
+								$href='/search?q='.$_GET['q'];
+					  		}
+					  	
+					   ?>
+                      	
+                      	<li>
+                      		
+                      		<a <?php if($value['active']) { echo "class='active'"; }  ?> id='<?php echo $t ?>' href=<?php echo $href ?> >
+                      		 
+                      		</a>
+                      	</li>
+                      	
+                      <?php endforeach; ?>
+                    </ul>
+
+                    <ul class="actions hidden hidden_ie">
+                        <li><a class="mbtn"><?php $this->translate('Search') ?></a></li>
+                        <li><a class="cancel">×</a></li>
+                    </ul>
+
+                    <div id="searchable">
+                        <div id="search_icon"></div>
+                        <h2 class="query"><?php echo $_GET['q'] ?></h2>
+                    </div>
+
+                    <div class="stitching">
+                        <div class="stitch"></div>
+                        <div class="stitch white"></div>
+                    </div>
+                </div>
+
+
+
+
+	
+		
+		<script type="text/javascript" src='../data_mobile/js/jquery.masonry.min.js'></script>
+	
+		<script type="text/javascript">
+			
+		/*$(document).ready(function(){
+			var contaner_width = $('#ColumnContainer .pinboard').width();
+			var item_width = (Math.round(contaner_width / 5)-5);
+			$('#ColumnContainer .pinboard .pin').css({width:Math.round(contaner_width / 5)});
+			var total_images = $('#ColumnContainer .pinboard .pin img').size();
+
+			var start_masonry = false;
+			$('#ColumnContainer .pinboard .pin img').each(function(i, item){
+				var image = new Image(); 
+				image.src = $(item).data('original');
+				image.onload = function(){
+					$(item).css({
+						"width": item_width,
+						"height": Math.ceil(item_width / (this.width/this.height))
+					}).attr('src', this.src).removeAttr('width').removeAttr('height');
+					if( (i+1) == total_images) { start_masonry = true; }
+				};
+				image.onerror = function() {
+					if( (i+1) == total_images) { start_masonry = true; }
+				};
+			});
+			
+			var masonry_load = setInterval(function(){
+				if(start_masonry) {
+					load_masonry();
+					clearInterval(masonry_load);
+				}
+			}, 50);
+			function load_masonry() {
+				$('#ColumnContainer .pinboard').masonry({
+					itemSelector : '.pin',
+					columnWidth: (item_width+4),
+					isAnimated:false,
+					isResizable:false,
+					gutterWidth: 1,
+					animate:false
+				  });
+				  
+				$(window).bind('deviceorientation', function() { $('#ColumnContainer .pinboard').masonry('reload'); });
+				$(window).bind('MozOrientation', function() { $('#ColumnContainer .pinboard').masonry('reload'); });
+				$(window).bind('load', function() { $('#ColumnContainer .pinboard').masonry('reload'); }); 
+				$(window).bind('resize', function() { $('#ColumnContainer .pinboard').masonry('reload'); }); 
+
+			  }
+			  
+		
+		});*/
+			 
+		</script>
+			<div id='container'>
+				<ul class='list_view'></ul>
+			</div>
+			
+			
+			<div id='profile'>
+				
+				<div class='user_boards'>
+				</div>
+			</div>
+			
+	
+		
+		
+
+
+
+
+<?php echo $this->footer_part; ?>

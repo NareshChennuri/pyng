@@ -1,0 +1,43 @@
+<?php echo $this->header_part; ?>
+
+<div class="titlebar">
+	<div class="title">
+		<h3 class="title-8"><?php echo $this->board['board_title'];?></h3>
+		<?php if(JO_Registry::get('oauth_fb_key')) { ?>
+		<div class="fb-like" data-href="<?php echo $this->board_url;?>" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>
+		<?php } ?>
+	</div>
+	<div class="boardmeta">
+		<?php $total = count($this->board_users); foreach($this->board_users AS $user) { ?>
+		<?php if($total == 1) { ?>
+		<p class="boardmember"><a href="<?php echo $user['href'];?>"><img src="<?php echo $user['avatars']['avatar_image_a'];?>" alt="<?php echo $user['fullname'];?>" /> <span class="username"><?php echo $user['fullname'];?></span></a></p>
+		<?php } else { ?>
+		<p class="boardmember"><a href="<?php echo $user['href'];?>"><img src="<?php echo $user['avatars']['avatar_image_a'];?>" alt="<?php echo $user['fullname'];?>" /></a></p>
+		<?php } ?>
+		<?php } ?>
+		<p class="boardstats"><?php echo sprintf($this->translate('%s followers, %s pins'), '<strong>'.$this->board['board_followers'].'</strong>', '<strong>'.$this->board['board_pins'].'</strong>');?></p>
+		<?php if($this->is_enable_follow) { ?>
+		<p class="boardbutton">
+			<?php if($this->board['following_board']) { ?>
+			<a href="<?php echo $this->follow;?>" class="grey-button event-click-follow-board" data-boardauthorid="<?php echo $this->board['user_user_id'];?>"><?php echo $this->translate('Unfollow');?></a>
+			<?php } else { ?>
+			<a href="<?php echo $this->follow;?>" class="red-button event-click-follow-board" data-boardauthorid="<?php echo $this->board['user_user_id'];?>"><?php echo $this->translate('Follow');?></a>
+			<?php } ?>
+		</p>
+		<?php } else if($this->board['edit']) { ?>
+		<p class="boardbutton"><a href="<?php echo $this->board['edit'];?>" class="grey-button"><?php echo $this->translate('Edit');?></a> </p>
+		<?php } else { ?>
+		<p class="boardbutton"></p>
+		<?php } ?>
+		<div class="clear"></div>
+	</div>
+	<?php if($this->board['board_description']) { ?>
+	<div class="boarddescription">
+		<p><?php echo $this->board['board_description'];?></p>
+	</div>
+	<?php } ?>
+</div>
+<div id="boxcontainerwrapper">
+	<div id="boxcontainer" class="event-masonry-container"><?php echo $this->result_data;?></div>
+</div>
+<?php echo $this->footer_part; ?>

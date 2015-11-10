@@ -1,0 +1,62 @@
+<?php echo $this->header_part; ?>
+
+<div id="panel">
+	<div class="left">
+		<ul class="socbtns">
+			<li class="activebtn"><a href="<?php echo $this->invites;?>" class="active invite"><?php echo $this->translate('Invite Friends');?></a></li>
+			<li><a href="<?php echo $this->invites_fb;?>" class="fb"><?php echo $this->translate('Facebook');?></a></li>
+		</ul>
+	</div>
+	<div class="right">
+		<h4 class="title"><?php echo sprintf($this->translate('Invite Your Friends to %s'), JO_Registry::get('site_name'));?></h4>
+		<form action="" method="post" class="invite">
+			<?php for($i = 1; $i<$this->invate_limit; $i++) { ?>
+				<p>
+					<label for="email-<?php echo $i;?>" class="hide"><?php echo $this->translate('Email Adress '.$i);?>:<br /></label>
+					<input type="text" name="email-<?php echo $i;?>" id="email-<?php echo $i;?>" value="<?php echo $this->translate('Email Adress '.$i);?>" />
+				</p>
+				<?php if(isset($this->view->result_from_invate[$i]['success'])) { ?>
+				<p class="response success"><?php echo $this->view->result_from_invate[$i]['success'];?></p>
+				<?php } elseif(isset($this->view->result_from_invate[$i]['error'])) { ?>
+				<p class="response error"><?php echo $this->view->result_from_invate[$i]['error'];?></p>
+				<?php } ?>
+			<?php } ?>
+			
+			<p>
+				<label for="note" class="hide"><?php echo $this->translate('Add a personal note');?>:<br /></label>
+				<textarea name="note" id="note" rows="5" cols="30"><?php echo $this->translate('Add a personal note');?></textarea>
+			</p>
+			<p class="submit"><input type="submit" value="<?php echo $this->translate('Send Invites');?>" /></p>
+		</form>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('form.invite input[type=text], form.invite textarea').clearOnFocus();
+	$('form.invite').submit(function(){
+		$('form.invite p.response').remove();
+		var send_data = {
+			'note': $('#note').val()
+		};
+		for(i=1; i<<?php echo $this->invate_limit;?>; i++) {
+			send_data['email-'+i] = $('#email-'+i).val();
+		}
+		$.post(window.location.href, send_data, function(response){ 
+			for(i in response.send) {
+				if(response.send[i].success) {
+					$('<p class="response success">'+response.send[i].success+'</p>').insertAfter($('#email-'+i).parents('p'));
+				} else if(response.send[i].error) {
+					$('<p class="response error">'+response.send[i].error+'</p>').insertAfter($('#email-'+i).parents('p'));
+				}
+			}
+		}, 'json');
+		
+		return false;
+	});
+});
+</script>
+
+<?php echo $this->footer_part; ?>

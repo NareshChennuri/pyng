@@ -1,0 +1,106 @@
+<script  id='pinBox' type='text/x-jquery-tmpl'>
+<div class='pin'>
+<div class="image">
+
+		<img style='width:100%' class="notLoadedImg" alt="" data-src="${images.thumb_original_a}" src="${images.thumb_original_a}">
+	
+
+ </div>
+<span class="pin_description">
+    ${description}                  
+</span>	
+<p class="pin_source">
+		<span class='pin_method'><a href="${author_profile.href}" class='link'> ${author_profile.fullname} </a></span>${text_onto} <span class='pin_method'><a  class='link' href="${board_url}">${text_board}</a> ${text_date_diff} {{if $via_profile}} ${text_via}</span> <a href='${via_profile.profile}' class='link'>${via_profile.fullname}</a> {{/if}} </span>
+</p>
+	{{if pin_comments}}
+		<div class="pin_comments" style="display:block">
+		
+				<div class="inner" style="margin: -10px">
+					<table>
+						<tbody>
+							<tr>
+								<td class="icon"></td>
+									<td class="comment_text">
+									{{each pin_comments}}
+											<p>
+												<a class="link" href="${$value.user.profile}"> 
+													${$value.user.fullname}
+												<a>
+													<span>
+														${$value.comment}
+													</span>
+												</p>
+									{{/each}}
+								</td>
+							</tr>
+						</tbody>
+				</table>
+			</div>
+		</div>
+	{{/if}}
+		
+
+	<div class="pin_stats">
+		{{if likes > 0}}
+		<div class="pin_likes" style="display: block">
+			<div class="likeIcon icon"></div>
+			<span>${likes}</span>
+		</div>
+		{{/if}}
+		{{if repins > 0}}
+			<div class="pin_repins" style="display: block;">
+            <div class="repinIcon icon"></div>
+				<span>${repins}</span>
+			</div>
+		{{/if}}
+    </div>
+	
+	{{if loged}}
+		<div style="text-align: center;width: 100%;padding-bottom:10px">
+    				<a data-comment='${url_comment}' class="comment_btn white mbtn" title=""><strong>Comment</strong><span></span></a>
+    			    <a href="${url_like}" class="white mbtn like_btn" data-liked="${is_liked}"> 
+           				<strong>
+							${text_like_unlike}
+           				</strong>
+           				<span></span>
+    			    </a>
+    			 
+    				<a class="repin_btn white mbtn" href="${url_repin}" title=""><strong>Repin</strong><span></span></a>
+			     
+
+
+
+		</div>
+	{{/if}}			
+	</div>
+	
+	<div class='board' style='border-top: 1px solid #ccc;'>
+		<a class="board_link tappable_link" href="${board_url}">
+	<div style="width: 80%;" class='tappable'>
+	<span>
+			${boardData.title}
+	</span>
+	
+	<div class="board_images" style="min-height: 30px">
+		
+			{{each thumbs}}
+				{{if $value.thumb_image_a}}
+				<img class="board_image" src="${$value.thumb_image_a}">			    		
+				{{/if}}		    				
+			{{/each}}											
+						    				
+														
+						    				
+														
+						    				
+														
+						    				
+														
+	</div>
+	</div>
+	 <div style="float: right;width: 20%;margin-bottom: -20%;">
+        <img src="data_mobile/images/arrow.png" height="14px" style="float: right;margin-top: -45px">
+     </div>
+	</a>
+	</div>
+</div>

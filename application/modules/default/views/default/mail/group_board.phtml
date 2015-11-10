@@ -1,0 +1,9 @@
+<p><?php echo sprintf($this->translate('Hi %s'), $this->user_info['firstname']);?>,</p>
+
+<p>
+	<a href="<?php echo $this->profile_href;?>"><?php echo $this->full_name;?></a> <?php echo sprintf($this->translate('added new %s pin %s to a group board %s'), '<a href="'.$this->pin_href.'">','</a>', '<a href="'.$this->board_href.'">'.$this->board_title.'</a>'); ?>
+</p>
+
+<div>
+	<?php echo html_entity_decode(JO_Registry::get('mail_footer'), ENT_QUOTES, 'utf-8');?>
+</div>

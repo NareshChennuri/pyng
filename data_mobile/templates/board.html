@@ -1,0 +1,35 @@
+<script  id='pinBox' type='text/x-jquery-tmpl'>
+
+<li class="tappable" style='{{if thumbs}}background-image:url(${thumbs[0]["thumb_image_b"]});background-repeat: no-repeat;background-size: 155px;background-position-x: right;{{/if}}'>
+    
+	<a class="board_link" href="${board_url}">
+	<div style="width: 80%;">
+	<span>
+			${title}
+	</span>
+	
+	<div class="board_images" style="min-height: 30px">
+		
+			{{each thumbs}}
+				{{if $value.thumb_image_a}}
+				<img class="board_image" src="${$value.thumb_image_a}">			    		
+				{{/if}}		    				
+			{{/each}}											
+						    				
+														
+						    				
+														
+						    				
+														
+						    				
+														
+	</div>
+	</div>
+	 <div style="float: right;width: 20%;margin-bottom: -20%;">
+        <img src="../data_mobile/images/arrow.png" height="14px" style="float: right;margin-top: -45px">
+     </div>
+	</a>
+	
+</li>
+
+</script>

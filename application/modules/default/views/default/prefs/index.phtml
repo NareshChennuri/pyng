@@ -1,0 +1,124 @@
+<?php echo $this->header_part; ?>
+
+<div id="formcontainerwrapper">
+	<div id="formcontainer">
+		<form method="post" action="" class="main-form">
+			<h3 class="title-9"><?php echo $this->translate('Change Email Settings');?></h3>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_email"><?php echo $this->translate('Email');?></label>
+				</div>
+				<div class="cell-center">
+					<p class="simpletext"><?php echo $this->user_data['new_email'];?> &nbsp;&middot;&nbsp; <a href="<?php echo $this->settings_href;?>"><?php echo $this->translate('Change Email');?></a></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('Group Pins');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="groups_pin_email"><input type="checkbox" id="groups_pin_email" name="groups_pin_email" <?php echo ($this->user_data['groups_pin_email'] ? 'checked="checked"' : '');?> value="1" /><?php echo $this->translate('When a new pin is added to a group board');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('Comments');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="comments_email"><input type="checkbox" id="comments_email" name="comments_email" <?php echo ($this->user_data['comments_email'] ? 'checked="checked"' : '');?> value="1" /><?php echo $this->translate('When someone comments on your pin');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('Likes');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="likes_email"><input type="checkbox" id="likes_email" name="likes_email" <?php echo ($this->user_data['likes_email'] ? 'checked="checked"' : '');?> value="1" /><?php echo $this->translate('When someone likes your pin');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('Repins');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="repins_email"><input type="checkbox" id="repins_email" name="repins_email" <?php echo ($this->user_data['repins_email'] ? 'checked="checked"' : '');?> value="1" /><?php echo $this->translate('When your pin is repinned');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('Follows');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="follows_email"><input type="checkbox" id="follows_email" name="follows_email" <?php echo ($this->user_data['follows_email'] ? 'checked="checked"' : '');?> value="1" /><?php echo $this->translate('When a new person follows you');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_email_interval_0"><?php echo $this->translate('Frequency');?></label>
+				</div>
+				<div class="cell-center">
+					<p class="simpletext"><?php echo $this->translate('How often you receive emails about likes, repins &amp; follows:');?></p>
+					<div class="checkboxes">
+						<label for="id_email_interval_0"><input type="radio" name="email_interval" value="1" id="id_email_interval_0" <?php echo ($this->user_data['email_interval']==1?' checked="checked"':'');?> /><?php echo $this->translate('Immediately');?></label>
+						<label for="id_email_interval_1"><input type="radio" name="email_interval" value="2" id="id_email_interval_1" <?php echo ($this->user_data['email_interval']==2?' checked="checked"':'');?> /><?php echo $this->translate('Once Daily');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('Digest');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="digest_email"><input type="checkbox" id="digest_email" name="digest_email" <?php echo ($this->user_data['digest_email'] ? 'checked="checked"' : '');?> value="1" /><?php echo $this->translate('Emails summarizing your weekly activity');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('News');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="custom-checkboxes">
+						<label for="news_email"><input type="checkbox" id="news_email" name="news_email" <?php echo ($this->user_data['news_email'] ? 'checked="checked"' : '');?> value="1" /><?php echo $this->translate('Occasional Pinterest news and updates');?></label>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="submit"><button type="submit" class="red-button big-button"><?php echo $this->translate('Save Settings');?></button></div>
+		</form>
+	</div>
+</div>
+<?php ob_start();?>
+<script type="text/javascript"><!--
+head.ready('main',function(){
+
+	$('.custom-checkboxes input[type=checkbox]').switcherSlider({
+		text: {
+			on: '<?php echo $this->translate('ON');?>',
+			off: '<?php echo $this->translate('OFF');?>'
+		}
+	});
+
+});
+//--></script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<?php echo $this->footer_part; ?>

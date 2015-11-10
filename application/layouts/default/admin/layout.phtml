@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo $this->translate('Administration');?> - <?php echo $this->getRequest()->getBaseUrl();?></title>
+
+<base href="<?php echo $this->getRequest()->getBaseUrl();?>" />
+
+<script language="javascript" type="text/javascript">
+var BASE_URL = "<?php echo $this->getRequest()->getBaseUrl();?>";
+var IMGURL = "cms/<?php echo $this->getRequest()->getModule();?>/images/";
+var ADMINURL = "<?php echo $this->getRequest()->getModule();?>";
+var CONTROLLER = "<?php echo $this->getRequest()->getController();?>";
+</script>
+<link href="cms/<?php echo $this->getRequest()->getModule();?>/assets/style.css" rel="stylesheet" type="text/css" />
+<link href="cms/<?php echo $this->getRequest()->getModule();?>/assets/themes/custom-theme/jquery-ui-1.8.11.custom.css" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="cms/<?php echo $this->getRequest()->getModule();?>/assets/elrte/css/elrte.min.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="cms/<?php echo $this->getRequest()->getModule();?>/assets/elfinder/css/elfinder.css" type="text/css" media="screen" charset="utf-8" />
+  
+<?php echo $this->placeholder('style');?>
+
+<script type="text/javascript" src="<?php echo $this->getRequest()->getModule();?>?controller=index&action=i18n"></script>
+<script type="text/javascript" src="<?php echo $this->getRequest()->getModule();?>?controller=js"></script>
+
+<script type="text/javascript" src="cms/assets/jquery.js"></script>
+<script type="text/javascript" src="cms/assets/jquery-ui-1.8.11.custom.min.js"></script>
+<script type="text/javascript" src="cms/assets/tooltip.js"></script>
+<script type="text/javascript" src="cms/<?php echo $this->getRequest()->getModule();?>/assets/global.js"></script>
+<script type="text/javascript" src="cms/assets/tabs.js"></script>
+<script type="text/javascript" src="cms/assets/jquery.validate.pack.js"></script>
+<script type="text/javascript" src="cms/assets/prettyCheckboxes.js"></script>
+<script type="text/javascript" src="cms/assets/tablednd.js"></script>
+<script type="text/javascript" src="cms/<?php echo $this->getRequest()->getModule();?>/assets/jquery.joform.js"></script>
+
+<script src="cms/<?php echo $this->getRequest()->getModule();?>/assets/elrte/js/elrte.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="cms/<?php echo $this->getRequest()->getModule();?>/assets/elfinder/js/elfinder.full.js" type="text/javascript" charset="utf-8"></script>
+
+      
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	//menu
+	$('#menu ul li:has(ul) > a').addClass('more');
+	$('#menu ul li a.more').append('<span class="arrow">&nbsp;&nbsp;&raquo;</span>');
+	$('#menu ul li').hover(function () {
+		$(this).find('ul:first').stop(true, true).animate({opacity: 'toggle', height: 'toggle'}, 200).addClass('active_list');
+	}, function () {
+		$(this).children('ul.active_list').stop(true, true).animate({opacity: 'toggle', height: 'toggle'}, 200).removeClass('active_list');
+	});
+	<?php if($this->getRequest()->getController() != 'index') {?>
+	$('a[href*="<?php echo $this->getRequest()->getModule();?>/<?php echo $this->getRequest()->getRequest('forwarded', $this->getRequest()->getController());?>/"]').parent('li').addClass('active').parents('li[id]').addClass('active');
+	<?php } else { ?>
+	$('#home_link').addClass('active');
+	<?php } ?>
+});
+</script>
+
+<?php echo $this->placeholder('scipts');?>
+
+</head>
+<body>
+
+
+<?php 
+	$generated_menu = Helper_Config::get('adminmenupermisions');
+?>
+
+<div id="menu">
+	<div class="w90p">
+		<ul>
+			
+			<?php if($generated_menu) { ?>
+				<?php foreach($generated_menu AS $menu_title => $data) { ?>
+				<?php if(count($data) == 1) { ?>
+				<?php foreach($data AS $k => $v) { ?>
+				<li id="menu_<?php echo $v['key'];?>">
+					<a href="<?php echo $v['href'];?>"><?php echo $menu_title;?></a>
+				</li>
+				<?php } ?>
+				<?php } elseif(count($data) > 1) { ?>
+				<?php foreach($data AS $child) { ?>
+				<li id="menu_<?php echo $child['key'];?>">
+				<?php break;} ?>
+					<a href="javascript:void(0);"><?php echo $menu_title;?></a>
+					<ul>
+						<?php foreach($data AS $child) { ?>
+						<li><a href="<?php echo $child['href'];?>"><?php echo $child['name'];?></a></li>
+						<?php } ?>
+					</ul>
+				</li>
+				<?php } ?>
+				<?php } ?>
+			<?php } ?>
+					
+		</ul>
+        
+        <div class="fright">
+			<ul>
+				<li><a><strong><?php echo $this->translate('Welcome');?> <?php echo JO_Session::get('user[firstname]');?></strong></a></li>
+				<li><a target="_blank" href="<?php echo $this->getRequest()->getBaseUrl();?>"><img src="<?php echo $this->getRequest()->getBaseUrl();?>cms/admin/images/view-site.png" alt="" class="icon" /><?php echo $this->translate('Go to the site');?></a></li>
+				<li><a href="<?php echo $this->getRequest()->getModule();?>/login/logout/"><img src="<?php echo $this->getRequest()->getBaseUrl();?>cms/admin/images/log-out.png" alt="" class="icon" /><?php echo $this->translate('Logout');?></a></li>
+			</ul>
+		</div>
+    	<div class="clear"></div>
+	</div>
+</div>
+
+<div id="content">  <!-- Start Content-->
+  <div class="wrap">
+  <br />
+  <?php 
+		//echo $this->placeholder()->content; OR
+		echo $this->placeholder('content');
+	?>	
+  
+  </div>
+  <!-- End Content/-->
+</div>
+<div class="clear"></div>
+<br />
+<!-- Start Footer-->
+	<div id="footer">
+		<div id="footer-inner">
+			<p><a href="http://shopynga.com/" title="Deals around your Local Stores - Shopynga" target="_blank">Shopynga</a></p>
+    	</div>
+	</div>
+<!-- End Footer-->
+</body>
+
+</html>

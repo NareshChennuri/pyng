@@ -1,0 +1,142 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/dictionary.png">
+		<?php echo $this->translate('Ignore dictionary');?>
+	</h3>
+	
+	<?php if($this->successfu_edite || $this->error_permision) { ?>
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<?php } else if($this->error_permision) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error_permision;?></span></span>
+	<?php } ?>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<a class="button" href="<?php echo $module;?>/ignoredictionary/create/"><?php echo $this->translate('Add new');?></a>
+		<a class="button" href="javascript:void(0);" onclick="multiActionSelected('deleteMulti');"><?php echo $this->translate('Delete selected');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Ignore dictionary Manager');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+<form action="<?php echo $module;?>/ignoredictionary/" method="get" id="testtt">
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20"></th>	
+			<th width="20" class="left">
+				<a href="<?php echo $this->sort_dic_id;?>" <?php if($this->order == 'dic_id') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>>#</a>
+			</th>
+			<th class="left">
+				<a href="<?php echo $this->sort_word;?>" <?php if($this->order == 'word') { ?>class="sort-<?php echo $this->sort;?>"<?php }?>><?php echo $this->translate('Word');?></a>
+			</th>
+
+			<th width="20"><?php echo $this->translate('Edit');?></th>
+			<th width="20"><?php echo $this->translate('Delete');?></th>
+		</tr>
+		<tr class="search">
+			<th width="20">
+				<input type="checkbox" class="check_all_list" />
+			</th>	
+			<th class="left">
+				<input class="inputbox" type="text" name="filter_dic_id" value="<?php echo $this->filter_dic_id;?>" size="4" />
+			</th>
+			<th class="left">
+				<input class="inputbox filter_username" type="text" name="filter_word" value="<?php echo $this->filter_word;?>" size="8" />
+			</th>
+            
+			<th colspan="2">
+				<input type="submit" value="<?php echo $this->translate('Filter');?>" class="button">
+				&nbsp; <a href="<?php echo $module;?>/ignoredictionary/"><img src="cms/<?php echo $module;?>/images/reload.png" class="tooltip"  alt="" title="<?php echo $this->translate('Reset');?>" /></a>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->words) { ?>
+	<?php foreach($this->words AS $word) { ?>
+		<tr id="<?php echo $word['dic_id'];?>">
+			<td>
+				<input type="checkbox" class="check_list" name="action_check[]" value="<?php echo $word['dic_id'];?>" />
+			</td>
+			<td><?php echo $word['dic_id'];?>.</td>
+			<td>
+				<?php echo $word['word'];?>
+			</td>
+			<td align="center"><a href="<?php echo $module;?>/ignoredictionary/edit/?id=<?php echo $word['dic_id'];?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+           	<td align="center">
+				<a id="item_<?php echo $word['dic_id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="4">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+</form>
+<?php if($this->pagination) { ?>
+<br />
+<div class="fleft">
+<?php echo $this->translate('Page');?> <b><?php echo $this->page_num;?></b> <?php echo $this->translate('from');?> <b><?php echo $this->total_pages;?></b> (<b><?php echo $this->total_rows;?></b> <?php echo $this->translate('records');?>)
+</div>
+<div class="pagination fright">
+	<?php echo $this->pagination;?>
+</div>
+<div class="clear"></div>
+<?php } ?>
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function() {       
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/ignoredictionary/delete/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+});
+// ]]>
+</script>

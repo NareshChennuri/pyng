@@ -1,0 +1,16 @@
+<?php if($this->Recipient_message) { ?>
+<p><?php echo sprintf($this->translate('%s said:'), $this->self_firstname);?></p> 
+<p>"<?php echo $this->Recipient_message;?>"</p>
+<?php } ?>
+
+<p>
+	<?php echo sprintf($this->translate('%s is a place to catalog all the things you love.'), $this->header_title);?>
+
+	<?php if($this->shared_content) { ?>
+		<?php echo sprintf($this->translate('Join and create your own pinboards %s here %s.'), '<a href="'.$this->shared_content.'" target="_blank">', '</a>');?>
+	<?php } ?>
+</p>
+
+<div>
+	<?php echo html_entity_decode(JO_Registry::get('mail_footer'), ENT_QUOTES, 'utf-8');?>
+</div>

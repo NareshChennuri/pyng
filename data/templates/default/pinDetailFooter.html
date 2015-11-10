@@ -1,0 +1,94 @@
+<div class="cells event-slideDown-auto"> 
+	
+	{{if onto_board.pins}}
+	<div class="cell">
+		{{if enable_follow_board}}
+		<p class="button"> 
+			{{if board_is_follow}} 
+			<a class="grey-button event-click-follow-board" href="${board_follow_href}" data-boardauthorid="${onto_board.user_id}">${text_unfollow}</a> 
+			{{else}} 
+			<a class="red-button event-click-follow-board" href="${board_follow_href}" data-boardauthorid="${onto_board.user_id}">${text_follow}</a> 
+			{{/if}}
+		</p>
+		{{/if}}
+		<p class="helptext">${text_onto_board}</p>
+		<h3 class="title-10"><a href="${onto_board.url}">${onto_board.name}</a></h3>
+		<ul class="pinners">
+			{{each onto_board.pins}} 
+			<li{{if $value.key}} class="${$value.key}"{{/if}}> <a href="${$value.href}"><img src="${$value.images.thumb_image_a}" alt="${onto_board.name}" /></a></li>
+			{{/each}}
+		</ul>
+		<div class="clear"></div>
+	</div>
+	{{/if}}
+	
+	{{if originally_pinned || source}}
+	<div class="row">
+		{{if originally_pinned}}
+		<div class="cell">
+			{{if enable_follow_board}}
+			<p class="button"> 
+				 {{if via_is_follow}} 
+				 <a class="grey-button event-click-follow-user gray" href="${via_follow_href}" data-userid="${originally_pinned.user_id}">${text_unfollow}</a> 
+				 {{else}} 
+				 <a class="red-button event-click-follow-user" href="${via_follow_href}" data-userid="${originally_pinned.user_id}">${text_follow}</a> 
+				 {{/if}}
+			</p>
+			{{/if}}
+			<p class="helptext">${text_originally_pinned}</p>
+			<h3 class="title-10"><a href="${originally_pinned.url}">${originally_pinned.name}</a></h3>
+			<ul class="pinners">
+				{{each originally_pinned.pins}} 
+				<li{{if $value.key}} class="${$value.key}"{{/if}}><a href="${$value.href}"><img src="${$value.images.thumb_image_a}" alt="${originally_pinned.name}" /></a></li>
+				{{/each}}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		{{/if}}
+		
+		{{if source}}
+		<div class="cell">
+			<p class="helptext">${text_pined_via}</p>
+			<h3 class="title-10"><a href="${source.url}">${source.name}</a></h3>
+			<ul class="pinners">
+				{{each source.pins}} 
+				<li{{if $value.key}} class="${$value.key}"{{/if}}> <a href="${$value.href}"><img src="${$value.images.thumb_image_a}" alt="${source.name}" /></a></li>
+				{{/each}}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		{{/if}}
+		<div class="clear"></div>
+	</div>
+	{{/if}}
+	
+	{{if users_likes || users_repins}}
+	<div class="row">
+		{{if users_likes}}	
+		<div class="cell">
+			<h3 class="title-10">${text_likes}</h3>
+			<ul class="pinners">
+				{{each users_likes}} 
+				<li{{if $value.key}} class="${$value.key}"{{/if}}> <a href="${$value.href}"><img src="${$value.avatars.avatar_image_a}" alt="${source.fullname}" /></a></li>
+				{{/each}}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		{{/if}}
+	
+		{{if users_repins}}
+		<div class="cell">
+			<h3 class="title-10">${text_repins}</h3>
+			<ul class="pinners">
+				{{each users_repins}} 
+				<li{{if $value.key}} class="${$value.key}"{{/if}}><a href="${$value.user.href}"><img src="${$value.user.avatars.avatar_image_a}" alt="${$value.user.fullname}" /></a></li>
+				{{/each}}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		{{/if}}
+		<div class="clear"></div>
+	</div>
+	{{/if}}
+	
+</div>

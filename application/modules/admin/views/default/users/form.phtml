@@ -1,0 +1,166 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+	ob_start();
+?>
+<link rel="stylesheet" type="text/css" href="cms/assets/vchecks/css/geogoer.vchecks.css" >
+<script type="text/javascript" src="cms/assets/vchecks/jquery.vchecks.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#custom_list").vchecks();
+	});
+</script>
+<?php $this->placeholder('scipts', ob_get_clean());?>
+
+<form name="admin_form" id="admin_form" method="post" action="">
+
+	<div class="info_line top">
+		<h3 class="fleft title">
+			<img alt="" src="cms/<?php echo $module;?>/images/gallery-sml.png">
+			<?php if(isset($this->new)): ?>
+			<?php echo $this->translate('Create user'); ?>
+			<?php else: ?>
+			<?php echo $this->translate('Users Preview');?>
+			<?php endif; ?>
+		</h3>
+		
+		<span id="fader" class="fleft mleft30" style="display:none;">
+			<span class="msgError"><span><?php echo $this->translate('Error!')?></span><i class="error_text"></i></span>
+		</span>
+		
+		<div class="fright mtop3">
+			<input style="position: relative;top: -1px;" type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $this->cancel_url;?>"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div class="clear"></div>
+	
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+		<?php if(!isset($this->new)): ?>
+			<tr>
+				<td width="150"></td>
+				<td>
+					<a href="<?php echo $this->profile_url;?>" target="_blank"><?php echo $this->translate('Profile in site');?></a>
+        		</td>
+			</tr>
+		
+		<?php endif; ?>
+			<tr>
+				<td><?php echo $this->translate('Username');?>: </td>
+				<td>
+					<input class="inputbox required" type="text" value="<?php echo $this->username;?>" name="username" />
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('First Name');?>: </td>
+				<td>
+					<input class="inputbox" type="text" value="<?php echo $this->firstname;?>" name="firstname" />
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Last Name'); ?>: </td>
+				<td>
+					<input class="inputbox" type="text" value="<?php echo $this->lastname;?>" name="lastname" />
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('E-mail');?>: </td>
+				<td>
+					<input class="inputbox required" type="text" value="<?php echo $this->email;?>" name="email" />
+        		</td>
+			</tr>
+			
+			
+		</tbody>
+	</table>
+	<br /><br />
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<tr>
+				<td width="150"><?php echo $this->translate('Password')?>: </td>
+				<td>
+					<input type="text" size="15" value="" class="inputbox"  name="password" />
+        			<?php if(!isset($this->new)): ?>&nbsp;&nbsp; <img title="<?php echo $this->translate('If you do not want to change the password, leave it blank!');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif"><?php endif; ?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Status');?>: </td>
+				<td>
+					<select name="status">
+						<?php if($this->status) { ?>
+						<option selected="selected" value="1"><?php echo $this->translate('Active');?></option>
+						<option value="0"><?php echo $this->translate('Noactive');?></option>
+						<?php } else { ?>
+						<option value="1"><?php echo $this->translate('Active');?></option>
+						<option selected="selected" value="0"><?php echo $this->translate('Noactive');?></option>
+						<?php } ?>
+					</select>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Administrator');?>: </td>
+				<td>
+					<select name="is_admin" id="is-administrator">
+						<?php if($this->is_admin) { ?>
+						<option selected="selected" value="1"><?php echo $this->translate('Yes');?></option>
+						<option value="0"><?php echo $this->translate('No');?></option>
+						<?php } else { ?>
+						<option value="1"><?php echo $this->translate('Yes');?></option>
+						<option selected="selected" value="0"><?php echo $this->translate('No');?></option>
+						<?php } ?>
+					</select>
+        		</td>
+			</tr>
+			<?php if(JO_Session::get('user[is_developer]')):?>
+			<tr>
+				<td><?php echo $this->translate('Mega admin');?>: </td>
+				<td>
+					<select name="is_developer" id="is-developer">
+						<?php if($this->is_developer) { ?>
+						<option selected="selected" value="1"><?php echo $this->translate('Yes');?></option>
+						<option value="0"><?php echo $this->translate('No');?></option>
+						<?php } else { ?>
+						<option value="1"><?php echo $this->translate('Yes');?></option>
+						<option selected="selected" value="0"><?php echo $this->translate('No');?></option>
+						<?php } ?>
+					</select>
+        		</td>
+			</tr>
+			<?php endif; ?>
+			<tr>
+				<td valign="top"><div class="group_hide"><?php echo $this->translate('Groups');?>: </div></td>
+				<td>
+					<div class="group_hide">
+					<?php if($this->groups_list) { ?>
+					<ul id="custom_list" style="width: 400px;">
+						<?php foreach($this->groups_list AS $group) { ?>
+						<li>
+							
+								<?php if(array_key_exists($group['ug_id'], $this->groups)) { ?>
+								<input checked="checked" id="group-<?php echo $group['ug_id'];?>" name="groups[<?php echo $group['ug_id'];?>]" value="on" type="checkbox" />
+								<?php } else { ?>
+								<input id="group-<?php echo $group['ug_id'];?>" name="groups[<?php echo $group['ug_id'];?>]" value="on" type="checkbox" />
+								<?php } ?>
+								<span><?php echo $group['name'];?></span>
+						</li>
+						<?php } ?>
+					</ul>
+					<?php } ?>
+					</div>
+        		</td>
+			</tr>
+			
+		</tbody>
+	</table>
+		
+	<div class="info_line bottom">
+		<div class="fright mtop3">
+			<input style="position: relative;top: -1px;" type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $this->cancel_url;?>"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+		
+</form>

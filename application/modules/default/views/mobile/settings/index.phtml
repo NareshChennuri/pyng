@@ -1,0 +1,412 @@
+<?php echo $this->header_part; ?>
+
+<div id="detail" class="editprofile">       
+	<div id="view-profile">
+		
+
+		<form name="profileEdit" accept-charset="utf-8" method="post" action="" class="Form StaticForm" id="profileEdit">
+
+            <h3><?php echo $this->translate('Edit Profile');?></h3>
+
+            <ul>
+
+                <!-- Email -->
+                <li>
+                    <label for="id_email"><?php echo $this->translate('Email');?></label>
+                    <div class="Right">
+                        <input type="text" id="id_email" value="<?php echo $this->user_data['new_email'];?>" name="email">
+                        <span class="help_text"><?php echo $this->translate('Not shown publicly');?></span>
+                        
+                        
+                    </div>
+                </li>
+
+                <!-- Notifications -->
+                <li>
+                <label><?php echo $this->translate('Notifications');?></label>
+                    <div class="Right">
+                        <p class="pad"><a class="Button WhiteButton Button18" href="<?php echo $this->prefs_action;?>"><strong><?php echo $this->translate('Change Email Settings');?></strong><span></span></a></p>
+                    </div>
+                </li>
+
+                <!-- Password -->
+                <li>
+                <label><?php echo $this->translate('Password');?></label>
+                    <div class="Right">
+                        <p class="pad"><a class="Button WhiteButton Button18" href="<?php echo $this->new_password;?>"><strong><?php echo $this->translate('Change Password');?></strong><span></span></a></p>
+                    </div>
+                </li>
+
+                <!-- First Name -->
+                <li>
+                    <label for="id_first_name"><?php echo $this->translate('First Name');?></label>
+                    <div class="Right">
+                        <input type="text" id="id_first_name" value="<?php echo $this->user_data['firstname'];?>" name="firstname">
+                        
+                    </div>
+                </li>
+
+                <!-- Last Name -->
+                <li>
+                    <label for="id_last_name"><?php echo $this->translate('Last Name');?></label>
+                    <div class="Right">
+                        
+                        <input type="text" id="id_last_name" value="<?php echo $this->user_data['lastname'];?>" name="lastname">
+                    </div>
+                </li>
+
+                <!-- Username -->
+                <li>
+                    <label for="id_username"><?php echo $this->translate('Username');?></label>
+                    <div class="Right">
+                        <input type="text" id="id_username" value="<?php echo $this->user_data['username'];?>" name="username">
+                        <span class="help_text username_available"><?php echo $this->base_href;?>username</span>
+                        
+                    </div>
+                </li>
+
+                <!-- Gender -->
+                <li>
+                    <label for="id_gender_0"><?php echo $this->translate('Gender');?></label>
+                    <div id="genderOptions" class="Right">
+                        <ul>
+							<li><label for="id_gender_0"><input <?php echo ($this->user_data['gender'] == 'male' ? 'checked="checked"' : '');?> type="radio" name="gender" value="male" id="id_gender_0"> <?php echo $this->translate('Male');?></label></li>
+							<li><label for="id_gender_1"><input <?php echo ($this->user_data['gender'] == 'female' ? 'checked="checked"' : '');?> type="radio" name="gender" value="female" id="id_gender_1"> <?php echo $this->translate('Female');?></label></li>
+							<li><label for="id_gender_2"><input <?php echo ($this->user_data['gender'] == 'unspecified' ? 'checked="checked"' : '');?> type="radio" name="gender" value="unspecified" id="id_gender_2"> <?php echo $this->translate('Unspecified');?></label></li>
+						</ul>
+                        
+                    </div>
+                </li>
+
+                <!-- About -->
+                <li>
+                    <label for="id_about"><?php echo $this->translate('About');?></label>
+                    <div class="Right">
+                        <textarea name="description" cols="54" rows="3" id="id_about"><?php echo $this->user_data['description'];?></textarea>
+                        <div id="aboutCount" class="CharacterCount"></div>
+                        
+                    </div>
+                </li>
+
+                <!-- Location -->
+                <li>
+                    <label for="id_location"><?php echo $this->translate('Location');?></label>
+                    <div class="Right">
+                        <input type="text" id="id_location" value="<?php echo $this->user_data['location'];?>" name="location">
+                        <span class="help_text"><?php echo $this->translate('e.g. Palo Alto, CA');?></span>
+                        
+                    </div>
+                </li>
+
+                <!-- Website -->
+                <li>
+                    <label for="id_website"><?php echo $this->translate('Website');?></label>
+                    <div class="Right">
+                        <input type="text" id="id_website" value="<?php echo $this->user_data['website'];?>" name="website">
+                        
+                    </div>
+                </li>
+
+                <!-- Image -->
+                <li>
+                    <label for="id_img"><?php echo $this->translate('Image');?></label>
+                    <div class="Right">
+                        
+                        <div class="current_avatar_wrapper">
+                          <img src="data/images/ajax-loader.gif" class="spinner" alt="<?php echo $this->translate('Loading...');?>" style="display: none;">
+                          <img alt="Current profile picture" class="current_avatar floatLeft" src="<?php echo $this->user_data['avatar'];?>">
+                        </div>
+
+                        <div style="padding-left: 12px;" class="floatLeft NoInput">
+                            <a class="floatLeft Button WhiteButton Button18 change_avatar" href="#"><strong><?php echo $this->translate('Upload an Image');?></strong><span></span></a>
+                            
+                            <div class="clear"></div>
+                            <?php if($this->facebook_enable) { ?>
+                            <br />
+                            
+                            <a class="floatLeft Button WhiteButton Button18 link_account refresh_user_image <?php echo (!$this->user_data['facebook_connect'] ? 'hide' : '');?>"><strong> <?php echo $this->translate('Refresh from Facebook');?></strong><span></span></a>
+                            
+                            <div class="clear"></div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </li>
+				
+				<?php if($this->facebook_enable) { ?>
+                <!-- Facebook -->
+                <li class="NoInput">
+                <label><?php echo $this->translate('Facebook');?></label>
+                    <div class="Right NoInput">
+                        <label for="facebook_connect" class="large">
+                            <input type="checkbox" id="facebook_connect" <?php echo ($this->user_data['facebook_connect'] ? 'checked="checked"' : '');?> /> <?php echo $this->translate('Link to Facebook');?>
+                        </label>
+                        <div class="clear"></div>
+                        
+                            <label for="facebook_timeline" class="large <?php echo (!$this->user_data['facebook_connect'] ? 'hide' : '');?>">
+                                <input type="checkbox" id="facebook_timeline" <?php echo ($this->user_data['facebook_connect'] ? '' : 'disabled="disabled"');?> <?php echo ($this->user_data['facebook_connect'] && $this->user_data['facebook_timeline'] ? 'checked="checked"' : '');?> name="facebook_timeline" /> <?php echo $this->translate('Add Pinterest to Facebook Timeline');?>
+                            </label>
+                            <p id="find_facebook_friends"><a class="Button WhiteButton Button18 link_account <?php echo (!$this->user_data['facebook_connect'] ? 'hide' : '');?>" href="<?php echo $this->invites_fb;?>"><strong><?php echo sprintf($this->translate('Find Facebook Friends on %s'), $this->site_name);?></strong><span></span></a></p>
+                        
+                    </div>
+                </li>
+                <?php } ?>
+
+				<?php if($this->twitteroauth_enable) { ?>
+                <!-- Twitter -->
+                <li class="NoInput">
+                  <label><?php echo $this->translate('Twitter');?></label>
+                    <div class="Right NoInput">
+                        <label for="twitter_connect" class="large">
+                            <input type="checkbox" id="twitter_connect" <?php echo ($this->user_data['twitter_connect'] ? 'checked="checked"' : '');?> /> <?php echo $this->translate('Link to Twitter');?>
+                        </label>
+			
+                    </div>
+                </li>
+				<?php } ?>
+
+                <!-- Search Index -->
+                <li>
+                    <label for="id_dont_search_index"><?php echo $this->translate('Hide');?></label>
+                    <div class="Right NoInput">
+                        <label for="id_dont_search_index" class="large">
+                            <input type="checkbox" id="id_dont_search_index" name="dont_search_index" <?php echo ($this->user_data['dont_search_index'] ? 'checked="checked"' : '');?> /> <?php echo $this->translate('Hide your Pinterest profile from search engines');?>
+                        </label>
+                    </div>
+                </li>
+
+                
+  
+
+
+                <!-- Delete -->
+                <li class="Delete">
+                <label><?php echo $this->translate('Delete');?></label>
+                    <div class="Right">
+                        <!-- href="/jooorooo/delete/" -->
+                        <p class="pad"><a name="delete_user_account" class="Button WhiteButton Button18" id="delete_user_account" href="#"><strong><?php echo $this->translate('Delete Account');?></strong><span></span></a></p>
+                        <div id="DeleteForm">
+                          <?php echo $this->delete_account;?>
+							<br> 
+							<p><?php echo $this->translate('If you want to permanently delete your account, please click the checkbox below:');?></p>
+                          <div id="DeleteDecision">
+                              <input type="checkbox" id="enable_button"><label for="enable_button">
+                                  <?php echo $this->translate('Yes, I want to delete my boards and pins permanently.');?></label>
+                          </div>
+
+                          <a class="Button WhiteButton RedButton DeleteButton Button18 disabled" id="delete_user_account_confirm" href="<?php echo $this->delete_username;?>"><strong><?php echo $this->translate('Delete My Account');?></strong><span></span></a>
+                          <a id="ChangeOfHeart" href="#"><?php echo $this->translate('I\'ve changed my mind!');?></a>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+            <!-- Button -->
+            <div class="Submit">
+                <a onclick="$('#profileEdit').submit(); return false" class="Button WhiteButton RedButton Button24 userform_submit editpage_submit" href="#"><strong><?php echo $this->translate('Save Profile');?></strong><span></span></a>
+            </div>
+        </form>		
+
+    
+    </div>
+    
+    <div class="clear"></div>    
+</div>
+
+
+<?php ob_start();?>
+<script type="text/javascript"><!--
+$(document).ready(function(){
+
+	new AjaxUpload($('.StaticForm a.change_avatar'), {
+		action: '<?php echo $this->form_action;?>',
+		name: 'file',
+		autoSubmit: true,
+		responseType: 'json',
+		onSubmit: function(file, extension) {
+			$(".current_avatar_wrapper .spinner").show().css({opacity: 1});
+			$(".current_avatar_wrapper .current_avatar").hide();
+		},
+		onComplete: function(file, json) {
+			if (json.error) {
+				Pins.error(json.error)
+			} else if (json.success) {
+				var image = new Image();
+				image.src = json.success;
+				image.onload = function(){
+					$('.current_avatar_wrapper .current_avatar').attr('src', image.src).show();
+					$(".current_avatar_wrapper .spinner").hide().css({opacity: 0});
+				}
+				image.onerror = function(){
+					$('.current_avatar_wrapper .current_avatar').show();
+					$(".current_avatar_wrapper .spinner").hide().css({opacity: 0});
+				}
+			}
+		}
+	});
+
+	$('#id_dont_search_index').switcherSlider({
+		text: {
+			on: '<?php echo $this->translate('ON');?>',
+			off: '<?php echo $this->translate('OFF');?>'
+		}
+	});
+
+	
+
+	<?php if($this->twitteroauth_enable) { ?>
+	$('#twitter_connect').switcherSlider({
+		text: {
+			on: '<?php echo $this->translate('ON');?>',
+			off: '<?php echo $this->translate('OFF');?>'
+		},
+		onSwitch: twitter_connect
+	});
+
+	function twitter_connect(item) {
+		$.post('<?php echo $this->twitter_connect;?>', {twitter_connect: (item.checked?'on':'off')}, function(data){
+
+			if(data.connected) {
+				if(data.connected != (item.checked?'on':'off')) {
+					$('#twitter_connect').switcherSlider( data.connected ? 'on_without_callback' : 'off_without_callback' );
+				}
+
+				
+				if(data.connected == 'on') {
+					window.location.reload();
+				}
+			} else if(data.login) {
+				window.location = data.login;
+			} else if(data.error) {
+				Pins.error(data.error);
+			}
+		},'json');
+	}
+	<?php } ?>
+
+	<?php if($this->facebook_enable) { ?>
+	$('#facebook_connect').switcherSlider({
+			text: {
+				on: '<?php echo $this->translate('ON');?>',
+				off: '<?php echo $this->translate('OFF');?>'
+			},
+			onSwitch: facebook_connect
+	});
+
+	function facebook_connect(item) {
+		$.post('<?php echo $this->facebook_connect;?>', {facebook_connect: (item.checked?'on':'off')}, function(data){
+
+			if(data.connected) {
+				if(data.connected != (item.checked?'on':'off')) {
+					$('#facebook_connect').switcherSlider( data.connected ? 'on_without_callback' : 'off_without_callback' );
+				}
+
+				
+				if(data.connected == 'on') {
+					window.location.reload();
+				} else {
+					$('label[for=facebook_timeline], #find_facebook_friends, a.refresh_user_image').hide();
+				}
+			} else if(data.login) {
+				window.location = data.login;
+			} else if(data.error) {
+				Pins.error(data.error);
+			}
+		},'json');
+	}
+
+
+	$('#facebook_timeline').switcherSlider({
+		text: {
+			on: '<?php echo $this->translate('ON');?>',
+			off: '<?php echo $this->translate('OFF');?>'
+		},
+		onSwitch: function(item){
+			if(item.checked) {
+				Facebook.startFacebookConnect("<?php echo $this->facebook_connect2;?>","publish_actions", true, true, "<?php echo $this->facebook_connect2;?>");
+			} else {
+				$.post('<?php echo $this->facebook_connect2;?>');
+			}
+		}
+	});
+	
+	<?php } ?>
+
+	$('#delete_user_account').click(function(){
+		$('#DeleteForm').show();
+		$(this).hide();
+		return false;
+	});
+
+	$('#ChangeOfHeart').click(function(){
+		$('#delete_user_account').show();
+		$('#DeleteForm').hide();
+		return false;
+	});
+
+	$('#enable_button').change(function(){
+		if($(this).is(':checked')) {
+			$('.StaticForm .RedButton.DeleteButton').removeClass('disabled');
+		} else {
+			$('.StaticForm .RedButton.DeleteButton').addClass('disabled');
+		}
+	}).change();
+
+	$('#id_about').jqEasyCounter({
+		holder: '#aboutCount',
+		maxChars: 200,
+		maxCharsWarning: 170,
+		template: '{count}'
+	});
+
+	$('a.refresh_user_image').click(function(){
+		$(".current_avatar_wrapper .spinner").show().css({opacity: 1});
+		$(".current_avatar_wrapper .current_avatar").hide();
+		$.post('<?php echo $this->facebook_connect_avatar;?>', function(json){
+			if (json.error) {
+				Pins.error(json.error)
+			} else if (json.success) {
+				var image = new Image();
+				image.src = json.success;
+				image.onload = function(){
+					$('.current_avatar_wrapper .current_avatar').attr('src', image.src).show();
+					$(".current_avatar_wrapper .spinner").hide().css({opacity: 0});
+				}
+				image.onerror = function(a){
+					$('.current_avatar_wrapper .current_avatar').show();
+					$(".current_avatar_wrapper .spinner").hide().css({opacity: 0});
+				}
+			} else {
+				$('.current_avatar_wrapper .current_avatar').show();
+				$(".current_avatar_wrapper .spinner").hide().css({opacity: 0});
+			}
+		}, 'json');
+	});
+
+	<?php if($this->successfu_edite) { ?>
+	Pins.success('<?php echo $this->translate('Information is successfully changed!');?>');
+	<?php } ?>
+	<?php if($this->error) { ?>
+	Pins.error('<?php echo $this->error;?>');
+	<?php } ?>
+
+	$('#enable_button').click(function(){
+		if($(this).is(':checked')) {
+			$('#delete_user_account_confirm').removeClass('disabled').unbind('click');
+		} else {
+			$('#delete_user_account_confirm').addClass('disabled').unbind('click').click(function(){ return false; });
+		}
+	});
+	
+	$('#delete_user_account_confirm').unbind('click').click(function(){ return false; });
+
+	$('#id_username').checkAvailable({
+		'url' : '<?php echo $this->check_username;?>',
+		'holder': '.help_text.username_available'
+	});
+	
+});
+//--></script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+
+<?php echo $this->footer_part; ?>

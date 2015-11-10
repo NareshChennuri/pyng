@@ -1,0 +1,63 @@
+<?php if(!$this->getRequest()->isXmlHttpRequest() && $this->is_facebook && $this->oauth_fb_key) { ?>
+<meta property="fb:app_id" content="<?php echo $this->oauth_fb_key;?>"/>
+<meta property="og:site_name" content="<?php echo $this->site_name;?>"/>
+<meta property="og:url" content="<?php echo $this->pin['pin_url'];?>"/>
+<meta property="og:title" content="<?php echo $this->pin['title'];?>"/>
+<meta property="og:description" content="<?php echo $this->pin['description'];?>"/>
+<meta property="og:image" content="<?php echo $this->pin['images']['thumb_image_b'];?>"/>
+<?php if($this->pin['is_video']) { ?>
+<meta property="og:video" content="<?php echo $this->pin['from'];?>"/>
+<?php } ?>
+<?php if($this->og_namespace) { ?>
+<meta property="og:type" content="<?php echo $this->og_namespace;?>:<?php echo $this->og_recipe;?>"/>
+<?php } else { ?>
+<meta property="og:type" content="website"/>
+<?php } ?>
+<?php } ?>
+
+<?php if($this->oauth_fb_key) { ?>
+<script type="text/javascript">
+var loaded_fb = loaded_fb || false;
+head.ready('jquery', function(location) { 
+	jQuery.Pins_onOpened = jQuery.Pins_onOpened || {};
+	jQuery.Pins_onOpened['f_p'] = jQuery.Pins_onOpened['f_p'] || (function(location) {
+		var li = $('.facebook-share-button');
+		button = $('<li class="facebook-share-button"><div class="fb-like" data-href="'+location+'" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div></li>');
+		if(li.size()) {
+			li.replaceWith(button);
+		} else {
+			button.appendTo('.event-load-buttons');	
+		}
+		button.show(1, function(){
+
+			if(!loaded_fb) {
+				(function() {
+					var e = document.createElement('script'); e.async = true;
+					e.src = document.location.protocol +
+					'//connect.facebook.net/en_US/all.js';
+					document.getElementsByTagName('head')[0].appendChild(e);
+				} ());
+	
+				window.fbAsyncInit = function() {
+					FB.init({
+						appId: '<?php echo $this->oauth_fb_key;?>',
+						status: true,
+						cookie: true,
+						xfbml: true
+					});
+					
+				};
+				loaded_fb = true;
+			} else {
+				var interval = setInterval(function() {
+					if(typeof FB != 'undefined') {
+						FB.XFBML.parse();
+						clearInterval(interval);
+					}
+				}, 20);
+			}
+		});
+	});
+});
+</script>
+<?php } ?>

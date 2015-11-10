@@ -1,0 +1,196 @@
+<?php echo $this->header_part; ?>
+
+<div id="panel">
+	<div class="left">
+		<ul class="socbtns">
+			<li><a href="<?php echo $this->invites;?>" class="invite"><?php echo $this->translate('Invite Friends');?></a></li>
+			<li class="activebtn"><a href="<?php echo $this->invites_fb;?>" class="active fb"><?php echo $this->translate('Facebook');?></a></li>
+		</ul>
+	</div>
+	<div class="right">
+		<h3 class="title"><?php echo $this->translate('Facebook');?></h3>
+		<div class="column nlm">
+			<h4 class="subtitle"><?php echo $this->translate('Invite Friends');?></h4>
+			
+			<div id="FriendSelectorInput">
+				<input type="text" class="filter-term" name="filter-term">
+			</div>
+			
+			<ul class="friendslist invatelist">
+				
+			</ul>	
+			
+		</div>
+		<div class="column">
+			
+			<h4 class="subtitle">
+				<?php echo sprintf($this->translate('Friends on %s'), $this->site_name);?>
+				<?php if($this->friends_not_follow) { ?>
+				<button type="button" class="Button RedButton Button13 FollowAll"><?php echo $this->translate('Follow All');?></button>
+				<?php } ?>
+			</h4>
+			
+			<?php if($this->friends_not_follow) { ?>
+			<ul class="friendslist not_followed_friendss">
+				<?php foreach($this->friends_not_follow AS $friend) { ?>
+				<li>
+					<p class="avatar">
+						<a href="<?php echo $friend['profile'];?>">
+							<img src="<?php echo $friend['avatar'];?>" alt="<?php echo $friend['fullname'];?>" />
+						</a>
+					</p>
+					<h5><a href="<?php echo $friend['profile'];?>"><?php echo $friend['fullname'];?></a></h5>
+					<p class="whitebtn"><a class="follow_user_follow" href="<?php echo $friend['follow_user'];?>"><?php echo $this->translate('Follow');?></a></p>
+					<div class="clear"></div>
+				</li>
+				<?php } ?>
+			</ul>	
+			<?php } ?>
+			
+			<p class="text"><?php echo sprintf($this->translate('Already following %d friends'), count($this->friends));?></p>	
+			<?php if($this->friends) { ?>
+			<ul class="friendslist followed_friendsq">
+				<?php foreach($this->friends AS $friend) { ?>
+				<li>
+					<p class="avatar">
+						<a href="<?php echo $friend['profile'];?>">
+							<img src="<?php echo $friend['avatar'];?>" alt="<?php echo $friend['fullname'];?>" />
+						</a>
+					</p>
+					<h5><a href="<?php echo $friend['profile'];?>"><?php echo $friend['fullname'];?></a></h5>
+					<p class="whitebtn"><a class="follow_user_unfollow" href="<?php echo $friend['follow_user'];?>"><?php echo $this->translate('Unfollow');?></a></p>
+					<div class="clear"></div>
+				</li>
+				<?php } ?>
+			</ul>	
+			<?php } ?>
+			
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript">
+    FB.init({
+        appId  : '<?php echo JO_Registry::get('oauth_fb_key');?>',
+        status 				: true,
+        cookie 				: true,
+        oauth				: true,
+        xfbml  				: true
+    });
+</script>	
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.FollowAll').click(function(){
+		$('.not_followed_friendss p.whitebtn a').each(function(){
+			$(this).click();
+		});
+		$(this).hide();
+	});
+});
+</script>
+<script type="text/javascript">
+
+      function sendRequestToRecipients(user_id, key) {
+
+    	  var link_url = "<?php echo $this->invate_href;?>" + key;
+    	  
+    	  FB.ui({
+              method: "send",
+              to: user_id,
+              name: "<?php echo sprintf($this->translate('Join %s, the Virtual Pinboard'), $this->site_name);?>",
+              description: "<?php echo $this->meta_description;?>",
+              picture: "<?php echo $this->site_logo;?>",
+              link: link_url,
+              display: 'popup'
+          }, function(response) {
+              if (!response){
+                  return;
+              }
+
+              $.post("<?php echo $this->add_to_invate;?>", {
+            	  user_id: user_id
+              }, function(data) {
+                  if (data == "success") {
+                      $('#invate_'+user_id).hide(function(){
+						$(this).remove();
+                      });
+                  }
+              });
+          });
+      }
+
+      <?php if($this->fb_session) { ?>
+      $.post('<?php echo $this->getfriends;?>', function(data){
+          var template_friend = $('#template_friend').html();
+		$(data.friends).each(function(){
+			res = template_friend;
+			res = res.replace(/\%id\%/g, this.id)
+			.replace(/\%name\%/g, this.name)
+			.replace(/\%avatar\%/g, this.avatar)
+			.replace(/\%key\%/g, this.key);
+			$('.invatelist').append(res);
+		});
+		
+		$('.filter-term').liveUpdate('.friendslist.invatelist', 'h5');
+		
+      }, 'json');
+      <?php } ?>
+
+      function initFollow() {
+    	  Pins.initFollow('.follow_user_unfollow', function(element){
+					$(element).parents('li').slideUp(function(){
+						var $not_followed_friends = $('.not_followed_friendss');
+						if($not_followed_friends.size() < 1) {
+							$not_followed_friends = $('<ul>').attr('class','friendslist not_followed_friendss');
+							$('#panel .right .column .subtitle').after($not_followed_friends);
+						}
+						var cloned = $(element).parents('li');
+						$not_followed_friends.append(cloned);
+						cloned.slideDown(function(){
+							$('#panel .right .column .text').html( ('<?php echo $this->translate('Already following %d friends');?>').replace('%d', $('.followed_friendsq li').size()) );
+							initFollow();
+						});
+					});
+					$(element).html('<?php echo $this->translate('Follow');?>')
+					.removeClass('follow_user_unfollow').addClass('follow_user_follow');
+		  });
+		  
+		  Pins.initFollow('.follow_user_follow', function(element){
+					$(element).parents('li').slideUp(function(){
+						var $followed_friends = $('.followed_friendsq');
+						if($followed_friends.size() < 1) {
+							$followed_friends = $('<ul>').attr('class','friendslist followed_friendsq');
+							$('#panel .right .column').append($followed_friends);
+						}
+						var cloned = $(element).parents('li');
+						$followed_friends.append(cloned);
+						cloned.slideDown(function(){
+							$('#panel .right .column .text').html( ('<?php echo $this->translate('Already following %d friends');?>').replace('%d', $('.followed_friendsq li').size()) );
+							initFollow();
+						});
+						$(element).html('<?php echo $this->translate('Unfollow');?>')
+						.removeClass('follow_user_follow').addClass('follow_user_unfollow');
+					});
+		  });
+      }
+
+      initFollow();
+      
+    </script>
+    
+<script type="text/template" id="template_friend">
+<li id="invate_%id%">
+	<p class="avatar">
+		<img src="%avatar%" alt="%name%" />
+	</p>
+	<h5>%name%</h5>
+	<p class="whitebtn"><a onclick="sendRequestToRecipients(%id%, '%key%');"><?php echo $this->translate('Invite');?></a></p>
+	<div class="clear"></div>
+</li>
+</script>
+
+<?php echo $this->footer_part; ?>

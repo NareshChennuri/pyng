@@ -1,0 +1,12 @@
+<div id="wrapper">
+	<p class="e404">
+		<a href="<?php echo $this->getRequest()->getBaseUrl();?>">
+			<img src="data/images/error_404_icon.png" class="fade">
+		</a>
+	</p>
+	<div class="textbox">
+		<h1><?php echo $this->translate('Oops!');?></h1>
+		<p><?php echo $this->translate('The page you\'re looking for could not be found.');?></p>
+		<p><a onclick="history.go(-1)" href="<?php echo $this->getRequest()->getBaseUrl();?>" class="link"><?php echo $this->translate('Go back?');?></a></p>
+	</div>
+</div>

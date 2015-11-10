@@ -1,0 +1,44 @@
+<?php echo $this->header_part; ?>
+
+<div id="detail">
+
+	<div class="FixedContainer">
+
+        <form accept-charset="utf-8" method="post" action="<?php echo $this->form_action;?>" class="Form StaticForm mtop100" id="profileEdit">
+
+            <h3><?php echo $this->translate('Reset Password');?></h3>
+            <ul>
+                <li>
+                    <label for="id_email"><?php echo $this->translate('E-mail');?></label>
+                    <div class="Right">
+                        
+                        <input type="text" maxlength="75" name="email" id="id_email">
+                        <span class="help_text"><?php echo $this->translate('Enter your email address and we\'ll send you instructions.');?></span>
+                    </div>
+                </li>
+
+            </ul>
+
+            <div class="Submit">
+                <a onclick="$('#profileEdit').submit(); return false" class="Button WhiteButton RedButton Button24" href="#">
+                    <strong><?php echo $this->translate('Submit');?></strong>
+                    <span></span>
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+	<div class="clear"></div>	
+</div>
+
+<?php if($this->error) { ?>
+<script type="text/javascript">
+$(window).load(function(){
+	Pins.error('<?php echo $this->error;?>');
+});
+</script>
+<?php } ?>
+
+<?php echo $this->footer_part; ?>

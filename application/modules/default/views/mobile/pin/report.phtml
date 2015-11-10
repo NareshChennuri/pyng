@@ -1,0 +1,64 @@
+<div id="reportpin">
+	<?php if(!$this->comment_is) { ?>
+	<h4 class="question"><?php echo $this->translate('Why are you reporting this pin?');?></h4>
+	<?php } else { ?>
+	<h4 class="question"><?php echo $this->translate('Why are you reporting this comment?');?></h4>
+	<?php } ?>
+	<?php if($this->error) { ?>
+	<div class="error-message"><?php echo $this->error;?></div>
+	<?php } ?>
+	<form action="<?php echo $this->url_form;?>" method="post">
+		<p class="hide">
+			<?php if(!$this->comment_is) { ?>
+			<input type="hidden" name="pin_id" value="<?php echo $this->pin_id;?>" />
+			<?php } else { ?>
+			<input type="hidden" name="comment_is" value="<?php echo $this->comment_is;?>" />
+			<?php } ?>
+			<input type="hidden" name="pin_oppener" value="<?php echo $this->getRequest()->getBaseUrl();?>" />
+		</p>
+		<?php foreach($this->reportcategories AS $id => $value) { ?>
+		<p>
+			<input <?php echo ($this->report_category == $id ? 'checked="checked"' : '');?> type="radio" id="report<?php echo $id;?>" name="report_category" value="<?php echo $id;?>" />
+			<label for="report<?php echo $id;?>"><?php echo $value;?></label>
+		</p>
+		<?php } ?>
+		<p>
+			<input <?php echo ($this->report_category == -1 ? 'checked="checked"' : '');?> type="radio" id="report-1" name="report_category" value="-1" />
+			<label for="report-1"><?php echo $this->translate('Other');?></label>
+		</p>
+		<p class="message-report hide">
+			<textarea rows="5" cols="3" name="report_message"></textarea>
+		</p>
+		<?php if(!$this->comment_is) { ?>
+		<p class="text">
+			<a href="<?php echo $this->intellectual_property;?>" class="link"><?php echo $this->translate('Is this your intellectual property?');?></a>
+		</p>
+		<?php } ?>
+		<?php if(!$this->comment_is) { ?>
+		<p class="submit"><input type="submit" value="<?php echo $this->translate('Report Pin');?>" name="reportpin" /></p>
+		<?php } else { ?>
+		<p class="submit"><input type="submit" value="<?php echo $this->translate('Report');?>" name="reportpin" /></p>
+		<?php } ?>
+		<div class="clear"></div>
+	</form>
+</div>
+
+<?php if(!$this->is_posted) { ?>
+<script type="text/javascript">
+$('#reportpin form').submit(function(){
+	$('.error-message').html('');
+	jQuery.post('<?php echo $this->url_form;?>', jQuery('#reportpin form').serialize(), function(result){
+		jQuery('#reportpin').replaceWith( result );
+	});
+	return false;
+});
+$('#reportpin form input, #reportpin form label').click(function(){
+	if(this.value == -1) {
+		$('.message-report').slideDown();
+	} else {
+		$('.message-report').slideUp();
+	}
+});
+$('input[name=pin_oppener]').val(Pins.opener);
+</script>
+<?php } ?>

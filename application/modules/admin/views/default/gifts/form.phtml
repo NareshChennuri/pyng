@@ -1,0 +1,51 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<form name="admin_form" id="admin_form" method="post" action="" enctype="multipart/form-data">
+
+	<div class="info_line top">
+		<h3 class="fleft title">
+			<img alt="" src="cms/<?php echo $module;?>/images/percents.png">
+			<?php echo $this->translate('Gifts between sums Management');?>
+		</h3>
+		
+		<span id="fader" class="fleft mleft30" style="display:none;">
+			<span class="msgError"><span><?php echo $this->translate('Error!');?></span><i class="error_text"></i></span>
+		</span>
+		
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $module;?>/gifts/"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div class="clear"></div>
+	
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<tr>
+				<td width="150"><?php echo $this->translate('From');?>:</td>
+				<td>
+					<input type="text" size="15" value="<?php echo $this->price_from;?>" class="inputbox"  name="price_from" />
+        		</td>
+			</tr>
+			<tr>
+				<td width="150"><?php echo $this->translate('To');?>: </td>
+				<td>
+					<input type="text" size="15" value="<?php echo $this->price_to;?>" class="inputbox"  name="price_to" />
+        		</td>
+			</tr>
+		</tbody>
+	</table>
+		
+	<div class="info_line bottom">
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $module;?>/gifts/"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+		
+</form>

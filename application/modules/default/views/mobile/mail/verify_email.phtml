@@ -1,0 +1,13 @@
+<p><?php echo sprintf($this->translate('Hi %s'), $this->user_info['firstname']);?>,</p>
+
+<p>
+	<?php echo sprintf($this->translate('Thank you for using %s.'), JO_Registry::get('site_name'));?>	
+</p>
+
+<p>
+	<a href="<?php echo $this->verify_email_href;?>"><?php echo $this->translate('Click here');?></a> <?php echo $this->translate('to verify your email address.');?>	
+</p>
+
+<div>
+	<?php echo html_entity_decode(JO_Registry::get('mail_footer'), ENT_QUOTES, 'utf-8');?>
+</div>

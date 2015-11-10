@@ -1,0 +1,168 @@
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		
+	
+	var i = 0;
+	document.addEventListener('touchend',function(e){
+			
+			if($(e.target).parent().hasClass('thumb')){
+				//if(i < 5 ){
+			
+				var cover = $(e.target).parent().find('.cover');
+				var thumb =  $(e.target).parent().find('img');
+				if(cover.hasClass('covered')){
+					
+					i--;
+					//animate the big thumb	
+					cover.animate({'height':'25px','marginTop':'-32px'},function(){
+						$(this).removeClass('covered');
+					});
+					
+					var th = document.getElementById($(cover).data('cor'));
+					console.log(th);
+					th.style.backgroundImage = '';
+					console.log(th.style.backgroundImage);
+					
+					
+					$("#catIds form").find("#"+$(e.target).parent().attr('data-id')).remove();
+	
+					
+					if(i !== 5){
+						
+							$("#buttonHolder").fadeOut(function(){
+									$(".footThumb").fadeIn();
+							});
+					}
+					
+					//
+				
+						
+					
+				}
+					
+				else {
+					if(i < 5) {
+						i++;
+					cover.animate({'height':'110px','marginTop':'-117px'},function(){
+						$(this).addClass('covered').attr('data-cor',i);
+					});
+					
+					//append image to the small footer thumb
+
+					
+					$("#catIds").find('form').append("<input type='text' name='category_id[]' id='"+$(e.target).parent().attr('data-id')+"' value='"+$(e.target).parent().attr('data-id')+"'/>")
+					console.log($("#thumbHolder").find('#'+i));
+					console.log(thumb.attr('src'));
+					//$("#thumbHolder").find($("#"+i)).css('background-image',"url('"+thumb.attr('src')+"')").css('background-size','37px 37px')//append("<img src='"+thumb.attr('src')+"'/>");
+					document.getElementById(i).style.backgroundImage = "url("+thumb.attr('src')+")";
+					document.getElementById(i).style.backgroundSize = '37px 37ox'
+						if(i == 5){
+							$(".footThumb").fadeOut(function(){
+							$("#buttonHolder").fadeIn();	
+							});
+							
+						}
+						
+						
+						
+					
+					}
+					
+				}
+				
+				
+			//}
+				}
+						
+			})
+			
+			
+			
+		
+	})
+	function goToSecond(){
+				$("#catIds form").submit();
+			}
+</script>
+
+<div style="background:white;-webkit-overflow-scrolling:touch;overflow: scroll;z-index:1000">
+	<div id='head'>
+		<div class='holder'>
+			<p><?php echo $this->translate('Welcome to'); ?></p>
+			<img src='<?php echo $this->site_logo; ?>'/>
+		</div>
+		
+		<div id="catIds" style="display: none">
+			<form method="POST" action=''>
+				
+			</form>
+		</div>
+
+			
+		</div>
+			<div style="-webkit-box-shadow: 1px -1px 10px grey;height:5px;overflow: hidden"></div>
+			<div id='h' style='margin-top: -5px;overflow: hidden;width: 100%;background: white;'>
+				<p style="text-align: center;z-index:100">Step 1 of 2</p>
+				<h1><?php echo $this->translate('Click a few things you like:') ?></h1>
+			</div>
+			
+			<div id='container'>
+				<div id="myContent">
+					<?php foreach($this->categories as $c): ?>
+					<?php if($c['thumb']): ?>	
+						<div class='thumb' id='<?php echo $c['title'] ?>' data-id='<?php echo $c['category_id'] ?>'>
+						<img src='<?php echo $c['thumb']; ?>' width='113px'/>
+						<p class='cover'>
+						<?php echo $this->translate($c['title']); ?>
+						</p>
+						</div>
+							
+					<?php endif; ?>
+						
+						
+						
+						
+						
+					<?php endforeach; ?>
+				</div>
+			</div>
+
+</div>
+<div id='foot' style="position: fixed;bottom:0px;z-index:12000">
+	<div style="-webkit-box-shadow: 1px -1px 5px grey;height:5px;z-index:-100"></div>
+
+		<div id='thumbRow'>
+			<div id='thumbHolder' style='display:none'>
+				<div class='footThumb' id='1'>
+				
+				</div>
+
+				<div class='footThumb' id='2'>
+				
+				</div>
+				
+				<div class='footThumb' id='3'>
+				
+				</div>
+				
+				<div class='footThumb' id='4'>
+				
+				</div>
+				
+				<div class='footThumb' id='5'>
+				
+				</div>
+			</div>
+			<div id='buttonHolder'>
+				<a class='red mbtn' id='nextButton' style='width:40%' ontouchend = 'goToSecond()'; >
+       			<strong><?php echo $this->translate('Continue'); ?> </strong>
+       			<span></span>
+       		</a>
+       		
+			</div>
+		</div>
+	
+</div>

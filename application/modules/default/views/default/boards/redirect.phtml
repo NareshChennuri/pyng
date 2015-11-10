@@ -1,0 +1,6 @@
+<?php if($this->redirect) { ?>
+<script type="text/javascript">
+window.location = '<?php echo $this->redirect;?>';
+</script>
+<h2><?php echo $this->translate('Redirect to login!');?></h2>
+<?php } ?>

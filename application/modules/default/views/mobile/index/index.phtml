@@ -1,0 +1,47 @@
+
+<?php echo $this->header_part; 
+
+$masonry = true;
+?>
+
+
+
+
+<script type='text/javascript'>
+	var model  = new Model;
+		
+	model.get('./',function(data){
+		model.getTemplate('pinBox',function(pinBox){
+			$.each(data,function(i,pin){
+				if(pin.template === 'pins'){
+					pin.grayImg = model.grayImg;
+					var pin = $(pinBox).tmpl(pin).appendTo("#container");
+					pin.find('img').LazyLoad();
+				}
+			});
+		});
+	});
+</script>
+
+<script type="text/javascript" src='data_mobile/js/infscroll.js'>
+	$(document).ready(function(){
+		
+		infScroll();
+	});
+</script>
+<!-- here we put the variables for the users pinboards -->
+
+
+
+		<div id="container">
+		
+		</div>
+		
+	
+	
+		
+		
+		<div class="clear"></div>
+	</div>
+	
+<?php echo $this->footer_part; ?>

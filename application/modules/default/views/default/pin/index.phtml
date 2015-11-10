@@ -1,0 +1,43 @@
+<?php echo $this->header_part; ?>
+
+<?php if($this->result_data) { ?>
+<?php ob_start();?>
+<!-- begin box -->
+<script type="text/javascript">
+	head.ready('main', function() {
+		
+		<?php if($this->comments) { ?>
+			$.ajax({
+				url:'?controller=pin&action=getComments',
+				data: {pin_id: <?php echo $this->pin_id;?>},
+				dataType:"jsonp",
+				type:"GET",
+				jsonpCallback: "Pins.loadPinDetailComments"
+			});
+		<?php } ?>
+		$.ajax({
+			url:'?controller=pin&action=getOtherData',
+			data: {pin_id: <?php echo $this->pin_id;?>},
+			dataType:"jsonp",
+			type:"GET",
+			jsonpCallback: "Pins.loadPinDetailFooter"
+		});
+
+		Pins.EventsDetailView($('.event-inline-load-pin'));
+		
+	});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<?php } ?>
+
+<div id="pinpagecontainerwrapper">
+	<div id="pinpagecontainer" class="event-inline-load-pin">		
+	<!-- start box -->
+	<?php echo $this->result_data;?>
+	<!-- end box -->
+	</div>
+</div>
+	
+	
+
+<?php echo $this->footer_part; ?>

@@ -1,0 +1,55 @@
+<?php echo $this->header_part;?>
+
+<div class="titlebar">
+	<div class="title">
+		<h3 class="title-8"><?php echo sprintf($this->translate('Repin an image for your %s board'), $this->board_name);?></h3>
+	</div>
+</div>
+<div id="boxcontainerwrapper">
+	<div id="boxcontainer" class="event-masonry-container"></div>
+</div>
+
+<?php ob_start();?>
+<script type="text/javascript">
+<!--
+head.ready('jquery', function(){
+	Pins = {
+			//container: $('.event-load-pins'),
+			autoload: false
+	};
+});
+//-->
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<script type="text/javascript">
+	head.ready('main', function() {
+
+		$.ajax({
+			url: '<?php echo $this->board_url;?>',
+			dataType: "jsonp",
+			type:"GET",
+			jsonpCallback: "Pins.getPins",
+			complete: function() {
+				if(Pins.infscr) {
+					Pins.infscr.loading.finished.call(this);
+				}
+				Pins.container.infscroll('pause');
+				Pins.container.find('.box .preview .icons .like,.box .preview .icons .comment, .event-coments-box')
+				.remove().show(1, function() {
+					Pins.container.masonry( 'reload' );
+					Pins.container.find('.event-click-open-detail-view').removeAttr('href').unbind('click').find('img').css('cursor', 'default');
+				});
+			}
+		});
+
+		$('.event-click-submit-disable').live('click', function() {
+			if(!$(this).hasClass('disabled')) {
+				jQuery.fancybox.defaults.afterClose = function() {
+					window.location = './';
+				}
+			}
+		});
+		
+	});
+</script> 
+<?php echo $this->footer_part;?>

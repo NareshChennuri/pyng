@@ -1,0 +1,31 @@
+{{if history}}
+<div class="box feed event-masonry">
+	<h3 class="heading">${text_title_box}</h3>
+	<div class="recent-activity-holder">
+		{{each history}}
+		<span class="story">
+	        <span class="profile">
+	        	<a href="${$value.href}">
+	        		<img src="${$value.profile.avatars.avatar_image_a}" alt="${$value.profile.fullname}">
+	        	</a>
+	        </span>
+			<span class="info">
+				<a href="${$value.href}">
+					<strong>${$value.profile.fullname}</strong> 
+				</a>
+				{{if $value.href_pin}}
+					${$value.text_type[0]} 
+					<a {{if $value.text_type[2]}}class="event-click-open-detail-view"{{/if}} href="${$value.href_pin}">
+						<strong>${$value.text_type[1]}</strong> 
+					</a>
+				{{else}}
+					${$value.text_type}
+				{{/if}}
+				<span class="time" title="${$value.date_added}">${$value.text_date_dif}</span>
+			</span>
+			<br class="clear" />
+		</span>
+		{{/each}}
+	</div>
+</div>
+{{/if}}

@@ -1,0 +1,21 @@
+
+<div class="info_line top">
+	<h3 class="title mtop6"> <?php echo $this->translate('Local');?> </h3>
+
+	<div class="clear"></div>
+</div>
+
+<table cellspacing="0" cellpadding="0" class="formtable">
+	<tbody>
+		<tr>
+			<td width="150"><?php echo $this->translate('Default');?>:</td>
+			<td>
+				<span class="input-out">
+					<label for="default_upload_method_locale">
+						<input <?php echo ($this->default_upload_method == 'locale' ? 'checked="checked"' : '');?> type="radio" value="locale" name="config[default_upload_method]" id="default_upload_method_locale" /> <?php echo $this->translate('Yes');?>
+					</label>
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>

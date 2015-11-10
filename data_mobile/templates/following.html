@@ -1,0 +1,40 @@
+<script  id='pinBox' type='text/x-jquery-tmpl'>
+	<li>
+	
+	<a class="tappable">
+                                    <table class="pinner">
+                                        <tbody>
+                                            <tr>
+                                                <td class="pinner_image">
+	                                                <a href="${user_href}" style="border:none">    
+													<img src="${avatars.avatar_image_a}" class="profile user_image" alt="Profile picture of  ">
+													</a>
+                                                </td>
+                                                <td>
+                                                	<a href="${user_href}" style="border:none">
+                                                    <span class="user_name">${fullname}</span>
+                                                   </a>
+                                                </td>
+												
+												{{if user_follow_href}}
+                                                <td class="right">
+														
+													     <a class="mbtn user red follow" id="follow" style="float:right;{{if following_user}}display:none !important{{/if}}" data-link="${user_follow_href}">
+										       			 <strong>${text_follow}</strong><span></span>
+										   				 </a>
+														 </div>
+														 
+													
+										   				 <a class="mbtn user unfollow disabled pressed" id="unfollow" data-link="${user_follow_href}" style="float:right;margin-top:7px;{{if !following_user}}display:none !important{{/if}}">
+										       			 <strong>${text_unfollow}</strong><span></span>
+										   				 </a>
+														
+														 
+										   		</td>
+												{{/if}}
+                                            </tr>
+                                        </tbody>
+                                    </table> <!-- End Pinner -->
+      </a>
+</li>
+</script>

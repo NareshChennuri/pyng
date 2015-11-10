@@ -1,0 +1,47 @@
+<div class="box person <?php echo ($this->key ? 'odd' : '');?>">
+	<a style="background-image: url(<?php echo $this->user['avatar'];?>)" class="PersonImage ImgLink" href="<?php echo $this->user['href'];?>"></a>
+        
+    <?php if($this->loged && !$this->user['userFollowIgnore']) { ?>
+	<div class="PersonFollow">
+        <?php if($this->user['userIsFollow']) { ?>
+		<a href="<?php echo $this->user['follow'];?>" class="WhiteButton gray">
+			<?php echo $this->translate('Unfollow');?>
+		</a>
+		<?php } else { ?>
+       	<a href="<?php echo $this->user['follow'];?>" class="WhiteButton">
+			<?php echo $this->translate('Follow');?>
+		</a>
+       	<?php } ?>
+	</div>
+	<?php } ?>
+        
+	<div class="PersonInfo">
+		<h4><a href="<?php echo $this->user['href'];?>"><?php echo $this->user['fullname'];?></a></h4>
+		<div class="stats">
+			<a href="<?php echo $this->user['href'];?>">
+				<?php echo $this->user['boards'];?> <?php echo ($this->user['boards']==1?$this->translate('Board'):$this->translate('Boards'));?>
+			</a> ·
+			<a href="<?php echo $this->user['pins_href'];?>">
+				<?php echo $this->user['pins'];?> <?php echo ($this->user['pins']==1?$this->translate('Pin'):$this->translate('Pins'));?>
+			</a>
+		</div>
+
+		<?php if($this->user['location']) { ?>
+		<div class="icons2">
+			<span class="icon location"></span> <?php echo $this->user['location'];?>
+		</div>
+		<?php } ?>
+	</div>
+        
+	<?php if($this->user['thumbs']) { ?>
+	<div class="PersonPins">
+            
+		<?php foreach($this->user['thumbs'] AS $thumb) { ?>
+		<a class="ImgLink" href="<?php echo $thumb['href'];?>">
+			<img alt="Image" src="<?php echo $thumb['thumb'];?>">
+		</a>
+		<?php } ?>
+            
+	</div>
+	<?php } ?>
+</div>

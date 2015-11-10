@@ -1,0 +1,24 @@
+<div class="person-box">
+	{{if enable_follow_user}}
+	<p class="button">
+        {{if following_user}}
+		<a href="${user_follow_href}" class="grey-button event-click-follow-user disabled">${text_unfollow}</a>
+		{{else}}
+       	<a href="${user_follow_href}" class="grey-button event-click-follow-user">${text_follow}</a>
+       	{{/if}}
+	</p>
+	{{/if}}
+	<p class="avatar"><a href="${user_href}"><img src="${avatars.avatar_image_c}" alt="" /></a></p>
+	<div class="info">
+		<h4 class="name"><a href="${user_href}">${fullname}</a></h4>
+		<p class="meta"><a href="${user_href}">${boards} ${text_board_s}</a> &middot; <a href="${pins_href}">${pins} ${text_pin_s}</a></p>
+		{{if location}}
+		<p class="location">${location}</p>
+		{{/if}}
+		{{if latest_pins}}
+		<p class="pins"> 
+			{{each latest_pins}} <a href="${$value.href}"><img alt="${fullname}" class="event-load-lazy-load" src="data/images/grey.gif" data-original="${$value.images.thumb_image_a}" /></a> {{/each}}
+		</p>
+		{{/if}} 
+	</div>
+</div>

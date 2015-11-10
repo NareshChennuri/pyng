@@ -1,0 +1,35 @@
+<div class="box board event-masonry" id="board_{{if history_id}}${history_id}_{{/if}}${board_id}">
+	<div class="title">
+		<h3>{{html set_activity_title}} <a href="${board_url}">${title}</a></h3>
+		<p class="pins">${pins} ${text_pin_s}</p>
+	</div>
+	<div class="boardbody">
+	
+	<div class="inv-box">
+		<a href="${user_href}" class="thumb"><img class="event-load-lazy-load" src="data/images/grey.gif" data-original="${avatars.avatar_image_a}" /></a>
+		<span class="inv-text"><a href="${user_href}">${fullname}</a> ${text_invited_you}</span>
+		<div class="clear"></div>
+		<a href="${board_accept}" class="red-button small-button event-board-invate-accept">${text_accept}</a>
+		<a href="${board_decline}" class="grey-button small-button event-board-invate-accept">${text_decline}</a>
+	</div>
+		<div class="list">
+			<ul>
+				{{each thumbs}}
+				{{if $index == 0}}
+				<li class="cover"> <a href="${board_url}"> <img class="event-load-lazy-load" src="data/images/grey.gif" {{if $value}}data-original="${$value.thumb_image_c}"{{/if}} width="222" height="150" alt="${title}" /> </a> {{if edit_url && pins > 1}}<a class="edit-board grey-button event-click-open-popup" href="${board_cover}" title="${text_edit_board_cover}"> ${text_edit_board_cover} </a> {{/if}} </li>
+				{{else}}
+				<li> <a href="${board_url}"> <img class="event-load-lazy-load" src="data/images/grey.gif" {{if $value}}data-original="${$value.thumb_image_a}"{{/if}} width="55" height="55" alt="${title}" /> </a> </li>
+				{{/if}}
+				{{/each}}
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="optionsbar">
+			{{if enable_follow_board}}
+				{{if following_board}} <a class="grey-button inline-button disabled event-click-follow-board" href="${board_follow_href}" data-boardauthorid="${autor_id}">${text_unfollow}</a> {{else}} <a class="grey-button inline-button event-click-follow-board" href="${board_follow_href}" data-boardauthorid="${autor_id}">${text_follow}</a> {{/if}}
+			{{else edit_url}}
+			<a href="${edit_url}" class="grey-button inline-button">${text_edit}</a>
+			{{/if}}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,65 @@
+<?php if($this->images) { ?>
+<?php ob_start(); ?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$('.gallery-thumbs').click(function(){
+
+		var new_image = new Image();
+		new_image.src = this.href;
+		new_image.onload = function() {
+			$('.big-image-holder').animate({
+				'height': new_image.height
+			}, function(){
+				$('img',this).fadeOut(function(){
+					$(this).attr('src', new_image.src).fadeIn();
+				});
+			});
+		}
+		
+		return false;
+	});
+
+});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<?php } ?>
+
+
+
+<?php echo $this->header_part; ?>
+
+<div id="detail">
+
+	<?php echo $this->left_part;?>		
+	
+	<div class="page-read">
+		<h1><a href="<?php echo $this->full_url;?>"><?php echo $this->page['title']; ?></a></h1>
+		<div class="text">
+			
+			<?php /*if($this->images) { ?>
+			<div class="photo">
+				<p class="big-image-holder">
+					<img src="<?php echo $this->images[0]['popup'];?>" alt="<?php echo $this->images[0]['title'];?>" />
+				</p>
+				<ul>
+					<?php for($i=0; $i<count($this->images); $i++) { ?>
+					<li>
+						<a class="gallery-thumbs" href="<?php echo $this->images[$i]['popup'];?>" title="<?php echo $this->images[$i]['title'];?>">
+							<img src="<?php echo $this->images[$i]['thumb'];?>" alt="<?php echo $this->images[$i]['title'];?>" />
+						</a>
+					</li>
+					<?php } ?>
+				</ul>
+			</div>
+			<?php }*/ ?>
+			
+			<?php echo $this->page['description']; ?>
+			
+		</div>
+	</div>
+	
+	<div class="clear"></div>	
+</div>
+
+<?php echo $this->footer_part; ?>

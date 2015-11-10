@@ -1,0 +1,26 @@
+body{background-image:url(../images/bg.png);background-repeat:repeat;background-position:left top;font-size:12px;color:#666;font-family:Arial, Helvetica, sans-serif;margin:0;padding:0}
+ul,li,ol{list-style-type:none}
+img,ul,li,p,form,input,textarea,h1,h2,h3,h4{margin:0;padding:0}
+img{vertical-align:middle;border:0}
+.inputbox,textarea{font-family:Arial, Helvetica, sans-serif;font-size:12px;background-color:#FFF;border:1px solid #B8B8B8;padding:5px}
+textarea{overflow:auto}
+.select{padding:3px}
+.button{font-family:Arial, Helvetica, sans-serif;font-size:12px;background-image:url(../images/but-dark.png);background-repeat:repeat-x;background-position:left top;color:#FFF;border:1px solid #333;display:inline-block;background-color:#333;text-decoration:none;text-shadow:0 0 0;cursor:pointer;margin:0;padding:2px 8px}
+.button:hover{background-image:url(../images/but-light.png);background-repeat:repeat-x;background-position:left bottom;color:#333;border:1px solid #FFF;background-color:#FFF;text-decoration:none}
+.login-box{width:600px;-moz-border-radius:5px;-webkit-border-radius:5px 5px 5px 5px;border-radius:5px 5px 5px 5px;background-image:url(../images/box-head.png);margin:100px auto 0;padding:10px}
+.login-border{border:1px solid #ccc;background-image:url(../images/white-bg.png)}
+.login-style{border:3px solid #FFF;background-image:url(../images/login.jpg);background-repeat:no-repeat;background-position:center center}
+.login-header{height:71px;background-image:url(../images/login_header.png);background-repeat:no-repeat;background-position:center bottom;padding:15px 15px 0}
+.login-header .logo{width:auto;padding-top:0;text-align:center;font-size:28px;font-weight:lighter;margin:0}
+.login-inside{height:227px;padding-top:35px;border-bottom:1px solid #00D2FF}
+.login-inside p{text-align:center;padding-bottom:10px;font-weight:600}
+.login-data{width:310px;-moz-border-radius:3px;-webkit-border-radius:3px 3px 3px 3px;border-radius:3px 3px 3px 3px;background-image:url(../images/white-bg.png);margin:0 auto 20px;padding:40px 10px 35px 30px}
+.login-data label{display:block;width:80px;float:left;line-height:30px;text-align:right;margin-right:10px}
+.login-data .row{padding-bottom:10px}
+.login-data .submit{margin-left:90px}
+.login-footer{border-top:1px solid #FFF;height:22px;background-color:#3D494C;padding:10px 15px}
+.login-footer a{float:right;width:auto:}
+.msg{width:500px;margin-right:auto;margin-left:auto;padding-top:10px}
+.msgError{background-image:url(../images/error-bg.png);background-repeat:repeat-x;background-position:top;background-color:#FACCCC;color:#8D0D0D;border:1px solid #F3ABAB;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:5px;padding:5px}
+.msgError span{background-image:url(../images/error-ico.png);background-repeat:no-repeat;background-position:5px center;display:inline-block;padding-right:10px;padding-left:30px;font-weight:700}
+.msgError .error li{background-image:url(../images/required.html);background-repeat:no-repeat;background-position:left center;padding-left:15px;margin-left:15px}

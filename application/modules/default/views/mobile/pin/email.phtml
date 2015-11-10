@@ -1,0 +1,48 @@
+<div id="emailpin">
+	<?php if($this->error) { ?>
+	<div class="error-message"><?php echo $this->error;?></div>
+	<?php } ?>
+	<form action="<?php echo $this->url_form;?>" method="post">
+		<p class="hide">
+			<input type="hidden" name="pin_id" value="<?php echo $this->pin_id;?>" />
+			<input type="hidden" name="pin_oppener" value="<?php echo $this->getRequest()->getBaseUrl();?>" />
+		</p>
+		<div class=" clear"></div>
+		<p class="ntp clear">
+			<label for="name" class="hide"><?php echo $this->translate('Recipient Name')?>:<br /></label>
+			<input type="text" value="<?php echo $this->Recipient_name;?>" name="name" id="name" />
+		</p>
+		<div class=" clear"></div>
+		<p class=" clear">
+			<label for="email" class="hide"><?php echo $this->translate('Recipient Email')?>:<br /></label>
+			<input type="text" value="<?php echo $this->Recipient_email;?>" name="email" id="email" />
+		</p>
+		<div class=" clear"></div>
+		<p class=" clear">
+			<label for="message" class="hide"><?php echo $this->translate('Message')?>:<br /></label>
+			<textarea name="message" id="message" rows="5" cols="30"><?php echo $this->Recipient_message;?></textarea>
+		</p>
+		<div class=" clear"></div>
+		<p class="submit mtop10"><input type="submit" value="<?php echo $this->translate('Send Email')?>" name="emailpin" /></p>
+		<div class=" clear"></div>
+	</form>
+</div>
+
+<?php if(!$this->is_posted) { ?>
+<script type="text/javascript">
+$('#emailpin form').submit(function(){
+	$('.error-message').html('');
+	jQuery.post('<?php echo $this->url_form;?>', jQuery('#emailpin form').serialize(), function(result){
+		jQuery('#emailpin').replaceWith( result );
+	});
+	return false;
+});
+<?php if($this->pin_oppener) { ?> 
+$('input[name=pin_oppener]').val('<?php echo $this->pin_oppener;?>');
+<?php } else { ?>
+$('input[name=pin_oppener]').val(Pins.opener);
+<?php } ?>
+
+$('#emailpin input, #emailpin textarea').clearOnFocus();
+</script>
+<?php } ?>

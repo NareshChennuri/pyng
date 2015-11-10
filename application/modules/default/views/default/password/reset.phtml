@@ -1,0 +1,37 @@
+<?php echo $this->header_part; ?>
+
+<div id="formcontainerwrapper">
+	<div id="formcontainer">
+		<form method="post" action="" class="main-form">
+			<h3 class="title-9"><?php echo $this->translate('Reset Password');?></h3>
+			<div class="row">
+				<div class="cell-left">
+					<label for="id_email"><?php echo $this->translate('E-mail');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" maxlength="75" name="email" id="id_email" />
+				</div>
+				<div class="cell-right">
+					<p class="helptext tworows"><?php echo $this->translate('Enter your email address and we\'ll send you instructions.');?></p>	
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="submit"><button type="submit" class="red-button big-button" href="#"><?php echo $this->translate('Submit');?></button></div>
+		</form>
+	</div>
+</div>
+<?php if($this->error) { ?>
+<script type="text/javascript">
+head.ready('main',function(){
+	Pins.error('<?php echo $this->error;?>');
+});
+</script>
+<?php } ?>
+<?php if($this->success) { ?>
+<script type="text/javascript">
+head.ready('main',function(){
+	Pins.success('<?php echo $this->translate('Success! You should receive an email shortly.');?>');
+});
+</script>
+<?php } ?>
+<?php echo $this->footer_part; ?>

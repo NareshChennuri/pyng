@@ -1,0 +1,191 @@
+<!--<?php if($this->successfu_edite) { ?>
+<?php //ob_start();?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#Success').slideDown();
+});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<?php } ?>
+<?php if($this->error) { ?>
+<?php ob_start();?>
+<script type="text/javascript">
+$(document).ready(function(){
+	Pins.error('<?php echo $this->error;?>');
+});
+</script>
+<?php // $this->placeholder('inhead',// ob_get_clean());?>
+<?php } ?>
+
+	<div class="container">
+	
+	    <div id="header">
+	
+	        <h1 class="logo">
+				<a href="<?php echo $this->baseUrl;?>">
+					<img src="<?php echo $this->site_logo;?>" alt="<?php echo $this->getLayout()->placeholder('title');?>" />
+				</a>
+			</h1>
+	
+	    </div><!-- #header -->
+		
+	<!--	<form action="" method="post" id="invitationForm">
+		
+	    <div id="RequestContainer">
+	
+	        <div id="RequestInvitation">
+	
+	            <h1 style="margin-bottom:0px"><?php echo $this->translate('Sign up for an invite to join Pintastic');?></h1>
+				<h3 style="text-align:center;font-weight:300;margin-bottom:20px;color:#ad9c9c"><?php echo sprintf($this->translate('or %slogin%s to your account'), '<a style="color:#a19191" href="'.$this->login.'">', '</a>');?></h3>
+	            <div id="CompleteAccount">
+	                <div class="Request">
+	                    <ul>
+	                        <li>
+	                            <input type="text" class="" id="invitationBox" name="email" value="<?php echo $this->translate('Email');?>" />
+	                            <label class="hide"><?php echo $this->translate('Email');?></label>
+	                            <span class="fff"></span>
+	                            <span style="display: none;" class="BoardNameError"></span>
+	                        </li>
+	                    </ul>
+	                    <button type="submit" class="BigButton BlueButton"><strong><?php echo $this->translate('Request Invitation');?></strong><span></span></button>
+	                	<div class="clear"></div>
+					</div><!-- .Request -->
+	          <!--  </div>
+	
+	        </div>
+	
+	        <div class="hide" id="Success">
+	            <p>
+	            <?php echo $this->translate('Thanks! We\'ll send you an invite as soon as we can.');?>
+	            <br>
+	            <?php echo sprintf($this->translate('In the meantime, %s check out some pins %s.'), '<a href="'.$this->baseUrl.'">', '</a>');?>
+	            </p>
+	        </div><!-- #Success -->
+	
+	  <!--  </div><!-- #RequestContainer -->
+	    
+	 <!--   </form>
+	
+	</div>
+						
+	<div class="clear"></div>
+	
+
+-->
+
+ <?php
+ 	if($this->successfu_edite):
+		
+ ?> 
+ 
+ 	<script>
+		var showHide = setInterval(function(){
+			
+			if($('#invite_success')){
+					$("#invite_form").hide();
+ 					$("#invite_success").show();
+			}
+			
+			clearInterval(showHide);
+			
+		})		 	
+ 		
+ 	</script>
+ 
+ <?php endif; ?>
+ <script>
+ 	//validate the email
+ 
+ 
+ 	
+ 		
+ 	
+ 
+  	var submit  = setInterval(function(){
+  			
+  			if($("#inviteMe")){
+  				var button = document.getElementById('inviteMe');
+  				
+  				
+  				document.addEventListener('touchend',function(e){
+  				
+
+  					//if the target is te button
+  					if(e.target == button){
+  						validate();
+  					}
+  					
+  					
+  					//clear the error
+  					function clearError(){
+  						$(".error").remove();
+  					}
+  					
+  					function  validate(){
+  						clearError();
+  						if($("#invitation_box").val() == ''){
+  								$("#invite_me").prepend("<p class='error'><?php echo "".$this->translate('Please enter your email address!')."" ?></p>")
+  						}
+  						
+  						else{
+  						
+  							if(	$("#invitation_box").val().search('@') == -1){
+  								clearError();
+  								$("#invite_me").prepend("<p class='error'><?php echo "".$this->translate('There was an error! Please try again.')."" ?></p>")
+  							}
+  							if($("#invitation_box").attr('value').match(/\./) == null ){
+  								clearError();
+  								$("#invite_me").prepend("<p class='error'><?php echo "".$this->translate('There was an error! Please try again.')."" ?></p>")
+
+  							}
+  							else{
+  								if($('#invite_me').submit()){
+  									$("#invite_form").fadeOut();
+  									$('#invite_success').fadeIn();
+  								}
+  							}
+  						}
+  					}
+  				})
+  				
+  				clearInterval(submit);
+  			}
+  	},10);
+ </script>
+
+  <body class="hdpi">
+        <div class="page short" id="wrapper">
+            <div id="logo_wrapper">
+                <div id="logo">
+                    <a href="/" ontouchstart="">
+                       
+                        	<img src='<?php echo "uploads".JO_Registry::get('site_logo'); ?>' style='height:30px'/>
+                        
+                    </a>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+            
+          
+       	<div class="middle_cont" id="invitation">
+                <div id="invite_form">
+                    <h2><?php echo $this->translate('Sign up for an invite to join.') ?></h2>
+                    <form id="invite_me" action='' method='POST'>
+                        <input name='email' class="user" id="invitation_box" placeholder="Your Email Address" type="email">
+                        <a class="obtn large" id='inviteMe'>Invite Me</a>
+                    </form>
+                </div>
+
+                <div id="invite_success">
+                    <h2><?php echo $this->translate('Thanks!'); ?></h2>
+                    <p><?php echo $this->translate("We'll send you an invite very soon!"); ?></p>
+                </div>
+            </div>
+            
+            <div class="last_cont">
+                <div class="divider invitation bottom"></div>
+            </div>
+   
+  
+   </body>

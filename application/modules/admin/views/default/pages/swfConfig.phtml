@@ -1,0 +1,163 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+$(function(){
+	var files = 0;
+	if(typeof window.upload_errors == 'undefined') {
+		window.upload_errors = 0;
+	}
+
+	 $('#swf_upload').swfupload({
+		upload_url : "<?php echo $this->getRequest()->getBaseUrl() . $module;?>/pages/uploadImages/",
+		flash_url : "cms/<?php echo $module;?>/assets/swfupload/swfupload.swf",
+		post_params : {
+			"PHPSESSID" : '<?php echo JO_Session::sid();?>',
+			"id" : '<?php echo $this->getRequest()->getRequest('id','0');?>'
+		},
+		use_query_string : false,
+		button_placeholder_id : 'swf_btn',
+		button_width : <?php echo (mb_strlen($this->translate('Upload images'), 'utf-8') * 11);?>,
+		button_height : 16,
+		button_cursor : SWFUpload.CURSOR.HAND,
+		button_window_mode : SWFUpload.WINDOW_MODE.TRANSPARENT,
+		button_text: '<span class="theFont"><?php echo $this->translate('Upload images');?></span>',
+		button_text_style: ".theFont { font-size: 11px;font-weight: bold;color:#ffffff;font-family: Verdana,Geneva,sans-serif; }",
+		button_text_top_padding: 2,
+		button_text_left_padding: 10,
+		file_types : "*.jpg;*.jpeg;*.png;*.gif",
+		file_size_limit: "10 MB",
+		file_upload_limit: 0,
+		debug: false,
+		prevent_swf_caching: true
+	 })
+	 	.bind('fileQueuedError', function(event, file, error, msg){
+			switch(error)
+			{
+				case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
+					alert("<?php echo $this->translate('You have selected more files than permitted.');?>");
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
+					alert("<?php echo $this->translate('The file exceeds the allowable size:');?> " + file.name);
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
+					alert("<?php echo $this->translate('You have selected an invalid file:');?> " + file.name);
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
+					alert("<?php echo $this->translate('You have selected an invalid file format:');?> " + file.name);
+					return false;
+					break;
+			}
+	 	})
+	 	.bind('uploadError', function(event, file, error, msg){
+			switch(error)
+			{
+				case SWFUpload.UPLOAD_ERROR.HTTP_ERROR:
+					alert("<?php echo $this->translate('No response from the file server:');?> " + file.name);
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.MISSING_UPLOAD_URL:
+					alert("<?php echo $this->translate('Missing address to upload selected files.');?>");
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.IO_ERROR:
+					alert("<?php echo $this->translate('An error occurred while saving a file:');?> " + file.name);
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.SECURITY_ERROR:
+					alert("<?php echo $this->translate('Violate the security of file servers:');?> " + file.name);
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.UPLOAD_LIMIT_EXCEEDED:
+					alert("<?php echo $this->translate('Exceed the limits for a number of files to upload.');?>");
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.UPLOAD_FAILED:
+					alert("<?php echo $this->translate('There was a problem uploading files!');?>");
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.SPECIFIED_FILE_ID_NOT_FOUND:
+					alert("<?php echo $this->translate('There was a problem uploading files ID!');?>");
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.FILE_VALIDATION_FAILED:
+					alert("<?php echo $this->translate('There was a problem validating the files:');?> " + file.name);
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.FILE_CANCELLED:
+					alert("<?php echo $this->translate('Uploading files is canceled.');?>");
+					return false;
+					break;
+				case SWFUpload.QUEUE_ERROR.UPLOAD_STOPPED:
+					alert("<?php echo $this->translate('Uploading files is stopped.');?>");
+					return false;
+					break;
+			}
+	 	})
+	 	.bind('fileQueued', function(event, file){
+	 		$('#gallery').dialog('open');
+	 		mb = 1024*1024;
+	 		element = "<li id='file_" + file.index + "'><?php echo $this->translate('File:');?>" +file.name  + " (" + (file.size/mb).toFixed(2) + " MB)<div><div></div></div><span>0%</span></li>";
+			$("#flash_files_list").append(element);
+			$("#file_" + file.index + " span").html('');
+			++files;
+			$(this).swfupload('startUpload');
+        })
+         .bind('uploadProgress', function(event, file, bytesLoaded){
+            var percentage = Math.round((bytesLoaded/file.size)*100);
+            $("#file_" + file.index + " div div").css({
+				"width": percentage.toFixed(1) + "%"
+			});
+
+            $("#file_" + file.index + " span").html(percentage.toFixed(1) + "%" + " | <?php echo $this->translate('uploading...');?> ");
+	    
+        })
+        .bind('uploadComplete', function(event, file){
+	        $(this).swfupload('startUpload');
+        }).bind('fileQueueError', function(el, file, errorCode, message){
+        	
+        }).bind('uploadSuccess', function(el, file, serverData){ 
+        	var json = eval('('+serverData+')'); 
+			if(json.error) {
+				window.upload_errors++;
+				$("#file_" + file.index + " div").remove();
+				$("#file_" + file.index + " span").html('<span class="upload_error">'+json.error+'</span>');
+			} else {
+				$("#file_" + file.index + " span").html(100 + "%" + " | <?php echo $this->translate('finish');?> ");
+				$("#file_" + file.index).fadeOut(1500, function (){ $(this).remove() });
+				addImageOnBoard(json);
+				if(window.imagesUploadOptions) {
+					imagesUploadOptions();
+				}
+			} 
+			
+			if(!window.upload_errors) {
+				if(files == (file.index + 1)) {
+					$('#gallery').dialog('close');
+				}
+			}
+        });
+});
+
+function addImageOnBoard(json) {
+	html  = '<li id="item_'+json.id+'" style="display:none;">';
+	html += '<div class="controller">';
+	html += '<img class="image_src" src="'+json.thumb+'" alt="" />';
+	html += '<span class="control">';
+	html += '<a href="javascript:void(0);" class="sort">';
+	html += '<img src="cms/<?php echo $module;?>/images/drag.png" alt="" title="<?php echo $this->translate('Sort');?>" class="tooltip" /></a>';
+	html += '<a href="javascript:void(0);" onclick="imageEdit(\''+json.id+'\');">';
+	html += '<img src="cms/<?php echo $module;?>/images/edit.png" alt="" title="<?php echo $this->translate('Edit');?>" class="tooltip"/></a>';
+	html += '<a href="'+json.image+'" title="<?php echo $this->translate('Preview');?>" rel="prettyPhoto[pp_gal]">';
+	html += '<img src="cms/<?php echo $module;?>/images/search.png" alt="Img Title" title="<?php echo $this->translate('Preview');?>" class="tooltip view" /></a>';
+	html += '<a href="javascript:void(0);" class="delete" onclick="geleteImage(\''+json.id+'\');">';
+	html += '<img src="cms/<?php echo $module;?>/images/delete.png" alt="" title="<?php echo $this->translate('Delete');?>" class="tooltip" /></a>';
+	html += '</span>';
+	html += '</div>';
+	html += '</li>';
+	$('#galleryrow').append(html);
+	$('#item_'+json.id).fadeIn(1000);
+	$("#item_"+json.id+" .tooltip").simpletooltip();
+}

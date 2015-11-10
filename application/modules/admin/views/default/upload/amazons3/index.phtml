@@ -1,0 +1,47 @@
+
+<div class="info_line top">
+	<h3 class="title mtop6"> <?php echo $this->translate('Amazon S3');?> </h3>
+
+	<div class="clear"></div>
+</div>
+
+<table cellspacing="0" cellpadding="0" class="formtable">
+	<tbody>
+		<tr>
+			<td width="150"><?php echo $this->translate('Default');?>:</td>
+			<td>
+				<span class="input-out">
+					<label for="default_upload_method_amazons3">
+						<input <?php echo ($this->default_upload_method == 'amazons3' ? 'checked="checked"' : '');?> type="radio" value="amazons3" name="config[default_upload_method]" id="default_upload_method_amazons3" /> <?php echo $this->translate('Yes');?>
+					</label>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Aws Access Key');?>:</td>
+			<td>
+				<input type="text" size="55" value="<?php echo $this->awsAccessKey;?>" class="inputbox" name="config[awsAccessKey]" />
+        	</td>
+		</tr>
+				
+		<tr>
+			<td><?php echo $this->translate('Aws Secret Key');?>:</td>
+			<td>
+				<input type="text" size="55" value="<?php echo $this->awsSecretKey;?>" class="inputbox" name="config[awsSecretKey]" />
+        	</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Bucklet');?>:</td>
+			<td>
+				<input type="text" size="55" value="<?php echo $this->bucklet;?>" class="inputbox" name="config[bucklet]" />
+        	</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Aws Bucklet Location');?>:</td>
+			<td>
+				<input type="text" size="55" value="<?php echo $this->awsDomain;?>" class="inputbox" name="config[awsDomain]" />
+        	</td>
+		</tr>
+				
+	</tbody>
+</table>

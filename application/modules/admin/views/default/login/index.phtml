@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo $this->translate('Administration');?> - <?php echo $this->getRequest()->getBaseUrl();?></title>
+<link href="<?php echo $this->base_url;?>cms/admin/assets/login.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $this->base_url;?>cms/assets/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $this->base_url;?>cms/assets/corners.js"></script>
+</head>
+<body>
+<div class="login-box">
+  <div class="login-border">
+    <div class="login-style">
+      <div class="login-header">
+        <div class="logo"><?php echo $this->translate('Administration');?></div>
+      </div>
+      <form action="" method="post">
+        <div class="login-inside">
+          <div class="login-data">
+            <div class="row clear">
+              <label for="user"><?php echo $this->translate('Username');?>:</label>
+              <input name="username" type="text" class="inputbox" id="user"  size="25" />
+            </div>
+            <div class="row clear">
+              <label for="password"><?php echo $this->translate('Password');?>:</label>
+              <input name="password" type="password" class="inputbox" id="password"  size="25" />
+            </div>
+            <input name="submit" type="submit" class="button" value="<?php echo $this->translate('Login');?>" id="submit" />
+          </div>
+          <p><?php echo $this->translate('Enter your username and password to login.');?></p>
+        </div>
+        <div class="login-footer"> <a href="<?php echo $this->base_url;?>" class="button"><?php echo $this->translate('Go to the site');?></a> </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="msg">
+	<?php if($this->error) { ?>
+  	<div id="fader"><div class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error;?></div></div>
+    <script type="text/javascript"> 
+    $(document).ready(function() {       
+      setTimeout(function() {       
+        $("#fader").fadeOut("slow",    
+        function() {       
+          $("#fader").remove();  
+        });
+      },
+      4000);
+    });
+    </script>
+    <?php } ?>
+</div>
+</body>
+
+
+</html>

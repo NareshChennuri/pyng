@@ -1,0 +1,130 @@
+
+<?php echo $this->header_part; ?>
+<!-- hide the signup and login button -->
+
+<script type="text/javascript">
+	$("#login_banner").hide();
+	
+	var result = new Object;
+	
+	function checkUsername(){
+		//get the result of the check
+		$.ajax({
+			url:<?php echo "'".$this->check_username."'"; ?>,
+			type:"POST",
+			data:{"raw":$("#username").val()},
+			dataType:"json",	
+			success:function(data){
+				//pass it to the funciton which will decide about the colors. Paramaters are the json result  as data and the td where it should be deployed
+				deployResult(data,$("#username_check"));
+			}
+		})
+	}
+	
+	function  checkEmail(){
+		$.ajax({
+			url:<?php echo "'".$this->check_email."'"; ?>,
+			type:"POST",
+			data:{"raw":$("#email").val()},
+			dataType:"json",	
+			success:function(data){
+				//pass it to the funciton which will decide about the colors. Paramaters are the json result  as data and the td where it should be deployed
+				deployResult(data,$("#email_check"));
+				//console.log(data);
+			}
+		})
+	}
+	
+	function clearField(field){
+		$(field).empty();
+		$("#errorMessage").remove();
+	}
+	
+	function deployResult(data,field){
+		
+		clearField(field);
+		$.each(data,function(index,data){
+			if(index == 'success' && data =='Available'){
+				$(field).append("<span style='color:green'>Ok</span>");	
+			}
+			else{
+			   $(field).append("<span style='color:red'>Error</span>");	
+			   $(field).prev().append("<div id='errorMessage' style ='font-size:12px;color:red;margin-top:5px;'>"+data+"</div>")
+			}
+		})		
+	}
+	
+	
+	$(document).ready(function(){
+		//check the username;
+		checkUsername();
+		
+		$("#username").focusout(function(){
+		checkUsername();
+		})
+		
+		$("#email").focusout(function(){
+			checkEmail();
+		})
+		
+	})
+</script>
+
+
+
+
+<div class='banner' id='fb_banner' style="text-align: center;"> 
+	
+	<img src='https://graph.facebook.com/<?php echo $this->user_id_fb ?>/picture?type=large'>
+	<h2>
+				<?php echo $this->translate('Hello')." ".$this->firstname."! ".$this->translate('Create an account'); ?>
+    </h2>
+
+	<div class="stitching">
+	            <div class="stitch"></div>
+	            <div class="stitch white"></div>
+	        </div>
+	</div>
+</div>
+
+<div class='last_cont' id='connect' style="text-align:center;margin-top:20px;">
+	
+	<form method="post" action='' id='regForm'>
+		<table style='text-align:center;width: 80%;margin-left:10%'>
+			<tr>
+				<td valign="top">
+					<input  type="text" name='username' id='username' placeholder="Username" value='<?php echo $this->username ?>'>
+				</td>
+				<td valign="top" id='username_check' style="padding-top:8px;">
+					
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" >
+				<input  type="text" id='email' name='email' placeholder="<?php echo $this->translate("E-mail"); ?>" >
+				</td>
+				<td valign="top"  id='email_check' style="padding-top:8px;">
+					
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" >
+					<input  type="password" id='password' name='password' placeholder="<?php echo $this->translate("Password"); ?>" >
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a class="red mbtn" type="submit" ontouchstart="" onclick="$('#regForm').submit()">
+                            <strong><?php echo  $this->translate('Sign Up') ?></strong>
+                            <span></span>
+        			</a>
+				</td>
+			</tr>
+		</table>
+		
+	</form>
+	
+	<?php print_r($_POST); ?>
+	
+	
+</div>

@@ -1,0 +1,54 @@
+<?php if($this->error) { ?>
+<script type="text/javascript">
+Pins.error('<?php echo $this->error;?>');
+</script>
+<?php } ?>
+
+<div id="formcontainer">
+	<div class="popup">
+		<form class="main-form" action="<?php echo $this->url_form;?>" method="post">
+			<div class="row">
+				<div class="cell-left">
+					<label for="name"><?php echo $this->translate('Recipient Name')?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" name="name" id="name" class="event-clear-focus" value="<?php echo $this->Recipient_name;?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="email"><?php echo $this->translate('Recipient Email')?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" name="email" id="email" class="event-clear-focus" value="<?php echo $this->Recipient_email;?>" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="message"><?php echo $this->translate('Message')?></label>
+				</div>
+				<div class="cell-center">
+					<textarea name="message" id="message" rows="5" cols="30" class="event-clear-focus"><?php echo $this->Recipient_message;?></textarea>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="submit"><button class="red-button big-button event-click-submit-disable" name="emailpin"><?php echo $this->translate('Send Email')?></button></div>
+			<p class="hide"><input type="hidden" name="pin_id" value="<?php echo $this->pin_id;?>" /></p>
+		</form>
+	</div>
+</div>
+
+<?php if(!$this->is_posted) { ?>
+<script type="text/javascript">
+$('.popup form').submit(function(){
+	var button = $('.event-click-submit-disable').addClass('disabled').attr('disabled', true);
+	loading.load(button);
+	jQuery.post('<?php echo $this->url_form;?>', jQuery(this).serialize(), function(result){
+		jQuery('#formcontainer').replaceWith( result );
+	});
+	return false;
+});
+</script>
+<?php } ?>

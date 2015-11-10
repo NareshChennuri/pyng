@@ -1,0 +1,109 @@
+ <?php 
+	$fblink = $twlink = null;
+	if($this->user_login_buttons) {
+		foreach($this->user_login_buttons AS $but) {
+			if($but['key'] == 'facebook') {
+				$fblink = $but['view']->login_url;
+			} elseif($but['key'] == 'twitter') {
+				$twlink = $but['view']->login_url;
+			}
+		}
+	}
+?>
+ <script type='text/javascript'>
+ 	
+ </script>
+
+  <body class="hdpi">
+
+  	   <?php 
+		/*  	   
+  	   		if($this->fb_register){
+  	   		 	//echo $this->fb_register;
+  	   			$this->fb_register = str_replace('page','touch',$this->fb_register);
+			//	echo $this->fb_register;
+			
+  	   		}
+			*/
+			
+  	   		
+  	   ?> 
+  	
+        <div class="page short" id="wrapper">
+            <div id="logo_wrapper">
+                <div id="logo" style="">
+                    <a href="/" ontouchstart="">
+                       
+                        	<img src='<?php echo "uploads".Helper_Config::get('site_logo'); ?>' style='max-width:180px; max-height: 60px;'/>
+                        
+                    </a>
+                </div>
+            </div>
+			
+            <div class="divider"></div>
+            
+          
+       	<div class="middle_cont" id="invitation" >
+       			
+     
+      			<?php if($this->error) { ?>
+      				
+      					<p class='error' style="margin-top: 20px;font-size:12px; ">
+      						<?php echo $this->error; ?>
+      					</p>
+      				
+      			<?php } ?>
+       		
+       		      <div id="invite_form" >
+       					
+                    <form id="invite_me" action='' method='POST' style='width:none !important;'>
+                    		<?php if($fblink) { ?>
+                    		<div class="social_buttons register" style="z-index: 993; padding-left:5%">
+				      			  <div class="inset" style="z-index: 992; margin-bottom:10px	 ">
+				            			<a class="fb login_button" href="<?php echo $fblink; ?>">
+				               				 <span class="logo_wrapper"><span class="logo_or"></span></span>
+				                			 <span><?php echo $this->translate('Register with Facebook') ?></span>
+				           				 </a>
+	        					</div>
+	       		       	 		<div class="clear" style="z-index: 991; "></div>
+	    					</div>
+	    					<?php } ?>
+	    					<h2 style="margin-bottom:20px"><?php echo $this->translate('or enter your credentials:') ?></h2>
+                      	<div id='personal_details' style="border-bottom: solid 1px #E2E2E2;padding-left:5%">
+	                     	<input name='email' class="user" id="registration_box" placeholder="<?php echo $this->translate('Your Email'); ?>" type="email" style='width: 250px !important' autocomplete='off'>
+	                       	<input name='firstname' class="user" id="registration_box" placeholder="<?php echo $this->translate('Your First Name') ?>" type="text" style='width: 250px !important' autocomplete='off'>
+	                       	<input name='lastname' class="user" id="registration_box" placeholder="<?php echo $this->translate('Your Last Name') ?>" type="text" style='width: 250px !important' autocomplete='off'>
+	                       	<input name='username' class="user" id="registration_box" placeholder="<?php echo $this->translate('Your Username') ?>" type="text" style='width: 250px !important' autocomplete='off'>
+						</div>                
+                    	
+                    	<div id='pass_details' style="border-bottom: solid 1px #E2E2E2;padding-left:5%;margin-top:5px;">
+	                       	<input name='password' class="user" id="registration_box" placeholder="<?php echo $this->translate('Your Password') ?>" type="password" style='width: 250px !important' autocomplete='off'>
+	                       	<input name='password2' class="user" id="registration_box" placeholder="<?php echo $this->translate('Repeat Password') ?>" type="password" style='width: 250px !important' autocomplete='off'>
+						</div>                    
+                    	
+                    	<div id='sign_up' style="padding-left:5%;margin-top:5px;text-align: center">
+								<a class="red mbtn" type="submit" ontouchstart="" onclick="$('#invite_me').submit()" style='margin-left:-5%;padding-bottom:10px'>
+                           			 <strong><?php echo  $this->translate('Sign Up') ?></strong>
+                            		<span></span>
+        						</a>
+						</div>
+                    	
+                    </form>
+   					
+                <div id="invite_success">
+                    <h2><?php echo $this->translate('Thanks!'); ?></h2>
+                    <p><?php echo $this->translate("We'll send you an invite very soon!"); ?></p>
+                </div>
+            </div>
+            
+          
+          
+   </div>
+  <div class='divider bottom'></div>
+   </body>
+   
+   
+   
+   	
+   
+

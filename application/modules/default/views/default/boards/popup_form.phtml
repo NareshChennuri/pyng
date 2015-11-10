@@ -1,0 +1,194 @@
+<div id="formcontainer">
+	<?php if(!$this->is_edit) { ?>
+	<div class="popup">
+	<?php } ?>
+	<form method="post" action="<?php echo $this->form_action;?>" class="main-form" id="CreateBoard<?php echo ($this->is_edit?'-edit':'');?>">
+		<?php if($this->is_edit) { ?>
+		<h3 class="title-9"><a id="delete_confirm" href="#Modal_show_delete" title="<?php echo $this->translate('Delete Board');?>" class="grey-button big-button fright event-click-open-popup-default"><?php echo $this->translate('Delete Board');?></a> <?php echo $this->translate('Edit Board');?> / <a href="<?php echo $this->board_href;?>"><?php echo $this->title?></a></h3>
+		<?php } ?>
+		<div class="row">
+			<div class="cell-left">
+				<label for="id_first_name<?php echo ($this->is_edit?'-edit':'');?>"><?php echo $this->translate('Board Name');?></label>
+			</div>
+			<div class="cell-center">
+				<input type="text" id="id_first_name<?php echo ($this->is_edit?'-edit':'');?>" value="<?php echo $this->title?>" name="newboard" />
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<?php if($this->config_board_description_enable) { ?>
+		<div class="row">
+			<div class="cell-left">
+				<label for="id_boarddesc<?php echo ($this->is_edit?'-edit':'');?>"><?php echo $this->translate('Board Description');?></label>
+			</div>
+			<div class="cell-center">
+				<textarea id="id_boarddesc<?php echo ($this->is_edit?'-edit':'');?>" name="description"><?php echo $this->board_description;?></textarea>
+			</div>
+			
+			<div class="cell-right">
+				<p class="helptext helptext-padT">
+					<span class="text_counter"></span>
+				</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php } ?>
+		
+		<div class="row">
+			<div class="cell-left">
+				<label for="category_id-select<?php echo ($this->is_edit?'-edit':'');?>"><?php echo $this->translate('Board Category');?></label>
+			</div>
+			<div class="cell-center">
+				<select name="category_id" id="category_id-select<?php echo ($this->is_edit?'-edit':'');?>">
+					<option value=""><?php echo $this->translate('Select Category');?></option>
+					<?php foreach($this->categories AS $category) { ?>
+					<?php if($this->category_id == $category['category_id']) { ?>
+					<option selected="selected" value="<?php echo $category['category_id'];?>"><?php echo $category['title'];?></option>
+					<?php } else { ?>
+					<option value="<?php echo $category['category_id'];?>"><?php echo $category['title'];?></option>
+					<?php } ?>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<?php if($this->enable_private_boards) { ?>
+		<div class="row">
+			<div class="cell-left">
+				<label for="id_dont_search_index"><?php echo $this->translate('Secret');?></label>
+			</div>
+			<div class="cell-center">
+				<div class="custom-checkboxes">
+					<label for="private_board<?php echo ($this->is_edit?'-edit':'');?>"><input type="checkbox" id="private_board<?php echo ($this->is_edit?'-edit':'');?>" name="public" <?php echo (!$this->private ? 'checked="checked"' : '');?> /></label>
+				</div>
+				<?php if($this->text_private_boards) { ?>
+				<div class="clear"></div>
+				<p class="helptext">
+					<?php echo $this->translate('How do secret boards work?')?> 
+					<a href="<?php echo $this->text_private_boards;?>" onclick="target='_blank'">
+						<strong><?php echo $this->translate('Learn more.')?></strong>
+					</a>
+				</p>
+				<?php } ?>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php } ?>
+		
+		<div class="row">
+			<div class="cell-left">
+				<label for="id_website"><?php echo $this->translate('Who can pin?');?></label>
+			</div>
+			<div class="cell-center">
+				<div class="collaborators">
+					<ul class="list">
+						<li>
+							<p class="avatar"><a href="<?php echo $this->userhref;?>"><img alt="<?php echo $this->fullname;?>" src="<?php echo $this->avatars['avatar_image_a'];?>" /></a></p>
+							<p class="fullname"><a href="<?php echo $this->userhref;?>"><?php echo $this->fullname;?></a></p>
+							<span class="noteholder"><?php echo $this->translate('Creator');?></span>
+							<div class="clear"></div>
+						</li>
+					</ul>
+					<input type="text" class="event-clear-focus event-auto-complete-friends<?php echo ($this->is_edit?'-edit':'');?>" value="<?php echo $this->translate('Add another pinner');?>" name="collaborator_name" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" />	
+					<ul class="list event-auto-complete-friends-append<?php echo ($this->is_edit?'-edit':'');?>">
+						<?php if($this->another_users) { ?>
+						<?php foreach($this->another_users AS $u) { ?>
+						<li class="user_fr_<?php echo $u['user_id'];?>">
+							<input type="hidden" name="friends[<?php echo $u['user_id'];?>]" value="<?php echo $u['user_id'];?>" />
+							<p class="avatar"><a href="<?php echo $u['href'];?>"><img alt="<?php echo $u['fullname'];?>" src="<?php echo $u['avatars']['avatar_image_a'];?>" class="collaborator_image" /></a></p>
+							<p class="fullname"><a href="<?php echo $u['href'];?>"><?php echo $u['fullname'];?></a></p>
+							<span class="noteholder"><a class="close-button" href="javascript:void(0);" onclick="$('.user_fr_<?php echo $u['user_id'];?>').remove();"><?php echo $this->translate('Remove');?></a></span>
+							<div class="clear"></div>
+						</li>
+						<?php } ?>
+						<?php } ?>
+					</ul>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="submit"><button class="red-button big-button event-click-submit-disable"><?php echo ($this->board_id?$this->translate('Edit Board'):$this->translate('Create Board'));?></button></div>
+	</form>
+	<?php if(!$this->is_edit) { ?>
+	</div>
+	<?php } ?>
+</div>
+
+<?php if($this->is_edit) { ?>
+<div class="hide" id="Modal_show_delete">
+	<div class="popup">
+		<div class="popuptext">
+			<p><?php echo $this->translate('Are you sure you want to permanently delete this board?')?></p>
+			<p class="buttons"><a onclick="$.fancybox.close(); return false" class="grey-button big-button" href="#"><?php echo $this->translate('Cancel');?></a> <a class="red-button big-button" href="<?php echo $this->board_delete;?>"><?php echo $this->translate('Delete Board')?></a></p>
+		</div>
+	</div>
+</div>
+<?php } ?>
+<script type="text/javascript">
+head.ready('main',function(){
+	$('#category_id-select<?php echo ($this->is_edit?'-edit':'');?>').selectBox();
+
+	$('.event-auto-complete-friends<?php echo ($this->is_edit?'-edit':'');?>').autoComplete({
+		ajax: '<?php echo $this->friends_href;?>',
+		maxHeight: 331,
+		backwardsCompatible: true,
+		onListFormat: function(event, data) { 
+			data.ul.empty();
+			if(data.list && data.list.users) {
+				$(data.list.users).each(function(i, user){
+					if( $('.event-auto-complete-friends<?php echo ($this->is_edit?'-edit':'');?> .user_fr_' + user.user_id).size() < 1 ) {
+						$('head').requireTemplate('autocomplete/' + user.template).tmpl(user).appendTo(data.ul);
+					}
+				});
+			}
+		},
+		onSelect: function(undefined,user, ul) { 
+			user = $(user).data('tmplItem').data;
+			if( $('.event-auto-complete-friends<?php echo ($this->is_edit?'-edit':'');?> .user_fr_' + user.user_id).size() < 1 ) {
+				$('head').requireTemplate('autocomplete/' + user.template_2).tmpl(user).appendTo('.event-auto-complete-friends-append<?php echo ($this->is_edit?'-edit':'');?>');
+			}
+			$(ul).hide();
+		}
+	});
+
+	$('#CreateBoard<?php echo ($this->is_edit?'-edit':'');?>').submit(function() {
+		var button = $('#CreateBoard<?php echo ($this->is_edit?'-edit':'');?> .event-click-submit-disable').addClass('disabled').attr('disabled', true);
+		loading.load(button);
+		$.post('<?php echo $this->form_action;?>', $(this).serialize(), function(data){
+			if(data.redirect) {
+				window.location = data.redirect;
+			} else if(data.error) {
+				Pins.error(data.error);
+				$('#CreateBoard<?php echo ($this->is_edit?'-edit':'');?> .event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+				loading.stop();
+			} else {
+				Pins.error(data);
+				$('#CreateBoard<?php echo ($this->is_edit?'-edit':'');?> .event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+				loading.stop();
+			}
+		}, 'json');
+		return false;
+	});
+
+	<?php if($this->config_board_description_enable) { ?>
+	$('#id_boarddesc<?php echo ($this->is_edit?'-edit':'');?>').jqEasyCounter({
+		holder: '.text_counter',
+		maxChars: 1000,
+		maxCharsWarning: 950,
+		template: '<?php echo $this->translate('{count} characters remaining');?>'
+	});
+	<?php } ?>
+
+	head.ready('switcherSlider', function() {
+		$('#private_board<?php echo ($this->is_edit?'-edit':'');?>').switcherSlider({
+			text: {
+				on: '<?php echo $this->translate('ON');?>',
+				off: '<?php echo $this->translate('OFF');?>'
+			}
+		});
+	});
+	
+});
+
+</script>

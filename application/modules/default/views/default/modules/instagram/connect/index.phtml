@@ -1,0 +1,35 @@
+<?php ob_start();?>
+<script type="text/javascript">
+head.ready('main', function() {
+	head.js({'instagram': 'data/js/lib/instagram.js'});
+});
+
+head.ready('switcherSlider', function() {
+	$('.event-instagram-connect').switcherSlider({
+			text: {
+				on: '<?php echo $this->translate('ON');?>',
+				off: '<?php echo $this->translate('OFF');?>'
+			},
+			stageClass: 'event-instagram-connect-click'
+	});
+
+	$('.event-instagram-connect-click').live('click',function() {
+		Instagram.startInstagramConnect("<?php echo $this->instagram_connect_url;?>");
+	});
+	
+});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+
+<div class="row">
+	<div class="cell-left">
+		<label><?php echo $this->translate('Instagram');?></label>
+	</div>
+	<div class="cell-center">
+		<div class="custom-checkboxes">
+			<label for="instagram_connect"><input class="event-instagram-connect" type="checkbox" id="instagram_connect" <?php echo ($this->instagram_connect ? 'checked="checked"' : '');?> /> <?php echo $this->translate('Link to Instagram');?></label>
+		</div>
+		<p class="button-newrow" id="instagram_fetch"<?php if(!$this->fetch_instagram_media) { ?> style="display:none;"<?php } ?>><a class="grey-button big-button" href="<?php echo $this->instagram_fetch;?>"><?php echo sprintf($this->translate('Fetch media from Instagram on %s'), $this->site_name);?></a></p>
+	</div>
+	<div class="clear"></div>
+</div>

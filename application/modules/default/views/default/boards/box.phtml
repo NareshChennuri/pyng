@@ -1,0 +1,58 @@
+<<?php echo ($this->enable_sort ? 'li' : 'div');?> class="box new_board_box" id="board_<?php echo $this->board['board_id'];?>">
+	
+	<h3 class="title serif">
+		<?php echo $this->set_activity_title;?>
+		<a href="<?php echo $this->board['href'];?>">
+			<?php echo $this->board['title'];?>
+		</a>
+	</h3>
+	<h4>
+		<?php echo $this->board['pins'];?> <?php echo ($this->board['pins']==1 ? $this->translate('Pin') : $this->translate('Pins'));?>
+	</h4>
+	
+	<div class="<?php echo ($this->enable_sort ? 'box' : 'box2');?>">
+		<div class="apps">
+			<?php if(isset($this->board['invited'])): ?>
+				<div class="inv-box">
+					<a href="<?php echo $this->board['user_href']; ?>"><img src="<?php echo $this->board['avatar']; ?>"></a>
+					 <a href="<?php echo $this->board['user_href']; ?>"><?php echo $this->board['firstname']; ?> <?php echo $this->board['lastname']; ?></a>
+					<?php echo $this->translate('invited you to this board'); ?>
+					<div class="clear"></div>
+					<a href="<?php echo $this->board['accept']; ?>" class="accept"><?php echo $this->translate('Accept'); ?></a>
+					<a href="<?php echo $this->board['decline']; ?>" class="decline"><?php echo $this->translate('No thanks'); ?></a>
+				</div>
+			<?php endif; ?>
+			<ul class="list">
+				<?php foreach($this->board['thumbs'] AS $key => $thumb) { ?>
+				<?php if($key==0) { ?>
+				<li class="cover">
+					<a href="<?php echo $this->board['href'];?>">
+						<img src="data/images/grey.gif" data-original="<?php echo ($thumb?$thumb:'data/images/grey.gif');?>" width="223" height="150" alt="<?php echo $this->board['title'];?>" />
+					</a>
+				</li>
+				<?php } else { ?>
+				<li class="<?php echo ($key%5==4 ? ' last' : '');?>">
+					<a href="<?php echo $this->board['href'];?>">
+						<img src="data/images/grey.gif" data-original="<?php echo ($thumb?$thumb:'data/images/grey.gif');?>" width="55" height="55" alt="<?php echo $this->board['title'];?>" />
+					</a>
+				</li>
+				<?php } ?>
+				<?php } ?>
+			</ul>
+			<div class="clear"></div>
+			<?php if($this->loged && $this->board['userFollowIgnore']) { ?>
+			<p class="follow">
+				<?php if($this->board['boardIsFollow']) { ?>
+				<a class="gray" href="<?php echo $this->board['follow'];?>"><?php echo $this->translate('Unfollow');?></a>
+				<?php } else { ?>
+				<a href="<?php echo $this->board['follow'];?>"><?php echo $this->translate('Follow');?></a>
+				<?php } ?>
+			</p>
+			<?php } elseif(isset($this->board['edit']) && $this->board['edit']) { ?>
+			<p class="buttonHolder">
+				<a href="<?php echo $this->board['edit'];?>"><?php echo $this->translate('Edit');?></a>
+			</p>
+			<?php } ?>
+		</div>
+	</div>
+</<?php echo ($this->enable_sort ? 'li' : 'div');?>>

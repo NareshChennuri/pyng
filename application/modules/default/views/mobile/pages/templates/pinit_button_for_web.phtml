@@ -1,0 +1,115 @@
+<div id="GenerateAButton">
+
+    <div id="PinItPreview">
+        <div class="line">
+            <label for="PinItLayoutInput"><strong><?php echo $this->translate('Pin Count');?></strong></label>
+            <select tabindex="4" name="layout" id="PinItLayoutInput">
+                <option value="horizontal"><?php echo $this->translate('Horizontal');?></option>
+                <option value="vertical"><?php echo $this->translate('Vertical');?></option>
+                <option value="none"><?php echo $this->translate('No Count');?></option>
+            </select>
+        </div>
+        <div class="preview" id="NonePreview" style="display: none"></div>
+        <div class="preview" id="VerticalPreview" style="display: none;"></div>
+        <div class="preview" id="HorizontalPreview" style="display: none;"></div>
+    </div>
+
+    <form id="CodeGenerator">
+        <div class="line">
+            <label for="PinItUrlInput"><strong><?php echo $this->translate('URL');?></strong> <?php echo $this->translate('of the page the pin is on:');?></label>
+            <input type="text" tabindex="1" value="" name="url" id="PinItUrlInput">
+        </div>
+        <div class="line">
+            <label for="PinItMediaInput"><strong><?php echo $this->translate('URL');?></strong> <?php echo $this->translate('of the image to be pinned:');?></label>
+            <input type="text" tabindex="2" value="" name="media" id="PinItMediaInput">
+        </div>
+        <div class="line">
+            <label for="PinItDescriptionInput"><strong><?php echo $this->translate('Description');?></strong> <?php echo $this->translate('of what they\'re pinning:');?></label>
+            <textarea tabindex="3" name="description" id="PinItDescriptionInput"></textarea>
+            <cite><?php echo $this->translate('Descriptions are optional but recommended; they will make pinning much easier for your users.');?></cite>
+        </div>
+    </form>
+
+    <div style="clear:both"></div>
+
+    <div id="PinItCodeBlock">
+        <p><?php echo $this->translate('Add this code to your page, right where you want the button to appear:');?></p>
+        <textarea id="PinItCode" readonly="readonly"></textarea>
+        <p><?php echo sprintf($this->translate('Add this code to your page only once, directly above the closing %s tag:'), '<tt>&lt;/BODY&gt;</tt>');?></p>
+        <textarea id="PinItScript" readonly="readonly"></textarea>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    <p><?php echo $this->translate('Important: you can have as many Pin It buttons on a page as you like, but you only need to include the JavaScript once!');?></p>
+
+<?php ob_start();?>
+    <script type="text/javascript">
+        $(function() {
+            function updateCode() {
+
+                var pinUrl = "<?php echo $this->bookmarklet;?>";
+                var jsUrl = "<?php echo $this->baseUrl;?>js/pinit.js";
+                var imgUrl = "<?php echo $this->baseUrl;?>data/images/PinExt.png";
+                var layout = $("#PinItLayoutInput").val();
+
+                var params = {
+                    url: $("#PinItUrlInput").val(),
+                    media: $("#PinItMediaInput").val(),
+                    description: $("#PinItDescriptionInput").val()
+                };
+
+                var sep = "?";
+                for (var k in params) {
+                    if (!params[k]) continue;
+                    pinUrl += sep + k + "=" + encodeURIComponent(params[k]);
+                    sep = "&amp;";
+                }
+
+                var linkCode = '<a href="' + pinUrl + '" class="pin-it-button"' +
+                	' count-layout="' + layout + '"><img border="0" src="' + imgUrl + '" title="<?php echo $this->translate('Pin It');?>" /></a>';
+
+		        $("#PinItCode").val(linkCode);
+		
+		        var linkScript = '<script type="text/javascript" src="' + jsUrl + '"></' + 'script>';
+		
+		        $("#PinItScript").val(linkScript);
+
+            }
+
+            function updatePreview() {
+                $(".preview").hide();
+
+                var layout = $("#PinItLayoutInput").val();
+                if (layout == "none") {
+                    $("#NonePreview").show();
+                } else if (layout == "vertical") {
+                    $("#VerticalPreview").show();
+                } else { 
+                    $("#HorizontalPreview").show();
+                }
+
+                updateCode();
+            }
+
+            $("#PinItUrlInput").keyup(updateCode);
+            $("#PinItMediaInput").keyup(updateCode);
+            $("#PinItDescriptionInput").keyup(updateCode);
+            $("#PinItLayoutInput").change(updatePreview);
+
+            updatePreview();
+
+            $("#PinItCode").click(function() {
+                $(this).select();
+            });
+
+            $("#PinItScript").click(function() {
+                $(this).select();
+            });
+
+            $('#PinItLayoutInput').selectBox();
+
+        });
+    </script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+</div>

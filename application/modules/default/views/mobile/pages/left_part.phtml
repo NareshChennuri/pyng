@@ -1,0 +1,21 @@
+<?php if($this->pages) { ?>
+<div class="pages-menu">
+	<ul>
+		<?php foreach($this->pages AS $page) { ?>
+		<li<?php echo ($page['active']?' class="active"':'');?>>
+			<a<?php echo ($page['active']?' class="active-href"':'');?> href="<?php echo $page['href'];?>"><?php echo $page['title'];?></a>
+		</li>
+		<?php } ?>
+	</ul>
+	<?php /* ?>
+	<div class="separator"></div>
+	<ul>
+		<?php foreach($this->pages AS $page) { ?>
+		<li>
+			<a href="<?php echo $page['href'];?>"><?php echo $page['title'];?></a>
+		</li>
+		<?php } ?>
+	</ul>
+	<?php */ ?>
+</div>
+<?php } ?>

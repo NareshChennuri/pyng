@@ -1,0 +1,63 @@
+<?php echo $this->header_part; ?>
+
+<div id="detail">
+
+	<div class="FixedContainer">
+
+        <form accept-charset="utf-8" method="post" action="<?php echo $this->form_action;?>" class="Form StaticForm mtop100" id="profileEdit">
+
+          <h3><?php echo $this->translate('Change Password');?></h3>
+
+            <ul>
+                <li>
+                    <label for="id_old_password"><?php echo $this->translate('Old');?></label>
+                    <div class="Right">
+                        
+                        <input type="password" id="id_old_password" name="old_password">
+                        <span class="help_text"><?php echo $this->translate('Your current password');?> ·<a href="<?php echo $this->reset;?>"><?php echo $this->translate('Reset Password');?></a></span>
+                        <span class="help_text"></span>
+                    </div>
+                </li>
+
+                <li>
+                    <label for="id_new_password1"><?php echo $this->translate('New');?></label>
+                    <div class="Right">
+                        
+                        <input type="password" id="id_new_password1" name="new_password1">
+                        <span class="help_text"><?php echo $this->translate('Be tricky!');?></span>
+                        <span class="help_text"></span>
+                    </div>
+                </li>
+
+                <li>
+                    <label for="id_new_password2"><?php echo $this->translate('New, Again');?></label>
+                    <div class="Right">
+                        
+                        <input type="password" id="id_new_password2" name="new_password2">
+                        <span class="help_text"><?php echo $this->translate('Confirm password');?></span>
+                    </div>
+                </li>
+
+            </ul>
+
+            <div class="Submit">
+                <a onclick="$('#profileEdit').submit(); return false" class="Button WhiteButton RedButton Button24" href="#">
+                    <strong><?php echo $this->translate('Change Password');?></strong>
+                    <span></span>
+                </a>
+            </div>
+        </form>
+    </div>	
+
+	<div class="clear"></div>	
+</div>
+
+<?php if($this->error) { ?>
+<script type="text/javascript">
+$(window).load(function(){
+	Pins.error('<?php echo $this->error;?>');
+});
+</script>
+<?php } ?>
+
+<?php echo $this->footer_part; ?>

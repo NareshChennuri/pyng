@@ -1,0 +1,51 @@
+<div class="p20o">
+	<h4 class="box_title tcenter"><?php echo $this->translate('Success!');?></h4>
+	<p class="tcenter"><?php echo $this->translate('Your pin was pinned!');?></p>
+	
+	<p class="mt10px">
+		<a class="mybutton See_your_Pin" href="<?php echo $this->pin_url;?>"><?php echo $this->translate('See your Pin');?></a>
+		<a class="mybutton" href="https://twitter.com/share?url=<?php echo $this->pin_url;?>" onclick="return shareButton('<?php echo $this->pin_url;?>', 'twitter');"><?php echo $this->translate('Tweet your Pin');?></a>
+		<?php if(!JO_Session::get('user[facebook_timeline]')) { ?>
+		<a class="mybutton" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $this->pin_url;?>" onclick="return shareButton('<?php echo $this->pin_url;?>', 'facebook');"><?php echo $this->translate('Share on Facebook');?></a>
+		<?php } ?>
+	</p>
+</div>
+
+<script type="text/javascript">
+function shareButton(url, type) {
+	switch(type) {
+		case 'twitter':
+			url = 'https://twitter.com/share?url='+encodeURIComponent(url);
+		break;
+		case 'facebook':
+			url = 'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url);
+		break;
+		default:
+			return false;
+		break;
+	}
+	t=document.title;
+	var wind = window.open(url, t,"location=0,status=0,scrollbars=0,width=450,height=270");
+	return false;
+}
+
+$(document).ready(function(){
+	if($.fancybox) {
+		setTimeout(function(){
+			$.fancybox.close();
+		}, 20000);
+	}
+
+	$('.See_your_Pin').click(function(){
+		window.open(this.href);
+		window.close();
+		return false;
+	});
+
+	setTimeout(function(){
+		window.close();
+	}, 20000);
+	
+});
+
+</script>

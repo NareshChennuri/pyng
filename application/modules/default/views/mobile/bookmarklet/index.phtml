@@ -1,0 +1,120 @@
+<?php ob_start();?>
+<script type="text/javascript">
+$(document).ready(function(){ 
+	var image = new Image();
+	image.src = '<?php echo $this->media;?>';
+	$(image).load(function(){
+		$('#content-holder .imageholder img').replaceWith( $(image).addClass('thumbShow') );
+		$('#content-holder .imageholder').height( $(image).outerHeight(true) );
+	});
+
+	regExPrice.addExpresionLine($('#message').html(), true);
+	$('#message').bind("keydown keyup keypress focus paste",function() {
+		regExPrice.addExpresionLine(this.value);
+	});
+});
+</script>
+<script type="text/javascript" src="data/js/jquery.jqEasyCharCounter.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$('#message').jqEasyCounter({
+		holder: 'p.text_counter',
+		maxChars: 500,
+		maxCharsWarning: 470,
+		template: '{count}'
+	}).bind('keyup', function(){
+		if($.trim(this.value)) {
+			$('#emailpin .submit input').removeClass('disabled').attr('disabled', false);
+		} else {
+			$('#emailpin .submit input').addClass('disabled').attr('disabled', true);
+		}
+	});	
+
+	$('#emailpin form').submit(function(){
+		$('#emailpin .submit input').after('<img src="data/images/loading_2.gif" id="loading_button" />');
+	});
+	$('#emailpin .submit input').click(function(){
+		$('#emailpin .submit input').after('<img src="data/images/loading_2.gif" id="loading_button" />');
+	});
+
+	if($.trim($('#message').val())) {
+		$('#emailpin .submit input').removeClass('disabled').attr('disabled', false);
+	} else {
+		$('#emailpin .submit input').addClass('disabled').attr('disabled', true);
+	}
+
+	$('#board_id').selectBox().selectBox('onReady', selectBoxCallback);
+
+	function selectBoxCallback(){
+		newbord = $('<p><input name="newboard" value="<?php echo $this->translate('Create New Board')?>" class="newboardcreator" id="newboardcreator" /></p>');
+		button = $('<input type="button" class="newboardcreator2">').attr('id','newboardcreator2').val('<?php echo $this->translate('Create')?>').click(function(){
+			$.post('<?php echo $this->createBoard;?>', $('#newBoardCreate').serialize(),function(data){
+				if(data.data) {
+					board_id_h = $('#board_id');
+					board_id_h.find('option').attr('selected', false);
+					board_id_h.append('<option value="'+data.data.board_id+'" selected="selected">'+data.data.title+'</option>')
+					.selectBox('destroy').selectBox().selectBox('onReady', selectBoxCallback);
+				} else if(data.error) {
+					alert(data.error);
+				} else {
+					alert(data);
+				}			
+
+			}, 'json');
+			return false;
+		});
+		newsubmit = $('<p>').addClass('submit').append(button);
+		bform = $('<form action="" method="post" id="newBoardCreate">').append(newbord).append(newsubmit);
+		new_board = $('<li>').addClass('createBoard').append(bform).append('<div class="clear"></div>');
+		$('.selectBox-dropdown-menu.selectBox-options').append(new_board).find('#newboardcreator').clearOnFocus();
+		$('#newBoardCreate').submit(function(){ return false; });
+	}
+	
+	
+});
+</script>
+<?php $this->placeholder('inhead');?>
+
+<div id="create_new_pin">
+	<div id="content-holder">
+		<div id="emailpin">
+			<form action="" method="post">
+				
+				<div class="hide">
+					<input type="hidden" name="title" value="<?php echo $this->title;?>">
+					<input type="hidden" name="price" value="">
+				</div>
+				
+				<div class="left imageholder">
+					<img src="data/images/ajax-loader.gif" alt="" />
+					<span class="price"></span>
+				</div>
+				<div class="left w335px">
+					<p class="ntp">
+						<label for="board_id" class="hide"><?php echo $this->translate('Board');?>:<br></label>
+						
+						<select name="board_id" id="board_id">
+							<?php foreach($this->boards AS $board) { ?>
+							<option value="<?php echo $board['board_id'];?>"><?php echo $board['title'];?></option>
+							<?php } ?>
+						</select>
+					</p>
+					<?php /* ?>
+					<p class="url">
+						<?php echo $this->url;?>
+					</p>
+					<?php */ ?>
+					<p>
+						<label for="message" class="hide"><?php echo $this->translate('Message');?>:<br></label>
+						<textarea name="message" id="message" rows="5" cols="30"><?php echo $this->description;?></textarea>
+					</p>
+					<p class="text_counter"></p>
+					<p class="submit"><input type="submit" value="<?php echo $this->translate('Pinit');?>"></p>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</form>
+		</div>
+	</div>
+</div>

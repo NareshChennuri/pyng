@@ -1,0 +1,149 @@
+<?php echo $this->header_part;?>
+
+<form action="" method="post" id="instagram-media-submit">
+	<div id="nag">
+		<div class="sheet sheet-1">
+			<p class="slogan onerow"><?php echo $this->translate('Select board for pinit selected media.');?></p>
+			<p class="buttons">
+				<select name="board_id" class="event-board-style">
+					<?php foreach($this->boards AS $board) { ?>
+					<option value="<?php echo $board['board_id'];?>"><?php echo $board['title'];?></option>
+					<?php } ?>
+				</select>
+			</p>
+			<div class="clear"></div>
+		</div>
+		<div class="sheet sheet-2"></div>
+		<div class="sheet sheet-3"></div>
+	</div>
+	<div class="titlebar">
+		<div class="title">
+			<h3 class="title-8"><?php echo $this->translate('Select media to Pinit.');?></h3>
+		</div>
+	</div>
+	<div id="mediacontainerwrapper">
+		<div id="mediacontainer">
+			<div class="selectmedia">
+				<div class="hide" id="selected_categories"></div>
+				<div class="socbutton"><a class="is button-body fetch-media" href="<?php echo $this->login_url;?>"><span class="logo_wrapper"><span class="logo"></span></span><span><?php echo $this->translate('Fetch media from Instagram');?></span></a></div>
+				<div id="media-list-check"></div>
+				<div class="clear"></div>
+				<div class="submit">
+					<button id="form-submiter" class="red-button big-button disabled" disabled="disabled"><?php echo $this->translate('Pinit');?></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<div id="infscr-loading" class="hide"><img alt="<?php echo $this->translate('Loading...');?>" src="data/images/loading.gif" />
+	<div><em><?php echo $this->translate('Loading media from Instagram...');?></em></div>
+</div>
+<?php if($this->error) { ?>
+<script type="text/javascript">
+head.ready('main', function(){
+	$(document).ready(function(){
+		Pins.error('<?php echo $this->translate('Please select at least one category.');?>');
+	});
+});
+</script>
+<?php } ?>
+<?php $key = str_replace('.','',microtime(true)).'_media';?>
+<script type="text/javascript">
+head.ready('main', function(){
+	$(document).ready(function(){
+		var contaner = $('#selected_categories').empty();
+		$('#mediacontainer .pin').live('click',function(){
+			selected = $('#mediacontainer .pin.selected').size();
+			media_id = $(this).attr('id').replace('media_','');
+			if($(this).hasClass('selected')) {
+				$(this).removeClass('selected');
+				contaner.find('input[value='+media_id+']').remove();
+			} else {
+				$(this).addClass('selected');
+				contaner.append('<input type="hidden" name="media_id[]" value="'+media_id+'" />');
+			}
+			if($('#mediacontainer .pin.selected').size() > 0) {
+				$('#form-submiter').attr('disabled', false).removeClass('disabled');
+				$('#board').slideDown();
+			} else {
+				$('#form-submiter').attr('disabled', true).addClass('disabled');
+				$('#board').slideUp();
+			}
+			return false;
+		});
+	
+		$('#mediacontainer a.fetch-media').click(function(){
+			$('body').append($('<div>').attr('id','hide-site-for-click').css({'opacity': '0.5','background':'#ffffff','top':0,'left':0,'position':'fixed','width':'100%','height':'100%','z-index':99998}));
+			$('#infscr-loading').show().css({
+				'z-index': 99999
+			});
+			$(this).parents('.socbutton').remove();
+			$.getJSON('<?php echo $this->checkLoginInstagram;?>', function(json){
+				if(json.redirect) {
+					window.location = json.redirect;
+				} else if(json.isUser) {
+					$.ajax({
+					    url: '<?php echo $this->getMediaInstagramFirst;?>',
+					    dataType: 'jsonp',
+					    jsonpCallback: 'addResponseData'
+					});
+				}
+			});
+			return false;
+		});
+	
+		Pins.initSelectBoxCreateBoard('.event-board-style');
+	
+		$('#form-submiter').click(function(){
+			var button = $(this).attr('disabled', true).addClass('disabled');
+			loading.load(button);
+			$.post('<?php echo $this->add_media_href;?>', $('#instagram-media-submit').serialize(), function(json){
+				if(json.error) {
+					Pins.error(json.error);
+				} else if(json.location) {
+					window.location = json.location;
+				} else {
+					Pins.error(json);
+				}
+				$(this).attr('disabled', false).removeClass('disabled');
+				loading.stop();
+			}, 'json');
+			return false;
+		});
+		
+	});
+	
+});
+
+var empty_results = 0;
+window.addResponseData = function(media) {
+	
+	var template = $('head').requireTemplate('instagram/media');
+	for(i in media) {
+		template.tmpl({
+			'media_title' : media[i].title,
+			'media_id': media[i].media_id,
+			'media_thumb': media[i].thumb
+		}).appendTo('#media-list-check').fadeIn();
+		empty_results = 0;
+	}
+	if(!media.length) {
+		empty_results++;
+	}
+
+	if(empty_results < 15) {
+		setTimeout(function(){
+			$.ajax({
+			    url: '<?php echo $this->getMediaInstagram;?>',
+			    dataType: 'jsonp',
+			    jsonpCallback: 'addResponseData'
+			});
+		}, 850);
+	} else {
+		$('#infscr-loading').hide();
+		$('#hide-site-for-click').remove();
+	}
+	
+}
+</script> 
+<?php echo $this->footer_part;?>

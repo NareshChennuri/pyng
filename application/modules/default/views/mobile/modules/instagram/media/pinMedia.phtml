@@ -1,0 +1,54 @@
+<?php echo $this->header_part;?>
+
+<form action="" method="post" id="instagram-media-submit">
+	<div id="mediacontainerwrapper">
+		<div id="mediacontainer">
+			<div class="selectmedia">
+				<div id="media-list-check">
+					<?php foreach($this->medias AS $media) { ?>
+					<a title="<?php echo $media['title'];?>" class="pin" href="javascript:void(0);" id="media_<?php echo $media['media_id'];?>"> <span class="category"><?php echo $media['title'];?></span> <span class="square"> <span class="check"> <img alt="Checkmark" src="data/images/CheckMark.png"> </span> <span class="shadow"></span> <span style="background: url(<?php echo $media['thumb'];?>) 0 0 no-repeat;" class="image"></span> </span> </a>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<div id="infscr-loading"><img alt="<?php echo $this->translate('Loading...');?>" src="data/images/loading.gif" />
+	<div><em><?php echo $this->translate('Pinit media...');?></em></div>
+</div>
+<script type="text/javascript">
+head.ready('main', function(){
+	$(document).ready(function(){
+		$('body').append($('<div>').attr('id','hide-site-for-click').css({'opacity': '0.5','background':'#ffffff','top':0,'left':0,'position':'fixed','width':'100%','height':'100%','z-index':99998}));
+		$('#infscr-loading').show().css({
+			'z-index': 99999
+		});
+		pinMedia();
+	});
+});
+
+function pinMedia() {
+	var first_media = $('#media-list-check a.pin:not(.selected):eq(0)');
+	if(first_media.size() > 0) {
+		var media_id = first_media.attr('id').replace('media_','');
+		$.post('<?php echo $this->pin_media;?>', {media_id: media_id}, function(json){
+			if(json.error) {
+				Pins.error(json.error);
+				first_media.addClass('selected').addClass('error');
+			} else if(json.location) {
+				window.location = json.location;
+			} else if(json.ok) {
+				first_media.addClass('selected');
+			} else {
+				Pins.error(json);
+				first_media.addClass('selected').addClass('error');
+			}
+			pinMedia();
+		}, 'json');
+	} else {
+		window.location = '<?php echo $this->pin_media_fetch;?>';
+	}
+}
+
+</script> 
+<?php echo $this->footer_part;?>

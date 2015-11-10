@@ -1,0 +1,17 @@
+{{each comments}}
+<li class="event-comment-row">
+	<p class="avatar"><a href="${$value.user.profile}"><img src="${$value.user.avatars.avatar_image_a}" alt="${$value.user.fullname}" /></a></p>
+	<div class="user">
+		<p class="fullname"><a href="${$value.user.profile}">${$value.user.fullname}</a></p>
+		<p class="text">{{html $value.comment}}</p>
+		<div class="clear"></div>
+	</div>
+	{{if $value.url_delete}}
+	<a href="${$value.url_delete}" class="close-button event-delete-comment" title="${$value.text_delete}">X</a>
+	{{else}}
+		{{if $value.url_report}}
+		<a href="${$value.url_report}" class="report-button event-click-open-popup" title="${$value.text_report}">⚐</a>
+		{{/if}}
+	{{/if}}
+</li>
+{{/each}}

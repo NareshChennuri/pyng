@@ -1,0 +1,19 @@
+<?php echo $this->header_part; ?>
+
+<div id="detail">
+
+		<div class="no_account_page">
+	        <a href="./">
+	        	<img src="data/images/error_Downtime_icon.png" class="fade">
+	        </a>
+	        <h1 class="fade"><?php echo $this->translate('Sorry!');?></h1>
+	        <?php echo $this->translate('Sorry, there was impossible to login with your facebook account.');?>
+	        <?php if($this->page_login_trouble) { ?>
+	        <br /><br />
+	        <?php echo $this->translate('Having trouble?');?> <a href="<?php echo $this->page_login_trouble['href'];?>"><?php echo $this->translate('Read more here.');?></a>
+	    	<?php } ?>
+	    </div>
+
+</div>
+    
+<?php echo $this->footer_part; ?>

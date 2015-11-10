@@ -1,0 +1,31 @@
+
+
+<li class='tappable'>
+    
+	<a class='board_link' href='<?php echo $this->board['href'] ?>'>
+	<div style='width: 80%;' >
+			<span>
+			<?php echo $this->board['title']; ?>
+		</span>
+	
+	<div class='board_images' style='min-height: 30px'>
+		
+			
+			<?php for($i = 0; $i < count($this->board['pins_array']); $i++): ?>
+			    <?php $baseUrl = substr($this->getRequest()->getBaseUrl(),0, -1); //echo $baseUrl; ?>
+				
+					<?php if($i < 5): ?>
+						<img class='board_image' src='<?php  echo "uploads".$this->board['pins_array'][$i]['image'] ?>' />
+					<?php endif; ?>
+									
+			<?php endfor; ?>
+	</div>
+	</div>
+	 <div style='float: right;width: 20%;margin-bottom: -20%;'>
+        <img src="../data_mobile/images/arrow.png" height='14px' style="float: right;margin-top: -45px"/>
+     </div>
+	</a>
+	
+</li>
+
+		

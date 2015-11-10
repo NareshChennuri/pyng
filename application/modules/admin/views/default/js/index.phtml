@@ -1,0 +1,19 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+window.image_upload = function(field, preview) {
+	$('<div id="myelfinder" />').elfinder({
+		url : '<?php echo $module;?>/elfinder',
+		lang : 'en',
+		dialog : { width : 900, modal : true, title : '<?php echo $this->translate('WM Cms - file manager for web');?>' },
+		closeOnEditorCallback : true,
+		editorCallback : function(selected){
+			if(!selected || !selected.split('?') || !selected.split('?')[0]) return;
+			selected = selected.split('?')[0].replace('uploads/','/');
+			$.post('<?php echo $module;?>/elfinder/image', {image: selected}, function(data){
+				$('#' + preview).attr('src',data);
+				$('#' + field).attr('value', selected);
+			});
+		}
+	});
+};

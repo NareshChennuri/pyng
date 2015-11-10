@@ -1,0 +1,13 @@
+<meta name="title" content="<?php echo $this->pin['title'];?>" />
+<meta name="description" content="<?php echo $this->pin['description'];?>" />
+<meta name="keywords" content="<?php echo $this->pin['keywords'];?>" />
+
+<meta name="medium" content="image"/>
+<meta http-equiv="imagetoolbar" content="no"/>
+
+<link rel="image_src" href="<?php echo $this->pin['images']['thumb_image_b'];?>"/>
+<link rel="canonical" href="<?php echo $this->pin['pin_url'];?>"/>
+
+<?php if($this->pin['is_video']) { ?>
+<meta name="video" content="<?php echo $this->pin['from'];?>"/>
+<?php } ?>

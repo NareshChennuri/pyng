@@ -1,0 +1,98 @@
+<div id="formcontainer" class="edit-board-cover">
+	<div class="popup">
+		<form action="<?php echo $this->form_action;?>" method="post" class="main-form event-submit-board-cover">
+			<div class="row">
+				<div class="cell-center">
+					<div class="pin-info">
+						<div class="thumb">
+							<div class="thumbshadow">
+								<div class="carousel">
+									<ul>
+									<?php foreach($this->pins AS $key => $pin) { ?>
+									<li class="media_<?php echo $key;?>"> <img src="<?php echo $pin['image'];?>" alt="" data-pin_id="<?php echo $pin['pin_id'];?>" data-image="<?php echo $pin['image_c'];?>" /> </li>
+									<?php } ?>
+									</ul>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="submit nlp">
+				<button class="red-button big-button event-click-submit-disable"><?php echo $this->translate('Set cover');?></button>
+				<a class="grey-button big-button" href="javascript:void(0)" onclick="$.fancybox.close();"><?php echo $this->translate('Cancel');?></a>	
+			</div>
+			<p class="hide"><input type="hidden" name="pin_id" value=""></p>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.carousel').imageCarousel({
+		onScrollEnd: function(page){
+			$('.event-submit-board-cover input[name="pin_id"]').val($('img', page).attr('data-pin_id'));
+		},
+		onInit: function(page){
+			$('.event-submit-board-cover input[name="pin_id"]').val($('img', page).attr('data-pin_id'));
+		},
+		textNext: '<?php echo $this->translate('Next');?>',
+		textPrev: '<?php echo $this->translate('Prev');?>'
+	});
+	$('.event-submit-board-cover').submit(function(){
+		var button = $('.event-click-submit-disable').addClass('disabled').attr('disabled', true);
+		loading.load(button);
+		$.post('<?php echo $this->form_action;?>', $(this).serialize(), function(result){
+			if(result.error) {
+				Pins.error(result.error);
+				$('.event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+			} else if(result.success) {
+				$('.carousel img').each(function(i, item){
+					if($(item).attr('data-pin_id') == result.success) {
+						img = $(item).data('image');
+						var new_image = new Image();
+						new_image.src = img;
+						new_image.onload = function() {
+							var image = $(item).offset();
+							var board_image  = $('#board_<?php echo ($this->history_id?$this->history_id.'_':''); ?><?php echo $this->board_id?> .cover img');
+							var image_temp = $('<img />').attr('src', new_image.src).css({
+								'position' : 'absolute',
+								'top': image.top,
+								'left': image.left,
+								'z-index': 9999999999999999,
+								'opacity': 0,
+								'width': $(item).width(),
+								'height': $(item).height()
+							}).attr('id', 'board_tmp_image').appendTo('body');
+							params = {
+								top : board_image.offset().top + 'px',
+								left : board_image.offset().left + 'px',
+								opacity : 1.0,
+								width : board_image.width(),  
+								height : board_image.height()
+							};		
+							image_temp.animate(params, 'slow', false, function () {
+								board_image.attr('src', new_image.src);
+								image_temp.remove();
+								$.fancybox.close();
+							});
+						};
+						new_image.onerror = function() {
+							$.fancybox.close();
+						};
+						setTimeout(function() { $.fancybox.close(); }, 10000);
+					}
+				});
+			} else {
+				Pins.error(result);
+				$('.event-click-submit-disable').removeClass('disabled').attr('disabled', false);
+			}
+			loading.stop();
+		}, 'json');
+		return false;
+	});
+});
+</script>

@@ -1,0 +1,15 @@
+<?php echo $this->header_part; ?>
+
+	<div id="category" class="noSeparator">
+		<h3><?php echo $this->translate('Pins from');?> <a onclick="target='_blank'" href="http://<?php echo $this->source['source'];?>"><?php echo $this->source['source'];?></a></h3>
+		<div class="clear"></div>
+	</div>
+
+	<div id="container" class="noboardwithcat masonry">
+		
+		<?php echo $this->pins;?>
+		
+		<div class="clear"></div>
+	</div>
+
+<?php echo $this->footer_part; ?>

@@ -1,0 +1,126 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<form action="" method="post">
+
+	<div class="info_line top">
+		<h3 class="fleft title">
+			<img alt="" src="cms/<?php echo $module;?>/images/extensions.png">
+			<a href="<?php echo $this->modules_url;?>"><?php echo $this->translate('Modules');?></a> >> 
+			<a href="<?php echo $this->modules_storage_url;?>"><?php echo $this->translate('Storage');?></a> >> 
+			<?php echo $this->translate('Rackspace');?>
+		</h3>
+		
+		<?php if($this->successfu_edite || $this->error) { ?>
+		<?php if($this->successfu_edite) { ?>
+		<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+		<?php } else if($this->error) { ?>
+		<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->error;?></span></span>
+		<?php } ?>
+		<script type="text/javascript"> 
+		// <![CDATA[
+		$(document).ready(function() {       
+			setTimeout(function() {
+				$("#fader").customFadeOut("slow" ,    
+				function() {       
+					$("#fader").remove();  
+				});
+			},
+			4000);
+		});
+		// ]]>
+		</script>
+		<?php } ?>
+	
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $this->modules_storage_url;?>"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		
+		<div class="clear"></div>
+	</div>
+	
+	<p class="info">
+		<?php echo $this->translate('Modules >> Rackspace Manager');?><br>
+	</p>
+	
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<tr>
+				<td><?php echo $this->translate('API Username');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->rackspace_api_username;?>" class="inputbox" name="rackspace[rackspace_api_username]" />
+	        	</td>
+			</tr>
+					
+			<tr>
+				<td><?php echo $this->translate('API Key');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->rackspace_api_key;?>" class="inputbox" name="rackspace[rackspace_api_key]" />
+	        	</td>
+			</tr>
+			<?php /* ?>
+			<tr>
+				<td><?php echo $this->translate('Account name');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->rackspace_account_name;?>" class="inputbox" name="rackspace[rackspace_account_name]" />
+	        	</td>
+			</tr>
+			<?php */ ?>
+			
+			<tr>
+				<td><?php echo $this->translate('Authentication service URI');?>:</td>
+				<td>
+					<select name="rackspace[rackspace_authentication_service_uri]">
+						<?php if($this->rackspace_authentication_service_uri == 'UK') { ?>
+						<option value="US">US Authentication service URI</option>
+						<option selected="selected" value="UK">UK Authentication service URI</option>
+						<?php } else { ?>
+						<option selected="selected" value="US">US Authentication service URI</option>
+						<option value="UK">UK Authentication service URI</option>
+						<?php } ?>
+					</select>
+	        	</td>
+			</tr>
+			
+			<tr>
+				<td><?php echo $this->translate('Pins contaner for upload');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->rackspace_pins_contaners;?>" class="inputbox" name="rackspace[rackspace_pins_contaners]" />
+	        	</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Pins contaner CDN');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->rackspace_pins_contaners_cdn;?>" class="inputbox" name="rackspace[rackspace_pins_contaners_cdn]" />
+	        	</td>
+			</tr>
+			
+			<tr>
+				<td><?php echo $this->translate('Users avatars contaner for upload');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->rackspace_users_contaners;?>" class="inputbox" name="rackspace[rackspace_users_contaners]" />
+	        	</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Users avatars contaner CDN');?>:</td>
+				<td>
+					<input type="text" size="55" value="<?php echo $this->rackspace_users_contaners_cdn;?>" class="inputbox" name="rackspace[rackspace_users_contaners_cdn]" />
+	        	</td>
+			</tr>
+		</tbody>
+		
+		<tfoot>
+			<tr>
+				<td colspan="2">
+					<div class="fright mtop3">
+						<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+						<a class="button" href="<?php echo $this->modules_storage_url;?>"><?php echo $this->translate('Cancel');?></a>
+					</div>
+					<div class="clear"></div>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</form>

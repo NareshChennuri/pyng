@@ -1,0 +1,9 @@
+<p><?php echo sprintf($this->translate('Hi %s'), $this->user_info['firstname']);?>,</p>
+
+<p>
+	<?php echo sprintf($this->translate('YOU are the newest member of %s, a community to share collections of things you love. We\'re excited to have you as a member and can\'t wait to see what you pin.'), JO_Registry::get('site_name'));?>
+</p>
+
+<div>
+	<?php echo html_entity_decode(JO_Registry::get('mail_footer'), ENT_QUOTES, 'utf-8');?>
+</div>

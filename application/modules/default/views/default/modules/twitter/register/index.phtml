@@ -1,0 +1,86 @@
+<?php echo $this->header_part; ?>
+
+<?php if($this->error) { ?>
+<script type="text/javascript">
+head.ready('main',function(){
+	Pins.error('<?php echo $this->error;?>');
+});
+</script>
+<?php } ?>
+
+<div id="formcontainerwrapper">
+	<div id="formcontainer">
+		<form method="post" action="" class="main-form">
+			<h3 class="title-9"><?php echo sprintf($this->translate('Hello %s! Create a Pintastic Account'), $this->firstname);?></h3>
+			<div class="row">
+				<div class="cell-left">
+					<label><?php echo $this->translate('Avatar');?></label>
+				</div>
+				<div class="cell-center">
+					<div class="current-avatar">
+						<img alt="Photo of Account Creator" src="<?php echo $this->avatar;?>" class="thumb" />
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="username"><?php echo $this->translate('Username');?></label>
+				</div>
+				<div class="cell-center">
+					<input type="text" name="username" id="username" value="<?php echo $this->username;?>" />
+				</div>
+				<div class="cell-right">
+					<p class="helptext red event-username-check"><?php echo $this->translate('Please use at least 3 characters');?></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="email"><?php echo $this->translate('Email');?></label>
+				</div>
+				<div class="cell-center">
+					 <input type="text" name="email" id="email" value="<?php echo $this->email;?>" />
+				</div>
+				<div class="cell-right">
+					<p class="helptext red event-email-check">&nbsp;</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="row">
+				<div class="cell-left">
+					<label for="password"><?php echo $this->translate('Password');?></label>
+				</div>
+				<div class="cell-center">
+					 <input type="password" name="password" id="password" value="<?php echo $this->password;?>" />
+				</div>
+				<div class="cell-right">
+					<p class="helptext">&nbsp;</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="submit"><button class="red-button big-button"><?php echo $this->translate('Create Account');?></button></div>
+		</form>
+	</div>
+</div>
+    
+<?php echo $this->footer_part; ?>
+
+<script type="text/javascript">
+head.ready('jquery',function(){
+	head.js({'checkAvailable':'data/js/jquery_lib/jquery.checkAvailable.js'}, function(){
+		$(document).ready(function(){
+			$('#username').checkAvailable({
+				'url' : '<?php echo $this->check_username;?>',
+				'holder': '.event-username-check'
+			});
+			
+			$('#email').checkAvailable({
+				'url' : '<?php echo $this->check_email;?>',
+				'holder': '.event-email-check'
+			});
+		});
+	});
+});
+</script>

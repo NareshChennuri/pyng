@@ -1,0 +1,31 @@
+<script type="text/javascript">
+var loaded_tw = loaded_tw || false;
+head.ready('jquery', function() {
+	jQuery.Pins_onOpened = jQuery.Pins_onOpened || {};
+	jQuery.Pins_onOpened['t_p'] = jQuery.Pins_onOpened['t_p'] || (function(location) {
+		$('.twitter-share-button').remove();
+		$('.event-load-buttons').append('<li class="twitter-share-button"><a href="https://twitter.com/share" class="tweet twitter-share-button" data-url="'+location+'"></a></li>').show(1, function() {
+			/********** twitter load onload **********/
+			if(!loaded_tw) {
+			    !function(d,s,id){
+			    	var js,fjs=d.getElementsByTagName(s)[0];
+			    	if(!d.getElementById(id)){
+			    		js=d.createElement(s);
+			    		js.id=id;
+			    		js.src="//platform.twitter.com/widgets.js";
+			    		fjs.parentNode.insertBefore(js,fjs);
+			    	}
+			    }(document,"script","twitter-wjs");
+			    loaded_tw = true;
+			} else {
+				var interval_tw = setInterval(function() {
+					if(typeof twttr != 'undefined') {
+						twttr.widgets.load();
+						clearInterval(interval_tw);
+					}
+				}, 20);
+			}
+		});
+	});
+});
+</script>
